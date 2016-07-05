@@ -11,6 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Context-Type" content="text/html; charset=UTF-8" />
+    <jsp:include page="easyui_header.jsp"/>
     <title>登录</title>
     <style>
         body{
@@ -31,11 +32,11 @@
         <table>
             <tr align="left">
                 <td>用户名：</td>
-                <td><input type="text" name="uName"/>${nameMsg}</td>
+                <td><input name="uName" class="easyui-textbox" data-options="iconCls:'icon-man'"/>${nameMsg}</td>
             </tr>
             <tr align="left">
                 <td>密码：</td>
-                <td><input type="password" name="uPass"/>${passMsg}</td>
+                <td><input type="password"  name="uPass" class="easyui-textbox" data-options="iconCls:'icon-lock'"/>${passMsg}</td>
             </tr>
             <tr>
                 <td colspan="2">

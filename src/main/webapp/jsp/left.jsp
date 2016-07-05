@@ -5,15 +5,18 @@
   Time: 13:48
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <jsp:include page="easyui_header.jsp"/>
+    <title>Left</title>
+
 </head>
 <body>
     <div>
-        <a href="right.jsp" target="right">one</a><br/>
-        <a href="right2.jsp" target="right">two</a>
+        <ul id="myTree" class="easyui-tree" data-options="url:'../js/myTree.json',method:'get',animate:true"></ul>
     </div>
 </body>
 </html>

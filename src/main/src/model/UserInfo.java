@@ -9,8 +9,8 @@ public class UserInfo extends Model<UserInfo> {
     public static final UserInfo dao = new UserInfo();
 
     public UserInfo getUserInfo(String userName, String password){
-        String sql = "select * from user_info where user_name = ? and password = ?";
-        UserInfo userInfo = UserInfo.dao.findFirst(sql, userName, password);
-        return userInfo;
+        //String sql = "select * from user_info where user_name = ? and password = ?";
+        //UserInfo userInfo = UserInfo.dao.findFirst(sql, userName, password);
+        return null;//userInfo;
     }
 }
