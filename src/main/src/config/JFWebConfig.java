@@ -4,6 +4,8 @@ import com.jfinal.config.*;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
+import controller.LeftMenuController;
+import controller.LoginController;
 import controller.WelcomeController;
 import model.UserInfo;
 
@@ -21,29 +23,31 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 前台路由转发设置
          */
+        me.add("/", LoginController.class);
         me.add("/welcome", WelcomeController.class);
+        me.add("/leftMenu", LeftMenuController.class);
     }
     public void configPlugin(Plugins me) {
         /**
          * 配置数据源和数据库连接池插件
          */
-        C3p0Plugin c3p0 = new C3p0Plugin(getProperty("jdbcUrl"),
-                getProperty("user"), getProperty("password"),
-                getProperty("driverClass"));
+        //C3p0Plugin c3p0 = new C3p0Plugin(getProperty("jdbcUrl"),
+         //       getProperty("user"), getProperty("password"),
+         //       getProperty("driverClass"));
 //        C3p0Plugin  c3p0  =  new  C3p0Plugin("jdbc:mysql://127.0.0.1:3306/chen",
 //                "root", "000000");
-        me.add(c3p0);
+        //me.add(c3p0);
 
         /**
          * 配置数据库表映射插件
          */
-        ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0);
-        me.add(arp);
+        //ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0);
+        //me.add(arp);
 
         /**
          * 配置映射表到模型
          */
-        arp.addMapping("user_info", UserInfo.class);
+        //arp.addMapping("user_info", UserInfo.class);
     }
     public void configInterceptor(Interceptors me) {
 
