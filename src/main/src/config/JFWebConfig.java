@@ -6,6 +6,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import controller.LeftMenuController;
 import controller.LoginController;
+import controller.ToApproveController;
 import controller.WelcomeController;
 import model.UserInfo;
 
@@ -26,6 +27,7 @@ public class JFWebConfig extends JFinalConfig {
         me.add("/", LoginController.class);
         me.add("/welcome", WelcomeController.class);
         me.add("/leftMenu", LeftMenuController.class);
+        me.add("/toApprove", ToApproveController.class);
     }
     public void configPlugin(Plugins me) {
         /**
