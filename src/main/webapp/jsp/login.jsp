@@ -38,6 +38,11 @@
                 <td>密码：</td>
                 <td><input type="password"  name="uPass" class="easyui-textbox" data-options="iconCls:'icon-lock'"/>${passMsg}</td>
             </tr>
+            <tr align="left">
+                <td>验证码：</td>
+                <td><input name="randomCode" class="easyui-textbox" />${codeMsg}</td>
+                <td><img src="img" alt="点击刷新" style="padding-center: 7px;" id="randomCode" onclick="refreshCode();" /></td>
+            </tr>
             <tr>
                 <td colspan="2">
                     <input type="submit" value=" 登 录 "  />
@@ -53,4 +58,13 @@
     </form>
 </div>
 </body>
+
+<script type="text/javascript">
+    function refreshCode(){
+        var d = new Date();
+        //为了避免服务器或者浏览器缓存，添加了一个额外的参数
+        document.getElementById("randomCode").src="img?t=" + d.toString(40);
+    }
+</script>
+
 </html>
