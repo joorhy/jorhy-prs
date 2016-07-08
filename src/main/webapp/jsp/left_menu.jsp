@@ -11,50 +11,60 @@
 <head>
     <title>LeftMenu</title>
     <script type="text/javascript">
-//        $(document).ready(function(){
-//        function loadData() {
-//            alert(1);
-//            $.ajax({
-//                type: 'post',
-//                url: '/leftMenu',
-//                function(data){
-//                    alert(data);
-//                    var obj = eval('(' + data + ')');
-//                    $("#toApprove").text = obj.toApprove;
-//                    $("#approved").text = obj.approved;
-//                    $("#rejected").text = obj.rejected;
-//                }
-//            });
-//        }
-//        });
+        $(function(){
+            $("#menuTree").tree({
+                onClick: function(node){
+                    alert(node.id);
+                    showcontent(node.text);
+                }
+            });
+        });
+
+        function showcontent(language){
+            $('#content').html(language);
+        }
+
+        function loadData(){
+            $.ajax({
+                type: 'POST',
+                url: '/leftMenu',
+                data:{},
+                dataType: 'json',
+                success: function(data){
+                    $("#toApprove").text(data.toApprove);
+                    $("#approved").text(data.approved);
+                    $("#rejected").text(data.rejected);
+                }
+            });
+        }
     </script>
 </head>
-<body >
-    <div id="menuTree">
-        <ul class="easyui-tree">
+<body  onload=" loadData();">
+    <div>
+        <ul  id="menuTree" class="easyui-tree">
             <li data-options="iconCls:'icon-cut'">
                 <span>项目审批中心</span>
                 <ul>
                     <li>
                         <span>项目审批</span>
                         <ul>
-                            <li><span><a href="" target="right">待审批项目（<span id="toApprove">2${toApprove}</span>)</a></span></li>
-                            <li><span><a href="" target="right">已审批项目（<span id="approved">3${approved}</span>）</a></span></li>
-                            <li><span><a href="" target="right">审批未通过项目（<span id="rejected">4${rejected}</span>）</a></span></li>
+                            <li><span>待审批项目（<span id="toApprove" style="color: red"></span>）</span></li>
+                            <li><span>已审批项目（<span id="approved" style="color: blue" ></span>）</span></li>
+                            <li><span>审批未通过项目（<span id="rejected" style="color:darkgreen"></span>）</span></li>
                         </ul>
                     </li>
-                    <li><span><a href="" target="right">采购执行</a></span></li>
+                    <li><span>采购执行</span></li>
                 </ul>
             </li>
         </ul>
         <ul class="easyui-tree">
-            <li><a href="" target="right">数据查询中心</a></li>
+            <li>数据查询中心</li>
         </ul>
         <ul class="easyui-tree">
-            <li><a href="" target="right">基础信息管理</a></li>
+            <li>基础信息管理</li>
         </ul>
         <ul class="easyui-tree">
-            <li><a href="" target="right">系统管理</a></li>
+            <li>系统管理</li>
         </ul>
     </div>
 </body>

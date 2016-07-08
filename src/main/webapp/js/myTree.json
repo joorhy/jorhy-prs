@@ -5,13 +5,16 @@
   "children" : [ {
     "text" : "项目审批",
     "children" : [ {
-      "text" : "待审批项目(2)"
+      "id":"toApprove",
+      "text" : "待审批项目"
       },
       {
-        "text" : "已审批项目(3)"
+        "id":"approved",
+        "text" : "已审批项目"
       },
       {
-        "text" : "审批未通过项目(4)"
+        "id":"rejected",
+        "text" : "审批未通过项目"
     }]
   },
     {
