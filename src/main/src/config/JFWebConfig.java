@@ -1,8 +1,10 @@
 package config;
 
 import com.jfinal.config.*;
+import com.jfinal.log.Log4jLogFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
 import controller.LeftMenuController;
 import controller.LoginController;
@@ -30,6 +32,7 @@ public class JFWebConfig extends JFinalConfig {
         me.add("/toApprove", ToApproveController.class);
     }
     public void configPlugin(Plugins me) {
+        me.add(new EhCachePlugin());
         /**
          * 配置数据源和数据库连接池插件
          */
