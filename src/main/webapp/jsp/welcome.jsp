@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <jsp:include page="easyui_header.jsp"/>
-    <title>登陆欢迎页</title>
+    <title>采购过程管理平台</title>
     <style>
         html,body{text-align:center;margin:0px auto;width:1200px;}
     </style>
