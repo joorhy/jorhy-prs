@@ -10,6 +10,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <jsp:include page="easyui_header.jsp"/>
+    <script type="text/javascript" src="../js/new/commodity.js"></script>
+    <script type="text/javascript" src="../js/new/service.js"></script>
+    <script type="text/javascript" src="../js/new/engineering.js"></script>
     <title>新建采购过程</title>
 </head>
 <body>
@@ -62,16 +65,15 @@
         <td>商品类预算总价：</td>
         <td><input name="uName" class="easyui-textbox" /></td>
     </td>
-    <table id="dg1" class="easyui-datagrid" title="商品类" style="width:1200px;height:auto"
+    <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:1200px;height:auto"
            data-options="
             iconCls: 'icon-edit',
             singleSelect: true,
-            toolbar: '#tb1',
+            toolbar: '#tbCommodity',
             url: 'datagrid_data1.json',
             method: 'get',
-            onClickCell: onClickCell,
-            onEndEdit: onEndEdit
-        ">
+            onClickCell: onClickCommodityCell,
+            onEndEdit: onEndCommodityEdit ">
         <thead>
             <tr>
                 <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
@@ -79,31 +81,31 @@
                 <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
                 <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
                 <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-                <th data-options="field:'prj_param',width:320,editor:'textbox'">技术参数及售后</th>
+                <th data-options="field:'prj_param',width:160,editor:'textbox'">技术参数及售后</th>
                 <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
             </tr>
         </thead>
     </table>
-    <div id="tb1" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append(1)">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(1)">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(1)">保存</a>
+    <div id="tbCommodity" style="height:auto">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendCommodity()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeCommodity()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptCommodity()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectCommodity()">撤消</a>
     </div>
     <br/>
     <td align="left">
         <td>服务类预算总价：</td>
         <td><input name="uName" class="easyui-textbox" /></td>
     </td>
-    <table id="dg2" class="easyui-datagrid" title="服务类" style="width:1200px;height:auto"
+    <table id="dgService" class="easyui-datagrid" title="服务类" style="width:1200px;height:auto"
            data-options="
             iconCls: 'icon-edit',
             singleSelect: true,
-            toolbar: '#tb2',
+            toolbar: '#tbService',
             url: 'datagrid_data1.json',
             method: 'get',
-            onClickCell: onClickCell,
-            onEndEdit: onEndEdit
-        ">
+            onClickCell: onClickServiceCell,
+            onEndEdit: onEndServiceEdit ">
         <thead>
         <tr>
             <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
@@ -111,31 +113,31 @@
             <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
             <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
             <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-            <th data-options="field:'prj_param',width:320,editor:'textbox'">技术参数及售后</th>
+            <th data-options="field:'prj_param',width:160,editor:'textbox',multiline:true">技术参数及售后</th>
             <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
         </tr>
         </thead>
     </table>
-    <div id="tb2" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append(2)">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(2)">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(2)">保存</a>
+    <div id="tbService" style="height:auto">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendService()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeService()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptService()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectService()">撤消</a>
     </div>
     <br/>
     <td align="left">
         <td>工程类预算总价：</td>
         <td><input name="uName" class="easyui-textbox" /></td>
     </td>
-    <table id="dg" class="easyui-datagrid" title="工程类" style="width:1200px;height:auto"
+    <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:1200px;height:auto"
            data-options="
             iconCls: 'icon-edit',
             singleSelect: true,
-            toolbar: '#tb',
+            toolbar: '#tbEngineering',
             url: 'datagrid_data1.json',
             method: 'get',
-            onClickCell: onClickCell,
-            onEndEdit: onEndEdit
-        ">
+            onClickCell: onClickEngineeringCell,
+            onEndEdit: onEndEngineeringEdit ">
         <thead>
         <tr>
             <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
@@ -143,15 +145,16 @@
             <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
             <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
             <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-            <th data-options="field:'prj_param',width:320,editor:'textbox'">技术参数及售后</th>
+            <th data-options="field:'prj_param',width:160,editor:'textbox'">技术参数及售后</th>
             <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
         </tr>
         </thead>
     </table>
-    <div id="tb" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append(3)">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(3)">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(3)">保存</a>
+    <div id="tbEnginneering" style="height:auto">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendEngineering()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeEngineering()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptEngineering()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectEngineering()">撤消</a>
     </div>
     <br/>
     <table align="right">
@@ -161,89 +164,6 @@
             <td><input type="submit" value=" 重 置 "  /></td>
         </td>
     </table>
-    <script type="text/javascript">
-        var editIndex = undefined;
-        function endEditing(){
-            if (editIndex == undefined){return true}
-            if ($('#dg').datagrid('validateRow', editIndex)){
-                $('#dg').datagrid('endEdit', editIndex);
-                editIndex = undefined;
-                return true;
-            } else {
-                return false;
-            }
-        }
-        function onClickCell(index, field){
-            if (editIndex != index){
-                if (endEditing()){
-                    $('#dg').datagrid('selectRow', index)
-                            .datagrid('beginEdit', index);
-                    var ed = $('#dg').datagrid('getEditor', {index:index,field:field});
-                    if (ed){
-                        ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
-                    }
-                    editIndex = index;
-                } else {
-                    setTimeout(function(){
-                        $('#dg').datagrid('selectRow', editIndex);
-                    },0);
-                }
-            }
-        }
-        function onEndEdit(index, row){
-            var ed = $(this).datagrid('getEditor', {
-                index: index,
-                field: 'prj_name'
-            });
-            row.productname = $(ed.target).textbox('getText');
-        }
-        function append(index){
-            if (endEditing()) {
-                if (index == 1) {
-                    $('#dg1').datagrid('appendRow', {});
-                    editIndex = $('#dg1').datagrid('getRows').length - 1;
-                    $('#dg1').datagrid('selectRow', editIndex)
-                            .datagrid('beginEdit', editIndex);
-                } else if (index == 2) {
-                    $('#dg2').datagrid('appendRow', {});
-                    editIndex = $('#dg2').datagrid('getRows').length - 1;
-                    $('#dg2').datagrid('selectRow', editIndex)
-                            .datagrid('beginEdit', editIndex);
-                } else {
-                    $('#dg').datagrid('appendRow', {});
-                    editIndex = $('#dg').datagrid('getRows').length - 1;
-                    $('#dg').datagrid('selectRow', editIndex)
-                            .datagrid('beginEdit', editIndex);
-                }
-            }
-        }
-        function removeit(index){
-            if (editIndex == undefined){return}
-            if (index == 1) {
-                $('#dg1').datagrid('cancelEdit', editIndex)
-                        .datagrid('deleteRow', editIndex);
-            } else if (index == 2) {
-                $('#dg2').datagrid('cancelEdit', editIndex)
-                        .datagrid('deleteRow', editIndex);
-            } else {
-                $('#dg').datagrid('cancelEdit', editIndex)
-                        .datagrid('deleteRow', editIndex);
-            }
-
-            editIndex = undefined;
-        }
-        function accept(index){
-            if (endEditing()){
-                if (index == 1) {
-                    $('#dg1').datagrid('acceptChanges');
-                } else if (index == 2) {
-                    $('#dg2').datagrid('acceptChanges');
-                } else {
-                    $('#dg').datagrid('acceptChanges');
-                }
-            }
-        }
-    </script>
 </div>
 </body>
 </html>
