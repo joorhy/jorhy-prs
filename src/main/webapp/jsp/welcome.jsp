@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <jsp:include page="easyui_header.jsp"/>
+    <jsp:include page="new.jsp" />
     <title>采购过程管理平台</title>
     <style>
         html,body{text-align:center;margin:0px auto;width:1200px;}
@@ -33,6 +34,7 @@
 
         //获取菜单中的数量
         function loadData(){
+            $('#contentDiv').layout("add", "aa");
             $.ajax({
                 type: 'POST',
                 url: '/leftMenu',
@@ -75,8 +77,8 @@
             <ul id="menuTree" class="easyui-tree" data-options="url:'../js/myTree.json',method:'get',animate:true"></ul>
             <!--<jsp:include page="left_menu.jsp"/>-->
         </div>
-        <div id="contentDiv" region="center" title="详细信息" style="padding:5px;width:100%;">
-            <jsp:include page="to_approve.jsp"/>
+        <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">
+            <!--jsp:include page="new.jsp"/-->
         </div>
     </div>
     <div id="footer" style="width:100%;border:1px goldenrod solid;"><jsp:include page="footer.jsp"/></div>

@@ -23,11 +23,11 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 前台路由转发设置
          */
-        me.add("/", NewController.class);
-        //me.add("/", LoginController.class);
+        me.add("/", LoginController.class);
         me.add("/welcome", WelcomeController.class);
         me.add("/leftMenu", LeftMenuController.class);
         me.add("/toApprove", ToApproveController.class);
+        me.add("/new", NewController.class);
     }
     public void configPlugin(Plugins me) {
         me.add(new EhCachePlugin());
