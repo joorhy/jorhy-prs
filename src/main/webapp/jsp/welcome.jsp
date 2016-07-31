@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <jsp:include page="easyui_header.jsp"/>
-    <jsp:include page="new.jsp" />
     <title>采购过程管理平台</title>
     <style>
         html,body{text-align:center;margin:0px auto;width:1200px;}
@@ -21,20 +20,21 @@
 
         function showcontent(nodeId){
             if(nodeId == "toApprove"){
-                $('#contentDiv').load("../jsp/to_approve.jsp");
+                //$('#contentDiv').load("../jsp/to_approve.jsp");
+                $('#contentDiv').panel('refresh','../jsp/to_approve.jsp');
 //                $.get("../jsp/to_approve.jsp",function(data){
 //                    $("#contentDiv").html(data);
 //                });
             }
             else if(nodeId == "approved"){
-                $('#contentDiv').load("../jsp/approved.jsp");
+                //$('#contentDiv').load("../jsp/approved.jsp");
+                $('#contentDiv').panel('refresh','../jsp/approved.jsp');
             }
 
         }
 
         //获取菜单中的数量
         function loadData(){
-            $('#contentDiv').layout("add", "aa");
             $.ajax({
                 type: 'POST',
                 url: '/leftMenu',
@@ -78,7 +78,7 @@
             <!--<jsp:include page="left_menu.jsp"/>-->
         </div>
         <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">
-            <!--jsp:include page="new.jsp"/-->
+            <jsp:include page="new.jsp" />
         </div>
     </div>
     <div id="footer" style="width:100%;border:1px goldenrod solid;"><jsp:include page="footer.jsp"/></div>
