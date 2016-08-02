@@ -23,8 +23,7 @@
         <table>
             <td align="left">
                 <td style="width:15%">采购函编号</td>
-                <td style="width:35%;"><input id="purc_code" class="easyui-validatebox tb"
-                                                                     data-options="required:true,missingMessage:'哈哈'"/></td>
+                <td style="width:35%;"><input id="purc_code" class="easyui-textbox"/></td>
                 <td style="width:15%;">资金来源</td>
                 <td style="width:35%;"><input id="funds_src" class="easyui-textbox" /></td>
             </td>
@@ -74,13 +73,13 @@
                 <td><input id="commodity_total_price" class="easyui-textbox" /></td>
             </td>
             <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbCommodity">
+                   data-options="rownumbers:true,singleSelect:true,url:'/new/commodityList',method:'get',toolbar:tbCommodity">
                 <thead>
                     <tr>
                         <th data-options="field:'prj_name',width:80">项目名称</th>
                         <th data-options="field:'prj_count',width:80">数量</th>
                         <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_spec',width:80">规格型号</th>
                         <th data-options="field:'prj_total_price',width:80">预算总价</th>
                         <th data-options="field:'prj_param',width:160">技术参数及售后</th>
                         <th data-options="field:'prj_attach',width:80">相关附件</th>
@@ -98,7 +97,7 @@
                         <th data-options="field:'prj_name',width:80">项目名称</th>
                         <th data-options="field:'prj_count',width:80">数量</th>
                         <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_spec',width:80">规格型号</th>
                         <th data-options="field:'prj_total_price',width:80">预算总价</th>
                         <th data-options="field:'prj_param',width:160">技术参数及售后</th>
                         <th data-options="field:'prj_attach',width:80">相关附件</th>
@@ -116,7 +115,7 @@
                         <th data-options="field:'prj_name',width:80">项目名称</th>
                         <th data-options="field:'prj_count',width:80">数量</th>
                         <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_spec',width:80">规格型号</th>
                         <th data-options="field:'prj_total_price',width:80">预算总价</th>
                         <th data-options="field:'prj_param',width:160">技术参数及售后</th>
                         <th data-options="field:'prj_attach',width:80">相关附件</th>
@@ -149,28 +148,37 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeEngineering()">删除</a>
     </div>
 
-    <!--div id="dlg" class="easyui-dialog" style="width:400px"
+    <div id="dlg" class="easyui-dialog" style="width:400px"
          closed="true" buttons="#dlg-buttons">
         <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-            <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc">User Information</div>
             <div style="margin-bottom:10px">
-                <input name="firstname" class="easyui-textbox" required="true" label="First Name:" style="width:100%">
+                <td>项目名称</td>
+                <t<input name="firstname" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="lastname" class="easyui-textbox" required="true" label="Last Name:" style="width:100%">
+                <td>数量</td>
+                <input name="lastname" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="phone" class="easyui-textbox" required="true" label="Phone:" style="width:100%">
+                <td>单价</td>
+                <input name="phone" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <input name="email" class="easyui-textbox" required="true" validType="email" label="Email:" style="width:100%">
+                <td>规格型号</td>
+                <input name="email" class="easyui-textbox" required="true" multiline="true"
+                       style="width:100%;height:40px">
+            </div>
+            <div style="margin-bottom:10px">
+                <td>技术参数及售后</td>
+                <input name="email" class="easyui-textbox" required="true" multiline="true" label="Email:"
+                       style="width:100%;height:120px">
             </div>
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCommodity()" style="width:90px">Save</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-    </div-->
+    </div>
 <!--/div-->
 </body>
 </html>

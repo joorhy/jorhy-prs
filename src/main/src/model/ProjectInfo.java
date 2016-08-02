@@ -1,7 +1,7 @@
 package model;
 
 import com.jfinal.plugin.activerecord.Model;
-import data.PrjData;
+import bean.PrjData;
 
 /**
  * Created by Joo on 2016/7/30.

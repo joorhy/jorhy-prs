@@ -1,9 +1,14 @@
 package controller;
 
 import com.jfinal.core.Controller;
-import data.PrjData;
+import bean.PrjData;
 import model.ProjectInfo;
 import org.activiti.engine.impl.util.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JooLiu on 2016/7/28.
@@ -19,7 +24,7 @@ public class NewController extends Controller {
     }
 
     // 提交按钮
-    public void save(){
+    public void save() {
         String strBaseData = getPara("base");
         String strCommodity = getPara("commodity");
         String strService = getPara("service");
@@ -44,5 +49,25 @@ public class NewController extends Controller {
 
     public void uploadFile() {
         System.out.print("");
+    }
+
+    public void commodityList() {
+        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        Map<String, String> dataInfo;
+        for (int i = 0; i < 8; i++) {
+            dataInfo = new HashMap<String, String>();
+            dataInfo.put("prj_name", "XX采购申请");
+            dataInfo.put("prj_count", "FI-SW-" + String.valueOf(i + 1));
+            dataInfo.put("prj_price", "张三");
+            dataInfo.put("prj_total_price", "同意");
+            dataInfo.put("prj_param", "2016-07-07 15:28:35");
+            dataInfo.put("prj_spec", "同意采购");
+            dataInfo.put("prj_attach", "同意采购");
+            dataList.add(dataInfo);
+        }
+
+        setAttr("rows", dataList);
+        setAttr("total", dataList.size());
+        renderJson();
     }
 }

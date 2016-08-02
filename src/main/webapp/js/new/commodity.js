@@ -3,7 +3,7 @@
  */
 
 function addCommodity(){
-    $('#dlg').dialog('open').dialog('center').dialog('setTitle','New User');
+    $('#dlg').dialog('open').dialog('center').dialog('setTitle','新增项目');
     $('#fm').form('clear');
     //url = 'save_user.php';
 }
@@ -11,7 +11,7 @@ function addCommodity(){
 function editCommodity(){
     var row = $('#dgCommodity').datagrid('getSelected');
     if (row){
-        $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit User');
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑项目');
         $('#fm').form('load',row);
        //url = 'update_user.php?id='+row.id;
     }
@@ -19,21 +19,21 @@ function editCommodity(){
 
 function saveCommodity(){
     $('#fm').form('submit',{
-        url: url,
+        url: "",
         onSubmit: function(){
             return $(this).form('validate');
         },
         success: function(result){
-            var result = eval('('+result+')');
-            if (result.errorMsg){
-                $.messager.show({
-                    title: 'Error',
-                    msg: result.errorMsg
-                });
-            } else {
-                $('#dlg').dialog('close');        // close the dialog
-                $('#dg').datagrid('reload');    // reload the user data
-            }
+            //var result = eval('('+result+')');
+            //if (result.errorMsg){
+            //    $.messager.show({
+            //        title: 'Error',
+            //        msg: result.errorMsg
+            //    });
+            //} else {
+            //    $('#dlg').dialog('close');        // close the dialog
+            //    $('#dg').datagrid('reload');    // reload the user data
+            //}
         }
     });
 }

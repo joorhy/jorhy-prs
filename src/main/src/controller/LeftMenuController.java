@@ -16,6 +16,5 @@ public class LeftMenuController extends Controller {
         setAttr("approved",approved);
         setAttr("rejected",rejected);
         renderJson();
-
     }
 }
