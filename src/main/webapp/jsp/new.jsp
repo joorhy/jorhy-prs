@@ -19,13 +19,14 @@
 <body>
 <!--div id="aa" class="easyui-panel" title="新建采购过程" style="width:100%;padding:0px 0px 0px 0px"-->
     <!--form  action="/new/add" method="post"-->
-    <div id="aa" class="easyui-panel" title="基础信息" style="width:98%;padding:0px 0px 0px 0px">
+    <div id="aa" class="easyui-panel" title="基础信息" style="width:98%">
         <table>
             <td align="left">
-                <td style="width:15%;padding:0px 0px 0px 0px">采购函编号</td>
-                <td style="width:35%;padding:0px 0px 0px 0px"><input id="purc_code" class="easyui-validatebox tb" data-options="required:true,missingMessage:'哈哈'"/></td>
-                <td style="width:15%;padding:0px 0px 0px 0px">资金来源</td>
-                <td style="width:35%;padding:0px 0px 0px 0px"><input id="funds_src" class="easyui-textbox" /></td>
+                <td style="width:15%">采购函编号</td>
+                <td style="width:35%;"><input id="purc_code" class="easyui-validatebox tb"
+                                                                     data-options="required:true,missingMessage:'哈哈'"/></td>
+                <td style="width:15%;">资金来源</td>
+                <td style="width:35%;"><input id="funds_src" class="easyui-textbox" /></td>
             </td>
             <tr/>
             <td align="left">
@@ -36,7 +37,7 @@
             </td>
             <tr/>
             <td align="left">
-                <td style="width:15%;padding:0px 0px 0px 0px">资金性质</td>
+                <td style="width:15%;">资金性质</td>
                 <td style="width:35%;">
                     <select id="funds_nature" class="easyui-combobox" style="width:53%;">
                         <option value="ncys">年初预算</option>
@@ -73,24 +74,17 @@
                 <td><input id="commodity_total_price" class="easyui-textbox" /></td>
             </td>
             <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-                   data-options="
-                       iconCls: 'icon-edit',
-                       singleSelect: true,
-                       toolbar: '#tbCommodity',
-                       url: 'datagrid_data1.json',
-                       method: 'get',
-                       onClickCell: onClickCommodityCell,
-                       onEndEdit: onEndCommodityEdit ">
+                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbCommodity">
                 <thead>
-                <tr>
-                    <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
-                    <th data-options="field:'prj_count',width:80,align:'right',editor:'numberbox'">数量</th>
-                    <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
-                    <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
-                    <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-                    <th data-options="field:'prj_param',width:160,editor:'textbox'">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
-                </tr>
+                    <tr>
+                        <th data-options="field:'prj_name',width:80">项目名称</th>
+                        <th data-options="field:'prj_count',width:80">数量</th>
+                        <th data-options="field:'prj_price',width:80">单价</th>
+                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                        <th data-options="field:'prj_attach',width:80">相关附件</th>
+                    </tr>
                 </thead>
             </table>
             <td align="left">
@@ -98,24 +92,17 @@
                 <td style="width:35%;"><input id="service_total_price" class="easyui-textbox" /></td>
             </td>
             <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
-                   data-options="
-                       iconCls: 'icon-edit',
-                       singleSelect: true,
-                       toolbar: '#tbService',
-                       url: 'datagrid_data1.json',
-                       method: 'get',
-                       onClickCell: onClickServiceCell,
-                       onEndEdit: onEndServiceEdit ">
+                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbService">
                 <thead>
-                <tr>
-                    <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
-                    <th data-options="field:'prj_count',width:80,align:'right',editor:'numberbox'">数量</th>
-                    <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
-                    <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
-                    <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-                    <th data-options="field:'prj_param',width:160,editor:'textbox',multiline:true">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
-                </tr>
+                    <tr>
+                        <th data-options="field:'prj_name',width:80">项目名称</th>
+                        <th data-options="field:'prj_count',width:80">数量</th>
+                        <th data-options="field:'prj_price',width:80">单价</th>
+                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                        <th data-options="field:'prj_attach',width:80">相关附件</th>
+                    </tr>
                 </thead>
             </table>
             <td align="left">
@@ -123,34 +110,19 @@
                 <td style="width:35%;"><input id="engineering_total_price" class="easyui-textbox" /></td>
             </td>
             <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
-                   data-options="
-                       iconCls: 'icon-edit',
-                       singleSelect: true,
-                       toolbar: '#tbEnginneering',
-                       url: 'datagrid_data1.json',
-                       method: 'get',
-                       onClickCell: onClickEngineeringCell,
-                       onEndEdit: onEndEngineeringEdit ">
+                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbEngineering">
                 <thead>
-                <tr>
-                    <th data-options="field:'prj_name',width:80,editor:'textbox'" >项目名称</th>
-                    <th data-options="field:'prj_count',width:80,align:'right',editor:'numberbox'">数量</th>
-                    <th data-options="field:'prj_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">单价</th>
-                    <th data-options="field:'prj_spec',width:80,editor:'textbox'">规格型号</th>
-                    <th data-options="field:'prj_total_price',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">预算总价</th>
-                    <th data-options="field:'prj_param',width:160,editor:'textbox'">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80,editor:'textbox'">相关附件</th>
-                </tr>
+                    <tr>
+                        <th data-options="field:'prj_name',width:80">项目名称</th>
+                        <th data-options="field:'prj_count',width:80">数量</th>
+                        <th data-options="field:'prj_price',width:80">单价</th>
+                        <th data-options="field:'prj_spec',width:800">规格型号</th>
+                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                        <th data-options="field:'prj_attach',width:80">相关附件</th>
+                    </tr>
                 </thead>
             </table>
-            <div class="easyui-datalist" title="Checkbox in DataList" style="width:100%;height:250px" data-options="
-                url: 'datalist_data1.json',
-                method: 'get',
-                checkbox: true,
-                selectOnCheck: false,
-                onBeforeSelect: function(){return false;}
-                ">
-            </div>
         </div>
         <br/><br/>
         <div align="right">
@@ -162,23 +134,43 @@
         </div>
     <!--/form-->
     <div id="tbCommodity" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendCommodity()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addCommodity()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editCommodity()">修改</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeCommodity()">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptCommodity()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectCommodity()">撤消</a>
     </div>
     <div id="tbService" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendService()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editService()">修改</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeService()">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptService()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectService()">撤消</a>
     </div>
-    <div id="tbEnginneering" style="height:auto">
+    <div id="tbEngineering" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendEngineering()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editEngineering()">修改</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeEngineering()">删除</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="acceptEngineering()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="rejectEngineering()">撤消</a>
     </div>
+
+    <!--div id="dlg" class="easyui-dialog" style="width:400px"
+         closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc">User Information</div>
+            <div style="margin-bottom:10px">
+                <input name="firstname" class="easyui-textbox" required="true" label="First Name:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="lastname" class="easyui-textbox" required="true" label="Last Name:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="phone" class="easyui-textbox" required="true" label="Phone:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="email" class="easyui-textbox" required="true" validType="email" label="Email:" style="width:100%">
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div-->
 <!--/div-->
 </body>
 </html>

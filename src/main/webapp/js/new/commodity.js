@@ -2,70 +2,58 @@
  * Created by Joo on 2016/7/28.
  */
 
-var editCommodityIndex = undefined;
-function endCommodityEditing(){
-    if (editCommodityIndex == undefined) {
-        return true
-    }
-    var ed = $('#dgCommodity').datagrid('getEditor', {
-        index: editCommodityIndex,
-        field: 'prj_name'
-    });
-    if ($(ed.target).textbox('getText') == "") {
-        return false;
-    }
+function addCommodity(){
+    $('#dlg').dialog('open').dialog('center').dialog('setTitle','New User');
+    $('#fm').form('clear');
+    //url = 'save_user.php';
+}
 
-    if ($('#dgCommodity').datagrid('validateRow', editCommodityIndex)){
-        $('#dgCommodity').datagrid('endEdit', editCommodityIndex);
-        editCommodityIndex = undefined;
-        return true;
-    } else {
-        return false;
+function editCommodity(){
+    var row = $('#dgCommodity').datagrid('getSelected');
+    if (row){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit User');
+        $('#fm').form('load',row);
+       //url = 'update_user.php?id='+row.id;
     }
 }
-function onClickCommodityCell(index, field){
-    if (editCommodityIndex != index){
-        if (endCommodityEditing()){
-            $('#dgCommodity').datagrid('selectRow', index).datagrid('beginEdit', index);
-            var ed = $('#dgCommodity').datagrid('getEditor', {index:index,field:field});
-            if (ed){
-                ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+
+function saveCommodity(){
+    $('#fm').form('submit',{
+        url: url,
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result = eval('('+result+')');
+            if (result.errorMsg){
+                $.messager.show({
+                    title: 'Error',
+                    msg: result.errorMsg
+                });
+            } else {
+                $('#dlg').dialog('close');        // close the dialog
+                $('#dg').datagrid('reload');    // reload the user data
             }
-            editCommodityIndex = index;
-        } else {
-            setTimeout(function(){
-                $('#dgCommodity').datagrid('selectRow', editCommodityIndex);
-            },0);
         }
-    }
-}
-function onEndCommodityEdit(index, row){
-    var ed = $('#dgCommodity').datagrid('getEditor', {
-        index: index,
-        field: 'prj_name'
     });
-    row.productname = $(ed.target).textbox('getText');
 }
-function appendCommodity(){
-    if (endCommodityEditing()) {
-        $('#dgCommodity').datagrid('appendRow', {});
-        editCommodityIndex = $('#dgCommodity').datagrid('getRows').length - 1;
-        $('#dgCommodity').datagrid('selectRow', editCommodityIndex).datagrid('beginEdit', editCommodityIndex);
-    }
-}
+
 function removeCommodity(){
-    if (editCommodityIndex == undefined){
-        return
+    var row = $('#dgCommodity').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
+            if (r){
+                $.post('destroy_user.php',{id:row.id},function(result){
+                    if (result.success){
+                        $('#dg').datagrid('reload');    // reload the user data
+                    } else {
+                        $.messager.show({    // show error message
+                            title: 'Error',
+                            msg: result.errorMsg
+                        });
+                    }
+                },'json');
+            }
+        });
     }
-    $('#dgCommodity').datagrid('cancelEdit', editCommodityIndex).datagrid('deleteRow', editCommodityIndex);
-    editCommodityIndex = undefined;
-}
-function acceptCommodity(){
-    if (endCommodityEditing()){
-        $('#dgCommodity').datagrid('acceptChanges');
-    }
-}
-function rejectCommodity(){
-    $('#dgCommodity').datagrid('rejectChanges');
-    editCommodityIndex = undefined;
 }
