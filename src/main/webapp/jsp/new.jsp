@@ -10,10 +10,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!--jsp:include page="easyui_header.jsp"/-->
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.full.min.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.dev.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
     <script type="text/javascript" src="../js/new/commodity.js"></script>
     <script type="text/javascript" src="../js/new/service.js"></script>
     <script type="text/javascript" src="../js/new/engineering.js"></script>
@@ -56,39 +52,6 @@
                 </td>
             </table>
         </div>
-    </div>
-    <br/><br/>
-    <div>
-        <table id="dgAttachFile" class="easyui-datagrid" title="添加附件" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'/new/commodityList',method:'get',
-               toolbar:tbAttachFile">
-            <thead>
-            <tr>
-                <th data-options="field:'file_name',width:600">文件名</th>
-                <th data-options="field:'file_size',width:80">大小</th>
-            </tr>
-            </thead>
-        </table>
-            <!--jsp:include page="uploader.jsp">
-            <td align="left">
-                <td>采购函扫描件</td>
-                <td><input id="cgh" class="easyui-filebox" data-options="buttonText:'选择文件'"
-                           data-url="/new/uploadFile" style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                       onclick="uploadFile()">上传</a></td>
-                <br/>
-                <td>资金来源文件</td>
-                <td><input id="zjly" class="easyui-filebox" data-options="buttonText:'选择文件'"
-                           style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                       onclick="uploadFile()">上传</a></td>
-                <br/>
-                <td>其他相关附件</td>
-                <td><input id="qt" class="easyui-filebox" data-options="buttonText:'选择文件'"
-                           style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                       onclick="uploadFile()">上传</a></td>
-            </td-->
     </div>
     <br/><br/>
     <div region="center">
@@ -151,6 +114,18 @@
         </table>
     </div>
     <br/><br/>
+    <div>
+        <div class="easyui-panel" title="添加附件" style="width:100%">
+            <div id="tbAttachFile" style="height:auto">
+                <a id='pickfiles' href="javascript:void(0)" class="easyui-linkbutton"
+                   data-options="iconCls:'icon-add',plain:true">添加</a>
+                <a id='uploadfiles' href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+                   onclick="removeEngineering()">删除</a>
+            </div>
+            <jsp:include page="uploader.jsp"/>
+        </div>
+    </div>
+    <br/><br/>
     <div align="right">
         <td align="right">
             <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
@@ -162,12 +137,6 @@
         </td>
     </div>
     <!--/form-->
-    <div id="tbAttachFile" style="height:auto">
-        <a id='attach_file' href="javascript:void(0)" class="easyui-linkbutton"
-           data-options="iconCls:'icon-add',plain:true">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
-           onclick="removeEngineering()">删除</a>
-    </div>
     <div id="tbCommodity" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
            onclick="addCommodity()">添加</a>

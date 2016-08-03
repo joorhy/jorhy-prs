@@ -2,13 +2,13 @@ package controller;
 
 import com.jfinal.core.Controller;
 import bean.PrjData;
+import com.jfinal.upload.UploadFile;
 import model.ProjectInfo;
 import org.activiti.engine.impl.util.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by JooLiu on 2016/7/28.
@@ -48,7 +48,10 @@ public class NewController extends Controller {
     }
 
     public void uploadFile() {
-        System.out.print("");
+        UploadFile uploadFile = getFile();
+        String fileName = uploadFile.getOriginalFileName();
+        File file = uploadFile.getFile();
+        file.delete();
     }
 
     public void commodityList() {

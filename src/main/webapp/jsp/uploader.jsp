@@ -20,8 +20,6 @@
 <br />
 
 <div id="container">
-    <a id="pickfiles" href="javascript:;">[Select files]</a>
-    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
 </div>
 
 <br />
@@ -35,7 +33,7 @@
         runtimes : 'html5,flash,silverlight,html4',
         browse_button : 'pickfiles', // you can pass in id...
         container: document.getElementById('container'), // ... or DOM Element itself
-        url : "/examples/upload",
+        url : "/new/uploadFile",
         filters : {
             max_file_size : '10mb',
             mime_types: [
