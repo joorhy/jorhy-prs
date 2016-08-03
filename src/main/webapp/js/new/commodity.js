@@ -2,57 +2,64 @@
  * Created by Joo on 2016/7/28.
  */
 
+var dlg_type;
+var edit_index;
 function addCommodity(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','新增项目');
-    $('#fm').form('clear');
-    //url = 'save_user.php';
+    $('#prj_name').textbox('clear');
+    $('#prj_count').textbox('clear');
+    $('#prj_price').textbox('clear');
+    $('#prj_spec').textbox('clear');
+    $('#prj_param').textbox('clear');
+    $('#prj_attach').textbox('clear');
+    $('#prj_total_price').textbox('clear');
+    dlg_type = 'new';
 }
 
 function editCommodity(){
     var row = $('#dgCommodity').datagrid('getSelected');
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑项目');
-        $('#fm').form('load',row);
-       //url = 'update_user.php?id='+row.id;
+        $('#prj_name').textbox('setText', row["prj_name"]);
+        $('#prj_count').textbox('setText',row["prj_count"]);
+        $('#prj_price').textbox('setText',row["prj_price"]);
+        $('#prj_spec').textbox('setText', row["prj_spec"]);
+        $('#prj_param').textbox('setText', row["prj_param"]);
+        $('#prj_attach').textbox('setText','');
+        $('#prj_total_price').textbox('setText', '');
+        dlg_type = 'edit';
+        edit_index = $('#dgCommodity').datagrid('getRowIndex', row);
     }
 }
 
 function saveCommodity(){
-    $('#fm').form('submit',{
-        url: "",
-        onSubmit: function(){
-            return $(this).form('validate');
-        },
-        success: function(result){
-            //var result = eval('('+result+')');
-            //if (result.errorMsg){
-            //    $.messager.show({
-            //        title: 'Error',
-            //        msg: result.errorMsg
-            //    });
-            //} else {
-            //    $('#dlg').dialog('close');        // close the dialog
-            //    $('#dg').datagrid('reload');    // reload the user data
-            //}
-        }
-    });
+    var data = {};
+    data["prj_name"] = $('#prj_name').textbox('getText');
+    data["prj_count"] = $('#prj_count').textbox('getText');
+    data["prj_price"] = $('#prj_price').textbox('getText');
+    data["prj_spec"] = $('#prj_spec').textbox('getText');
+    data["prj_param"] = $('#prj_param').textbox('getText');
+    data["prj_attach"] = '';//$('#prj_attach').textbox('getText');
+    data["prj_total_price"] = '';
+    if (dlg_type == 'edit') {
+        var updateData = {};
+        updateData['index'] = edit_index;
+        updateData['row'] = data;
+        $('#dgCommodity').datagrid('updateRow', updateData);
+    } else {
+        $('#dgCommodity').datagrid('appendRow', data);
+    }
+
+    $('#dlg').dialog('close');
 }
 
 function removeCommodity(){
     var row = $('#dgCommodity').datagrid('getSelected');
     if (row){
-        $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
+        $.messager.confirm('确认','是否确认删除此项目?',function(r){
             if (r){
-                $.post('destroy_user.php',{id:row.id},function(result){
-                    if (result.success){
-                        $('#dg').datagrid('reload');    // reload the user data
-                    } else {
-                        $.messager.show({    // show error message
-                            title: 'Error',
-                            msg: result.errorMsg
-                        });
-                    }
-                },'json');
+                var index =  $('#dgCommodity').datagrid('getRowIndex', row);
+                $('#dgCommodity').datagrid('deleteRow', index);
             }
         });
     }

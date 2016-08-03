@@ -52,7 +52,7 @@ public class NewController extends Controller {
     }
 
     public void commodityList() {
-        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        /*List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
         Map<String, String> dataInfo;
         for (int i = 0; i < 8; i++) {
             dataInfo = new HashMap<String, String>();
@@ -68,6 +68,6 @@ public class NewController extends Controller {
 
         setAttr("rows", dataList);
         setAttr("total", dataList.size());
-        renderJson();
+        renderJson();*/
     }
 }

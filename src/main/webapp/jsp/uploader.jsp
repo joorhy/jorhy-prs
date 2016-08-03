@@ -33,12 +33,9 @@
 
     var uploader = new plupload.Uploader({
         runtimes : 'html5,flash,silverlight,html4',
-
         browse_button : 'pickfiles', // you can pass in id...
         container: document.getElementById('container'), // ... or DOM Element itself
-
         url : "/examples/upload",
-
         filters : {
             max_file_size : '10mb',
             mime_types: [
@@ -46,18 +43,9 @@
                 {title : "Zip files", extensions : "zip"}
             ]
         },
-
-        // Flash settings
-        flash_swf_url : '/plupload/js/Moxie.swf',
-
-        // Silverlight settings
-        silverlight_xap_url : '/plupload/js/Moxie.xap',
-
-
         init: {
             PostInit: function() {
                 document.getElementById('filelist').innerHTML = '';
-
                 document.getElementById('uploadfiles').onclick = function() {
                     uploader.start();
                     return false;
@@ -66,12 +54,14 @@
 
             FilesAdded: function(up, files) {
                 plupload.each(files, function(file) {
-                    document.getElementById('filelist').innerHTML += '<a id="' + file.id + '"  href="javascript:;">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></a>';
+                    document.getElementById('filelist').innerHTML += '<a id="' + file.id + '"  href="javascript:;">'
+                            + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></a>';
                 });
             },
 
             UploadProgress: function(up, file) {
-                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent
+                        + "%</span>";
             },
 
             Error: function(up, err) {
@@ -79,9 +69,7 @@
             }
         }
     });
-
     uploader.init();
-
 </script>
 </body>
 </html>

@@ -10,174 +10,223 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!--jsp:include page="easyui_header.jsp"/-->
+    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.dev.js"></script>
+    <script type="text/javascript" src="../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
+    <script type="text/javascript" src="../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
     <script type="text/javascript" src="../js/new/commodity.js"></script>
     <script type="text/javascript" src="../js/new/service.js"></script>
     <script type="text/javascript" src="../js/new/engineering.js"></script>
     <script type="text/javascript" src="../js/new/new.js"></script>
+    <script type="text/javascript" src="../js/new/file_upload.js"></script>
     <title>新建采购过程</title>
 </head>
 <body>
 <!--div id="aa" class="easyui-panel" title="新建采购过程" style="width:100%;padding:0px 0px 0px 0px"-->
     <!--form  action="/new/add" method="post"-->
-    <div id="aa" class="easyui-panel" title="基础信息" style="width:98%">
-        <table>
-            <td align="left">
-                <td style="width:15%">采购函编号</td>
-                <td style="width:35%;"><input id="purc_code" class="easyui-textbox"/></td>
-                <td style="width:15%;">资金来源</td>
-                <td style="width:35%;"><input id="funds_src" class="easyui-textbox" /></td>
-            </td>
-            <tr/>
-            <td align="left">
-                <td style="width:15%;">联系人</td>
-                <td style="width:36%;"><input id="contacts" class="easyui-textbox"/></td>
-                <td style="width:15%;">联系电话</td>
-                <td style="width:35%;"><input id="phone_num" class="easyui-textbox"/></td>
-            </td>
-            <tr/>
-            <td align="left">
-                <td style="width:15%;">资金性质</td>
-                <td style="width:35%;">
-                    <select id="funds_nature" class="easyui-combobox" style="width:53%;">
-                        <option value="ncys">年初预算</option>
-                        <option value="zxzj">专项资金</option>
-                        <option value="zczj">自筹资金</option>
-                        <option value="jzzj">捐赠资金</option>
-                    </select>
+    <div>
+        <div class="easyui-panel" title="基础信息" style="width:100%">
+            <table>
+                <td align="left">
+                    <td style="width:15%">采购函编号</td>
+                    <td style="width:35%;"><input id="purc_code" class="easyui-textbox"/></td>
+                    <td style="width:15%;">资金来源</td>
+                    <td style="width:35%;"><input id="funds_src" class="easyui-textbox" /></td>
                 </td>
-                <td style="width:15%;padding:0px 0px 0px 0px"></td>
-                <td style="width:35%;padding:0px 0px 0px 0px"></td>
-            </td>
-        </table>
+                <tr/>
+                <td align="left">
+                    <td style="width:15%;">联系人</td>
+                    <td style="width:36%;"><input id="contacts" class="easyui-textbox"/></td>
+                    <td style="width:15%;">联系电话</td>
+                    <td style="width:35%;"><input id="phone_num" class="easyui-textbox"/></td>
+                </td>
+                <tr/>
+                <td align="left">
+                    <td style="width:15%;">资金性质</td>
+                    <td style="width:35%;">
+                        <select id="funds_nature" class="easyui-combobox" style="width:50%">
+                            <option value="ncys">年初预算</option>
+                            <option value="zxzj">专项资金</option>
+                            <option value="zczj">自筹资金</option>
+                            <option value="jzzj">捐赠资金</option>
+                        </select>
+                    </td>
+                    <td style="width:15%;padding:0px 0px 0px 0px"></td>
+                    <td style="width:35%;padding:0px 0px 0px 0px"></td>
+                </td>
+            </table>
+        </div>
     </div>
-        <!--div class="easyui-panel" region="center" title="上传附件" style="height:225px;width:80%;"-->
-            <!--jsp:include page="uploader.jsp"/-->
+    <br/><br/>
+    <div>
+        <table id="dgAttachFile" class="easyui-datagrid" title="添加附件" style="width:100%;height:225px"
+               data-options="rownumbers:true,singleSelect:true,url:'/new/commodityList',method:'get',
+               toolbar:tbAttachFile">
+            <thead>
+            <tr>
+                <th data-options="field:'file_name',width:600">文件名</th>
+                <th data-options="field:'file_size',width:80">大小</th>
+            </tr>
+            </thead>
+        </table>
+            <!--jsp:include page="uploader.jsp">
             <td align="left">
                 <td>采购函扫描件</td>
-                <td><input id="cgh" class="easyui-filebox" data-options="buttonText:'选择文件'" data-url="/new/uploadFile" style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="uploadFile()">上传</a></td>
+                <td><input id="cgh" class="easyui-filebox" data-options="buttonText:'选择文件'"
+                           data-url="/new/uploadFile" style="width:300px"></td>
+                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                       onclick="uploadFile()">上传</a></td>
                 <br/>
                 <td>资金来源文件</td>
-                <td><input id="zjly" class="easyui-filebox" data-options="buttonText:'选择文件'" style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="uploadFile()">上传</a></td>
+                <td><input id="zjly" class="easyui-filebox" data-options="buttonText:'选择文件'"
+                           style="width:300px"></td>
+                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                       onclick="uploadFile()">上传</a></td>
                 <br/>
                 <td>其他相关附件</td>
-                <td><input id="qt" class="easyui-filebox" data-options="buttonText:'选择文件'" style="width:300px"></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="uploadFile()">上传</a></td>
-            </td>
-        <!--/div-->
-        <br/><br/>
-        <div>
-            <td align="left">
-                <td>商品类预算总价</td>
-                <td><input id="commodity_total_price" class="easyui-textbox" /></td>
-            </td>
-            <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-                   data-options="rownumbers:true,singleSelect:true,url:'/new/commodityList',method:'get',toolbar:tbCommodity">
-                <thead>
-                    <tr>
-                        <th data-options="field:'prj_name',width:80">项目名称</th>
-                        <th data-options="field:'prj_count',width:80">数量</th>
-                        <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:80">规格型号</th>
-                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
-                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                        <th data-options="field:'prj_attach',width:80">相关附件</th>
-                    </tr>
-                </thead>
-            </table>
-            <td align="left">
-                <td style="width:15%;">服务类预算总价</td>
-                <td style="width:35%;"><input id="service_total_price" class="easyui-textbox" /></td>
-            </td>
-            <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
-                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbService">
-                <thead>
-                    <tr>
-                        <th data-options="field:'prj_name',width:80">项目名称</th>
-                        <th data-options="field:'prj_count',width:80">数量</th>
-                        <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:80">规格型号</th>
-                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
-                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                        <th data-options="field:'prj_attach',width:80">相关附件</th>
-                    </tr>
-                </thead>
-            </table>
-            <td align="left">
-                <td style="width:15%;">工程类预算总价</td>
-                <td style="width:35%;"><input id="engineering_total_price" class="easyui-textbox" /></td>
-            </td>
-            <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
-                   data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',toolbar:tbEngineering">
-                <thead>
-                    <tr>
-                        <th data-options="field:'prj_name',width:80">项目名称</th>
-                        <th data-options="field:'prj_count',width:80">数量</th>
-                        <th data-options="field:'prj_price',width:80">单价</th>
-                        <th data-options="field:'prj_spec',width:80">规格型号</th>
-                        <th data-options="field:'prj_total_price',width:80">预算总价</th>
-                        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                        <th data-options="field:'prj_attach',width:80">相关附件</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        <br/><br/>
-        <div align="right">
-            <td align="right">
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="savePrj()">保存</a></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="submitPrj()">提交审核</a></td>
-                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80" onclick="cancelPrj()">撤销</a></td>
-            </td>
-        </div>
+                <td><input id="qt" class="easyui-filebox" data-options="buttonText:'选择文件'"
+                           style="width:300px"></td>
+                <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                       onclick="uploadFile()">上传</a></td>
+            </td-->
+    </div>
+    <br/><br/>
+    <div region="center">
+        <td align="left">
+            <td>商品类预算总价</td>
+            <td><input id="commodity_total_price" class="easyui-textbox" /></td>
+        </td>
+        <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
+               data-options="rownumbers:true,singleSelect:true,url:'/new/commodityList',method:'get',
+               toolbar:tbCommodity">
+            <thead>
+                <tr>
+                    <th data-options="field:'prj_name',width:80">项目名称</th>
+                    <th data-options="field:'prj_count',width:80">数量</th>
+                    <th data-options="field:'prj_price',width:80">单价</th>
+                    <th data-options="field:'prj_spec',width:80">规格型号</th>
+                    <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                    <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                    <th data-options="field:'prj_attach',width:80">相关附件</th>
+                </tr>
+            </thead>
+        </table>
+        <td align="left">
+            <td style="width:15%;">服务类预算总价</td>
+            <td style="width:35%;"><input id="service_total_price" class="easyui-textbox" /></td>
+        </td>
+        <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
+               data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',
+               toolbar:tbService">
+            <thead>
+                <tr>
+                    <th data-options="field:'prj_name',width:80">项目名称</th>
+                    <th data-options="field:'prj_count',width:80">数量</th>
+                    <th data-options="field:'prj_price',width:80">单价</th>
+                    <th data-options="field:'prj_spec',width:80">规格型号</th>
+                    <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                    <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                    <th data-options="field:'prj_attach',width:80">相关附件</th>
+                </tr>
+            </thead>
+        </table>
+        <td align="left">
+            <td style="width:15%;">工程类预算总价</td>
+            <td style="width:35%;"><input id="engineering_total_price" class="easyui-textbox" /></td>
+        </td>
+        <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
+               data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',
+               toolbar:tbEngineering">
+            <thead>
+                <tr>
+                    <th data-options="field:'prj_name',width:80">项目名称</th>
+                    <th data-options="field:'prj_count',width:80">数量</th>
+                    <th data-options="field:'prj_price',width:80">单价</th>
+                    <th data-options="field:'prj_spec',width:80">规格型号</th>
+                    <th data-options="field:'prj_total_price',width:80">预算总价</th>
+                    <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+                    <th data-options="field:'prj_attach',width:80">相关附件</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <br/><br/>
+    <div align="right">
+        <td align="right">
+            <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                   onclick="savePrj()">保存</a></td>
+            <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                   onclick="submitPrj()">提交审核</a></td>
+            <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+                   onclick="cancelPrj()">撤销</a></td>
+        </td>
+    </div>
     <!--/form-->
+    <div id="tbAttachFile" style="height:auto">
+        <a id='attach_file' href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-add',plain:true">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="removeEngineering()">删除</a>
+    </div>
     <div id="tbCommodity" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addCommodity()">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editCommodity()">修改</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeCommodity()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="addCommodity()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"
+           onclick="editCommodity()">修改</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="removeCommodity()">删除</a>
     </div>
     <div id="tbService" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendService()">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editService()">修改</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeService()">删除</a>
-    </div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="appendService()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"
+           onclick="editService()">修改</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="removeService()">删除</a>
+    </div>tbAttachFile
     <div id="tbEngineering" style="height:auto">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appendEngineering()">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editEngineering()">修改</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeEngineering()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="appendEngineering()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"
+           onclick="editEngineering()">修改</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="removeEngineering()">删除</a>
     </div>
 
     <div id="dlg" class="easyui-dialog" style="width:400px"
          closed="true" buttons="#dlg-buttons">
-        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+        <!--form id="fm" method="post" novalidate style="margin:0;padding:20px 50px"-->
+        <div style="margin:0;padding:20px 50px">
             <div style="margin-bottom:10px">
                 <td>项目名称</td>
-                <t<input name="firstname" class="easyui-textbox" required="true" style="width:100%">
+                <input id="prj_name" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
                 <td>数量</td>
-                <input name="lastname" class="easyui-textbox" required="true" style="width:100%">
+                <input id="prj_count" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
                 <td>单价</td>
-                <input name="phone" class="easyui-textbox" required="true" style="width:100%">
+                <input id="prj_price" class="easyui-textbox" required="true" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
                 <td>规格型号</td>
-                <input name="email" class="easyui-textbox" required="true" multiline="true"
+                <input id="prj_spec" class="easyui-textbox" required="true" multiline="true"
                        style="width:100%;height:40px">
             </div>
             <div style="margin-bottom:10px">
                 <td>技术参数及售后</td>
-                <input name="email" class="easyui-textbox" required="true" multiline="true" label="Email:"
+                <input id="prj_param" class="easyui-textbox" required="true" multiline="true" label="Email:"
                        style="width:100%;height:120px">
             </div>
-        </form>
+        </div>
+        <!--/form-->
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCommodity()" style="width:90px">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCommodity()"
+           style="width:90px">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
     </div>
 <!--/div-->
 </body>
