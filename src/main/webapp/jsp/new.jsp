@@ -183,7 +183,7 @@
            onclick="editService()">修改</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
            onclick="removeService()">删除</a>
-    </div>tbAttachFile
+    </div>
     <div id="tbEngineering" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
            onclick="appendEngineering()">添加</a>
