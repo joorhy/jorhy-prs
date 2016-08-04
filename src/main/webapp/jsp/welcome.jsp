@@ -41,11 +41,19 @@
                 data:{},
                 dataType: 'json',
                 success: function(data){
+                    var newPrj = $('#menuTree').tree('find', "new");
+                    if(newPrj){
+                        $('#menuTree').tree('update', {
+                            target: newPrj.target,
+                            text:"新建采购过程（"+ data.toApprove +"）"
+                        });
+                    }
+
                     var toApprove = $('#menuTree').tree('find', "toApprove");
                     if(toApprove){
                         $('#menuTree').tree('update', {
                             target: toApprove.target,
-                            text:"待审批项目（"+ data.toApprove +"）"
+                            text:"已提交采购过程（"+ data.toApprove +"）"
                         });
                     }
 
@@ -53,7 +61,7 @@
                     if(approved){
                         $('#menuTree').tree('update', {
                             target: approved.target,
-                            text:"已审批项目（"+ data.approved +"）"
+                            text:"已执行采购过程（"+ data.approved +"）"
                         });
                     }
 
@@ -61,7 +69,7 @@
                     if(rejected){
                         $('#menuTree').tree('update', {
                             target: rejected.target,
-                            text:"审批未通过项目（"+ data.rejected +"）"
+                            text:"已完成采购过程（"+ data.rejected +"）"
                         });
                     }
                 }
@@ -74,7 +82,7 @@
     <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="header.jsp"/></div>
     <div class="easyui-layout" style="width:1200px;height:100%;">
         <div region="west" split="true" title="导航" style="width:250px;">
-            <ul id="menuTree" class="easyui-tree" data-options="url:'../js/myTree.json',method:'get',animate:true"></ul>
+            <ul id="menuTree" class="easyui-tree" data-options="url:'../js/prsTree.json',method:'get',animate:true"></ul>
             <!--<jsp:include page="left_menu.jsp"/>-->
         </div>
         <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">

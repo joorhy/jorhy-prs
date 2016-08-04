@@ -16,7 +16,7 @@
 </head>
 <body>
     <div>
-        <ul id="myTree" class="easyui-tree" data-options="url:'../js/myTree.json',method:'get',animate:true"></ul>
+        <ul id="myTree" class="easyui-tree" data-options="url:'../js/prsTree.json',method:'get',animate:true"></ul>
     </div>
 </body>
 </html>

@@ -9,9 +9,11 @@ public class LeftMenuController extends Controller {
     // 页面初始化
     public void index() {
         //查询待审批，已经审批，审批未通过数量
-        int toApprove = 1;
-        int approved = 2;
-        int rejected = 3;
+        int newPrj = 1;
+        int toApprove = 2;
+        int approved = 3;
+        int rejected = 4;
+        setAttr("new",newPrj);
         setAttr("toApprove",toApprove);
         setAttr("approved",approved);
         setAttr("rejected",rejected);
