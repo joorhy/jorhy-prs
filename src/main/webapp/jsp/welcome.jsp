@@ -11,11 +11,11 @@
     <script type="text/javascript">
 
         $(function(){
-            $("#menuTree").tree({
+            /*$("#menuTree").tree({
                 onClick: function(node){
                     showcontent(node.id);
                 }
-            });
+            });*/
         });
 
         function showcontent(nodeId){
@@ -35,7 +35,7 @@
 
         //获取菜单中的数量
         function loadData(){
-            $.ajax({
+            /*$.ajax({
                 type: 'POST',
                 url: '/leftMenu',
                 data:{},
@@ -73,7 +73,7 @@
                         });
                     }
                 }
-            });
+            });*/
         }
     </script>
 

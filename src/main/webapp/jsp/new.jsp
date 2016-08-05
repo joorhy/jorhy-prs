@@ -78,7 +78,7 @@
             <td style="width:35%;"><input id="service_total_price" class="easyui-textbox" /></td>
         </td>
         <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',
+               data-options="rownumbers:true,singleSelect:true,url:'/new/serviceList',method:'get',
                toolbar:tbService">
             <thead>
                 <tr>
@@ -97,7 +97,7 @@
             <td style="width:35%;"><input id="engineering_total_price" class="easyui-textbox" /></td>
         </td>
         <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get',
+               data-options="rownumbers:true,singleSelect:true,url:'/new/engineeringList',method:'get',
                toolbar:tbEngineering">
             <thead>
                 <tr>

@@ -25,6 +25,14 @@ public class PrjData {
     private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();
     private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();
 
+    public String getPurcCode() {
+        return strPurcCode;
+    }
+
+    public String getStrFundsSrc() {
+        return strFundsSrc;
+    }
+
     public String ReadBaseData(JSONObject obj) {
         lstCommodity.clear();
         lstService.clear();

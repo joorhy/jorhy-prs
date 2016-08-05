@@ -67,10 +67,22 @@ public class NewController extends Controller {
             dataInfo.put("prj_spec", "同意采购");
             dataInfo.put("prj_attach", "同意采购");
             dataList.add(dataInfo);
-        }
+        }*/
 
-        setAttr("rows", dataList);
-        setAttr("total", dataList.size());
-        renderJson();*/
+        setAttr("rows", new ArrayList<Map<String, String>>());
+        setAttr("total", 0);
+        renderJson();
+    }
+
+    public void serviceList() {
+        setAttr("rows", new ArrayList<Map<String, String>>());
+        setAttr("total", 0);
+        renderJson();
+    }
+
+    public void engineeringList() {
+        setAttr("rows", new ArrayList<Map<String, String>>());
+        setAttr("total", 0);
+        renderJson();
     }
 }
