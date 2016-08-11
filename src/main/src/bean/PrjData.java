@@ -18,9 +18,9 @@ public class PrjData {
     private String strContacts;
     private String strPhoneNum;
     private String strFundsNature;
-    private double fCommodityTotlePrice;
-    private double fServiceTotlePrice;
-    private double fEngineeringTotlePrice;
+    private double fCommodityTotalPrice;
+    private double fServiceTotalPrice;
+    private double fEngineeringTotalPrice;
     private ArrayList<ProductItem> lstCommodity = new ArrayList<ProductItem>();
     private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();
     private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();
@@ -33,6 +33,42 @@ public class PrjData {
         return strFundsSrc;
     }
 
+    public String getStrContacts() {
+        return strContacts;
+    }
+
+    public String getStrPhoneNum() {
+        return strPhoneNum;
+    }
+
+    public String getStrFundsNature() {
+        return strFundsNature;
+    }
+
+    public double getCommodityTotalPrice() {
+        return fCommodityTotalPrice;
+    }
+
+    public double getServiceTotalPrice() {
+        return fServiceTotalPrice;
+    }
+
+    public double getEngineeringTotalPrice() {
+        return fEngineeringTotalPrice;
+    }
+
+    public ArrayList<ProductItem> getCommodityList() {
+        return lstCommodity;
+    }
+
+    public ArrayList<ProductItem> getServiceList() {
+        return lstService;
+    }
+
+    public ArrayList<ProductItem> getEngineeringList() {
+        return lstEngineering;
+    }
+
     public String ReadBaseData(JSONObject obj) {
         lstCommodity.clear();
         lstService.clear();
@@ -43,9 +79,9 @@ public class PrjData {
         strContacts = obj.getString("contacts");
         strPhoneNum = obj.getString("phone_num");
         strFundsNature = obj.getString("funds_nature");
-        fCommodityTotlePrice = obj.getDouble("commodity_total_price");
-        fServiceTotlePrice = obj.getDouble("service_total_price");
-        fEngineeringTotlePrice = obj.getDouble("engineering_total_price");
+        fCommodityTotalPrice = obj.getDouble("commodity_total_price");
+        fServiceTotalPrice = obj.getDouble("service_total_price");
+        fEngineeringTotalPrice = obj.getDouble("engineering_total_price");
 
         return null;
     }

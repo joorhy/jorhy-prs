@@ -56,7 +56,8 @@ function saveCommodity(){
 function removeCommodity(){
     var row = $('#dgCommodity').datagrid('getSelected');
     if (row){
-        $.messager.confirm('确认','是否确认删除此项目?',function(r){
+        //$.messager.defaults = { ok: "确 认", cancel: "取 消" };
+        $.messager.confirm('操作提示','是否确认删除此项目?',function(r){
             if (r){
                 var index =  $('#dgCommodity').datagrid('getRowIndex', row);
                 $('#dgCommodity').datagrid('deleteRow', index);

@@ -9,11 +9,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <!--jsp:include page="easyui_header.jsp"/-->
+    <!--jsp:include page="easyui_header.jsp"/>
     <script type="text/javascript" src="../js/new/commodity.js"></script>
     <script type="text/javascript" src="../js/new/service.js"></script>
     <script type="text/javascript" src="../js/new/engineering.js"></script>
-    <script type="text/javascript" src="../js/new/new.js"></script>
+    <script type="text/javascript" src="../js/new/new.js"></script-->
     <title>新建采购过程</title>
 </head>
 <body>
