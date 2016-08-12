@@ -12,10 +12,10 @@
     <!--link rel="stylesheet" href="../js/plupload-2.1.9/js/jquery.plupload.queue/css/jquery.plupload.queue.css"
           type="text/css"/>
     <script type="text/javascript" src="../js/jquery-3.1.0/jquery-3.1.0.min.js"></script-->
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.full.min.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.dev.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
-    <script type="text/javascript" src="../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+    <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.dev.js"></script>
+    <script type="text/javascript" src="../../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <body>
 <div id="filelist"></div>
 <!--br/-->

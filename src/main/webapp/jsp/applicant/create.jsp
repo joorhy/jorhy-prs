@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../js/new/commodity.js"></script>
     <script type="text/javascript" src="../js/new/service.js"></script>
     <script type="text/javascript" src="../js/new/engineering.js"></script>
-    <script type="text/javascript" src="../js/new/new.js"></script-->
+    <script type="text/javascript" src="../js/new/applicant.js"></script-->
     <title>新建采购过程</title>
 </head>
 <body>
@@ -117,7 +117,7 @@
         <div class="easyui-panel" title="添加附件" style="width:100%;height:225px;">
             <a id='pickfiles' href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-add',plain:true">添加</a>
-            <jsp:include page="uploader.jsp"/>
+            <jsp:include page="attach.jsp"/>
         </div>
     </div>
     <br/><br/>

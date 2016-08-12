@@ -2,12 +2,12 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
-        <script type="text/javascript" src="../js/new/commodity.js"></script>
-        <script type="text/javascript" src="../js/new/service.js"></script>
-        <script type="text/javascript" src="../js/new/engineering.js"></script>
-        <script type="text/javascript" src="../js/new/new.js"></script>
+        <script type="text/javascript" src="../../js/applicant/commodity.js"></script>
+        <script type="text/javascript" src="../../js/applicant/service.js"></script>
+        <script type="text/javascript" src="../../js/applicant/engineering.js"></script>
+        <script type="text/javascript" src="../../js/applicant/applicant.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <jsp:include page="easyui_header.jsp"/>
+        <jsp:include page="../easyui_header.jsp"/>
         <title>采购过程管理平台</title>
         <style>
             html,body{text-align:center;margin:0px auto;width:1200px;}
@@ -23,7 +23,7 @@
             });
             function showNewPage() {
                 $('#contentDiv').panel('setTitle','新建采购过程');
-                $('#contentDiv').panel('refresh','../jsp/new.jsp');
+                $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
             }
 
             function showcontent(nodeId){
@@ -87,7 +87,7 @@
 
     </head>
     <body onload=" loadData();">
-        <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="header.jsp"/></div>
+        <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
         <div class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
                 <ul id="menuTree" class="easyui-tree" data-options="url:'../js/prsTree.json',method:'get',animate:true,
@@ -105,12 +105,12 @@
                     <div onclick="expand()">Expand</div>
                     <div onclick="collapse()">Collapse</div-->
                 </div>
-                <!--<jsp:include page="left_menu.jsp"/>-->
+                <!--<jsp:include page="../left_menu.jsp"/>-->
             </div>
             <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">
-                <jsp:include page="main.jsp" />
+                <jsp:include page="welcome.jsp" />
             </div>
         </div>
-        <div id="footer" style="width:100%;border:1px goldenrod solid;"><jsp:include page="footer.jsp"/></div>
+        <div id="footer" style="width:100%;border:1px goldenrod solid;"><jsp:include page="../footer.jsp"/></div>
     </body>
 </html>

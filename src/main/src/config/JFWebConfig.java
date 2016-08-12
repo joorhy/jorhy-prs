@@ -1,14 +1,12 @@
 package config;
 
 import com.jfinal.config.*;
-import com.jfinal.log.Log4jLogFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
 import controller.*;
 import model.ProjectInfo;
-import model.UserInfo;
 
 /**
  * Created by JooLiu on 2016/6/22.
@@ -25,10 +23,9 @@ public class JFWebConfig extends JFinalConfig {
          * 前台路由转发设置
          */
         me.add("/", LoginController.class);
-        me.add("/welcome", WelcomeController.class);
+        me.add("/applicant", ApplicantController.class);
         me.add("/leftMenu", LeftMenuController.class);
         me.add("/toApprove", ToApproveController.class);
-        me.add("/new", NewController.class);
     }
     public void configPlugin(Plugins me) {
         me.add(new EhCachePlugin());

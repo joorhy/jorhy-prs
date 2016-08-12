@@ -7,20 +7,19 @@ import model.ProjectInfo;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
  * Created by JooLiu on 2016/7/28.
  */
-public class NewController extends Controller {
+public class ApplicantController extends Controller {
     // 页面初始化
     public void index() {
-        renderJsp("/jsp/new.jsp");
+        renderJsp("/jsp/applicant/applicant.jsp");
     }
 
     public void uploader() {
-        renderJsp("/jsp/uploader.jsp");
+        renderJsp("/jsp/applicant/attach.jsp");
     }
 
     // 提交按钮
