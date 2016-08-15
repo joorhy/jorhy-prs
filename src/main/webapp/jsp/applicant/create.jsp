@@ -31,7 +31,7 @@
                 <tr/>
                 <td align="left">
                     <td style="width:15%;">联系人</td>
-                    <td style="width:36%;"><input id="contacts" class="easyui-textbox"/></td>
+                    <td style="width:35%;"><input id="contacts" class="easyui-textbox"/></td>
                     <td style="width:15%;">联系电话</td>
                     <td style="width:35%;"><input id="phone_num" class="easyui-textbox"/></td>
                 </td>
@@ -39,15 +39,13 @@
                 <td align="left">
                     <td style="width:15%;">资金性质</td>
                     <td style="width:35%;">
-                        <select id="funds_nature" class="easyui-combobox" style="width:50%">
+                        <select id="funds_nature" class="easyui-combobox" style="width:55%;">
                             <option value="ncys">年初预算</option>
                             <option value="zxzj">专项资金</option>
                             <option value="zczj">自筹资金</option>
                             <option value="jzzj">捐赠资金</option>
                         </select>
                     </td>
-                    <td style="width:15%;padding:0px 0px 0px 0px"></td>
-                    <td style="width:35%;padding:0px 0px 0px 0px"></td>
                 </td>
             </table>
         </div>
@@ -113,7 +111,7 @@
         </table>
     </div>
     <br/><br/>
-    <div style="padding:0px 18px 0px 0px">
+    <div style="padding:0px 0px 0px 0px">
         <div class="easyui-panel" title="添加附件" style="width:100%;height:225px;">
             <a id='pickfiles' href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-add',plain:true">添加</a>

@@ -26,9 +26,9 @@
         }
     </style>
 </head>
-<body>
+<body onload="refreshCode();">
 <div class="div">
-    <form  action="/login/login" method="post">
+    <form  action="/login" method="post">
         <div class="fl"><img src="login.jpg"></div>
         <table>
             <tr align="left">

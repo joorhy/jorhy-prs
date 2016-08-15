@@ -90,7 +90,7 @@
         <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
         <div class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
-                <ul id="menuTree" class="easyui-tree" data-options="url:'../js/prsTree.json',method:'get',animate:true,
+                <ul id="menuTree" class="easyui-tree" data-options="url:'../js/applicantTree.json',method:'get',animate:true,
                     onContextMenu: function(e,node){
                         e.preventDefault();
                         $(this).tree('select',node.target);
