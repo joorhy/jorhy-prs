@@ -1,6 +1,49 @@
 /**
  * Created by Joo on 2016/7/30.
  */
+$(function(){
+    $("#menuTree").tree({
+        onClick: function(node){
+            showcontent(node);
+        }
+    });
+});
+
+function showcontent(nodeId){
+    var parm = {};
+    paramData['purc_code'] = nodeId.text;
+    if(nodeId == "new_proj"){
+        $.ajax({
+            type: 'post',
+            url:'/applicant/getBaseData',
+            data: {param:JSON.stringify(paramData)},
+            dataType: 'json',
+            success: function (data) {
+                if(data.resultCode == 1) {
+
+                } else {
+                    /*if(data.errorType == "user") {
+                     showAlertMsg("提示",data.msg,"warning");
+                     } else {
+                     showRightBottomMsg("系统提示",data.msg,'slide',5000);
+                     }*/
+                }
+            },
+            error: function (x, e) {
+                alert("error");
+            }
+        });
+        var baseData =
+        $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
+
+    }
+    else if(nodeId == "approved"){
+        //$('#contentDiv').load("../jsp/approved.jsp");
+        $('#contentDiv').panel('refresh','../jsp/approved.jsp');
+    }
+
+}
+
 function savePrj() {
     $.messager.confirm('操作提示','是否确认保存此项目?',function(r){
         if (r){

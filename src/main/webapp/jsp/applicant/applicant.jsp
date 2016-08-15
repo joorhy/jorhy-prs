@@ -13,32 +13,9 @@
             html,body{text-align:center;margin:0px auto;width:1200px;}
         </style>
         <script type="text/javascript">
-
-            $(function(){
-                /*$("#menuTree").tree({
-                    onClick: function(node){
-                        showcontent(node.id);
-                    }
-                });*/
-            });
             function showNewPage() {
                 $('#contentDiv').panel('setTitle','新建采购过程');
                 $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
-            }
-
-            function showcontent(nodeId){
-                if(nodeId == "toApprove"){
-                    //$('#contentDiv').load("../jsp/to_approve.jsp");
-                    $('#contentDiv').panel('refresh','../jsp/to_approve.jsp');
-    //                $.get("../jsp/to_approve.jsp",function(data){
-    //                    $("#contentDiv").html(data);
-    //                });
-                }
-                else if(nodeId == "approved"){
-                    //$('#contentDiv').load("../jsp/approved.jsp");
-                    $('#contentDiv').panel('refresh','../jsp/approved.jsp');
-                }
-
             }
 
             //获取菜单中的数量

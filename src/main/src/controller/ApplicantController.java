@@ -104,6 +104,10 @@ public class ApplicantController extends Controller {
         renderText(lstRoot.toString());
     }
 
+    public void getBaseData() {
+
+    }
+
     public void commodityList() {
         /*List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
         Map<String, String> dataInfo;

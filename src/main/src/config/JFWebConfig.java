@@ -33,20 +33,20 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 配置数据源和数据库连接池插件
          */
-        C3p0Plugin c3p0 = new C3p0Plugin(getProperty("jdbcUrl"),
+        /*C3p0Plugin c3p0 = new C3p0Plugin(getProperty("jdbcUrl"),
                 getProperty("user"), getProperty("password"),
                 getProperty("driverClass"));
-        me.add(c3p0);
+        me.add(c3p0);*/
         /**
          * 配置数据库表映射插件
          */
-        ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0);
-        me.add(arp);
+        /*ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0);
+        me.add(arp);*/
 
         /**
          * 配置映射表到模型
          */
-        arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", ProjectInfo.class);
+        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", ProjectInfo.class);
     }
     public void configInterceptor(Interceptors me) {
 
