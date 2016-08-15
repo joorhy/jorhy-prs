@@ -11,7 +11,6 @@ function addCommodity(){
     $('#prj_price').textbox('clear');
     $('#prj_spec').textbox('clear');
     $('#prj_param').textbox('clear');
-    $('#prj_attach').textbox('clear');
     $('#prj_total_price').textbox('clear');
     dlg_type = 'new';
 }
@@ -25,7 +24,6 @@ function editCommodity(){
         $('#prj_price').textbox('setText',row["prj_price"]);
         $('#prj_spec').textbox('setText', row["prj_spec"]);
         $('#prj_param').textbox('setText', row["prj_param"]);
-        $('#prj_attach').textbox('setText','');
         $('#prj_total_price').textbox('setText', '');
         dlg_type = 'edit';
         edit_index = $('#dgCommodity').datagrid('getRowIndex', row);
@@ -39,7 +37,6 @@ function saveCommodity(){
     data["prj_price"] = $('#prj_price').textbox('getText');
     data["prj_spec"] = $('#prj_spec').textbox('getText');
     data["prj_param"] = $('#prj_param').textbox('getText');
-    data["prj_attach"] = '';//$('#prj_attach').textbox('getText');
     data["prj_total_price"] = '';
     if (dlg_type == 'edit') {
         var updateData = {};

@@ -15,24 +15,24 @@ function savePrj() {
             baseData['engineering_total_price'] = $('#engineering_total_price').textbox('getText');
             $.ajax({
                 type: 'post',
-                url:'/new/save',
+                url:'/applicant/save',
                 data: {base:JSON.stringify(baseData),commodity:JSON.stringify($('#dgCommodity').datagrid('getData')),
                     service:JSON.stringify($('#dgService').datagrid('getData')),
                     engineering:JSON.stringify($('#dgEngineering').datagrid('getData'))},
                 dataType: 'json',
-                success: function (data, textStatus) {
-                    //    if(data.resultCode == 1) {
-                    //showRightBottomMsg("系统提示","提交成功！",'slide',5000);
-                    //   } else {
-                    //if(data.errorType == "user") {
-                    //    showAlertMsg("提示",data.msg,"warning");
-                    //} else {
-                    //    showRightBottomMsg("系统提示",data.msg,'slide',5000);
-                    //}
-                    //    }
+                success: function (data) {
+                    if(data.resultCode == 1) {
+                        $('#menuTree').tree('reload', $('#new_proj').target);
+                    } else {
+                        /*if(data.errorType == "user") {
+                            showAlertMsg("提示",data.msg,"warning");
+                        } else {
+                            showRightBottomMsg("系统提示",data.msg,'slide',5000);
+                        }*/
+                    }
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    //    alert(textStatus + errorThrown);
+                error: function (x, e) {
+                    alert("error");
                 }
             });
         }

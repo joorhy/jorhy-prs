@@ -9,16 +9,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <!--jsp:include page="easyui_header.jsp"/>
-    <script type="text/javascript" src="../js/new/commodity.js"></script>
-    <script type="text/javascript" src="../js/new/service.js"></script>
-    <script type="text/javascript" src="../js/new/engineering.js"></script>
-    <script type="text/javascript" src="../js/new/applicant.js"></script-->
     <title>新建采购过程</title>
 </head>
 <body>
-<!--div id="aa" class="easyui-panel" title="新建采购过程" style="width:100%;padding:0px 0px 0px 0px"-->
-    <!--form  action="/new/add" method="post"-->
     <div>
         <div class="easyui-panel" title="基础信息" style="width:100%">
             <table>
@@ -67,7 +60,6 @@
                     <th data-options="field:'prj_spec',width:80">规格型号</th>
                     <th data-options="field:'prj_total_price',width:80">预算总价</th>
                     <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80">相关附件</th>
                 </tr>
             </thead>
         </table>
@@ -86,7 +78,6 @@
                     <th data-options="field:'prj_spec',width:80">规格型号</th>
                     <th data-options="field:'prj_total_price',width:80">预算总价</th>
                     <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80">相关附件</th>
                 </tr>
             </thead>
         </table>
@@ -105,7 +96,6 @@
                     <th data-options="field:'prj_spec',width:80">规格型号</th>
                     <th data-options="field:'prj_total_price',width:80">预算总价</th>
                     <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-                    <th data-options="field:'prj_attach',width:80">相关附件</th>
                 </tr>
             </thead>
         </table>
@@ -129,7 +119,6 @@
                    onclick="cancelPrj()">撤销</a></td>
         </td>
     </div>
-    <!--/form-->
     <div id="tbCommodity" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
            onclick="addCommodity()">添加</a>
@@ -157,7 +146,6 @@
 
     <div id="dlg" class="easyui-dialog" style="width:400px"
          closed="true" buttons="#dlg-buttons">
-        <!--form id="fm" method="post" novalidate style="margin:0;padding:20px 50px"-->
         <div style="margin:0;padding:20px 50px">
             <div style="margin-bottom:10px">
                 <td>项目名称</td>
@@ -182,7 +170,6 @@
                        style="width:100%;height:120px">
             </div>
         </div>
-        <!--/form-->
     </div>
     <div id="dlg-buttons">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCommodity()"
@@ -190,6 +177,5 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
     </div>
-<!--/div-->
 </body>
 </html>

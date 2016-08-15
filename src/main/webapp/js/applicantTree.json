@@ -1,4 +1,4 @@
-[ {
+[{
   "id" : 1,
   "text" : "采购信息管理中心",
   "iconCls" : "icon-cut",
@@ -22,5 +22,4 @@
       "text" : "已完成采购过程",
       "iconCls" : "icon-cut"
     }]
- }
-]
+ }]

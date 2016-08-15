@@ -22,9 +22,9 @@ public class LoginController  extends Controller{
         String randomCode = getPara("randomCode");
         boolean loginSuccess = CaptchaRender.validate(this, randomCode);
         if (loginSuccess) {
-            forwardAction("/accounting");
+            redirect("/accounting");
         } else {
-            forwardAction("/applicant");
+            redirect("/applicant");
         }
     }
 

@@ -90,8 +90,8 @@
         <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
         <div class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
-                <ul id="menuTree" class="easyui-tree" data-options="url:'../js/applicantTree.json',method:'get',animate:true,
-                    onContextMenu: function(e,node){
+                <ul id="menuTree" class="easyui-tree" data-options="url:'/applicant/applicantTree',method:'get',
+                    animate:true,onContextMenu: function(e,node){
                         e.preventDefault();
                         $(this).tree('select',node.target);
                         $('#mm').menu('show',{
@@ -100,12 +100,7 @@
                         });}"></ul>
                 <div id="mm" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPage()" data-options="iconCls:'icon-add'">新建</div>
-                    <!--div onclick="removeit()" data-options="iconCls:'icon-remove'">Remove</div>
-                    <div class="menu-sep"></div>
-                    <div onclick="expand()">Expand</div>
-                    <div onclick="collapse()">Collapse</div-->
                 </div>
-                <!--<jsp:include page="../left_menu.jsp"/>-->
             </div>
             <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">
                 <jsp:include page="welcome.jsp" />
