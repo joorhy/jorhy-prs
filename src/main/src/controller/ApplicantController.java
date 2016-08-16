@@ -39,14 +39,14 @@ public class ApplicantController extends Controller {
         prjData.ReadProductData(objCommodity, PrjData.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        prjData.ReadProductData(objService, PrjData.SERVIDE);
+        prjData.ReadProductData(objService, PrjData.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
         prjData.ReadProductData(objEngineering, PrjData.ENGINEERING);
 
         ProjectInfo.dao.addProject(prjData);
 
-        setAttr("resultCode",1);
+        setAttr("result", "success");
         renderJson();
     }
 
@@ -64,7 +64,7 @@ public class ApplicantController extends Controller {
         for (int i=0; i<lstPrjData.size(); i++) {
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", String.valueOf(i));
-            childrenNode.put("text", lstPrjData.get(i).getPurcCode());
+            childrenNode.put("text", lstPrjData.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             newProjChildren.put(childrenNode);
         }
@@ -105,38 +105,53 @@ public class ApplicantController extends Controller {
     }
 
     public void getBaseData() {
-
+        String strID = getPara("id");
+        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        if (data != null) {
+            setAttr("result", "success");
+            setAttr("base", data.GetBaseDataObj().toString());
+        } else {
+            setAttr("result", "failed");
+        }
+        renderJson();
     }
 
     public void commodityList() {
-        /*List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
-        Map<String, String> dataInfo;
-        for (int i = 0; i < 8; i++) {
-            dataInfo = new HashMap<String, String>();
-            dataInfo.put("prj_name", "XX采购申请");
-            dataInfo.put("prj_count", "FI-SW-" + String.valueOf(i + 1));
-            dataInfo.put("prj_price", "张三");
-            dataInfo.put("prj_total_price", "同意");
-            dataInfo.put("prj_param", "2016-07-07 15:28:35");
-            dataInfo.put("prj_spec", "同意采购");
-            dataInfo.put("prj_attach", "同意采购");
-            dataList.add(dataInfo);
-        }*/
-
-        setAttr("rows", new ArrayList<Map<String, String>>());
-        setAttr("total", 0);
+        String strID = getPara("id");
+        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        if (data != null) {
+            setAttr("rows", data.getProductDataObj(PrjData.COMMODITY));
+            setAttr("total", data.getProductDataObj(PrjData.COMMODITY).size());
+        } else {
+            setAttr("rows", new ArrayList<Map<String, String>>());
+            setAttr("total", 0);
+        }
         renderJson();
     }
 
     public void serviceList() {
-        setAttr("rows", new ArrayList<Map<String, String>>());
-        setAttr("total", 0);
+        String strID = getPara("id");
+        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        if (data != null) {
+            setAttr("rows", data.getProductDataObj(PrjData.SERVICE));
+            setAttr("total", data.getProductDataObj(PrjData.SERVICE).size());
+        } else {
+            setAttr("rows", new ArrayList<Map<String, String>>());
+            setAttr("total", 0);
+        }
         renderJson();
     }
 
     public void engineeringList() {
-        setAttr("rows", new ArrayList<Map<String, String>>());
-        setAttr("total", 0);
+        String strID = getPara("id");
+        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        if (data != null) {
+            setAttr("rows", data.getProductDataObj(PrjData.ENGINEERING));
+            setAttr("total", data.getProductDataObj(PrjData.ENGINEERING).size());
+        } else {
+            setAttr("rows", new ArrayList<Map<String, String>>());
+            setAttr("total", 0);
+        }
         renderJson();
     }
 }

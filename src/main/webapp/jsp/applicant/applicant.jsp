@@ -2,9 +2,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
-        <script type="text/javascript" src="../../js/applicant/commodity.js"></script>
-        <script type="text/javascript" src="../../js/applicant/service.js"></script>
-        <script type="text/javascript" src="../../js/applicant/engineering.js"></script>
+        <script type="text/javascript" src="../../js/applicant/items.js"></script>
         <script type="text/javascript" src="../../js/applicant/applicant.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <jsp:include page="../easyui_header.jsp"/>
@@ -74,7 +72,7 @@
                         $('#mm').menu('show',{
                             left: e.pageX,
                             top: e.pageY
-                        });}"></ul>
+                        });},onClick: function(node) { showContent(node); }"></ul>
                 <div id="mm" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPage()" data-options="iconCls:'icon-add'">新建</div>
                 </div>

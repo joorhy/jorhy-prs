@@ -8,7 +8,6 @@ public class ProductItem {
     public int nPrjCount;
     public double fPrjPrice;
     public String strPrjSpec;
-    public double fPrjTotalPrice;
+    public double fPrjPrePrice;
     public String strPrjParam;
-    public String strPrjAttachFile;
 }
