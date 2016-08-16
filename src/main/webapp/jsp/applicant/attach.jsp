@@ -17,8 +17,7 @@
     <script type="text/javascript" src="../../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
     <script type="text/javascript" src="../../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <body>
-<div id="filelist"></div>
-<!--br/-->
+<div id="fileList"></div>
 <div id="container">
 </div>
 
@@ -31,7 +30,7 @@
         runtimes : 'html5,html4',
         browse_button : 'pickfiles', // you can pass in id...
         container: document.getElementById('container'), // ... or DOM Element itself
-        url : "/new/uploadFile",
+        url : "/applicant/uploadFile",
         filters : {
             max_file_size : '10mb',
             mime_types: [
@@ -41,8 +40,8 @@
         },
         init: {
             PostInit: function() {
-                /*document.getElementById('filelist').innerHTML = '';
-                document.getElementById('uploadfiles').onclick = function() {
+                document.getElementById('fileList').innerHTML = '';
+                /*document.getElementById('uploadfiles').onclick = function() {
                     uploader.start();
                     return false;
                 };*/
@@ -50,13 +49,22 @@
 
             FilesAdded: function(up, files) {
                 plupload.each(files, function(file) {
-                    document.getElementById('filelist').innerHTML += '<a id="' + file.id + '"  href="javascript:;">'
-                            + file.name + ' (' + plupload.formatSize(file.size) + ') </a>';
-                    document.getElementById('filelist').innerHTML += '<a id="uploadfiles" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:\'icon-remove\',plain:true" onclick="removeEngineering()">删除</a>'
+                    //document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' + file.name +
+                    //' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                    /*document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">';*/
+                    document.getElementById('fileList').innerHTML += '<a id="' + file.id + '"  href="javascript:;">'
+                            + file.name + ' (' + plupload.formatSize(file.size) + ') </a><b></b><tr/>';
+                    //document.getElementById('fileList').innerHTML += '<a id="uploadFiles" href="javascript:void(0)" ' +
+                    //        'class="easyui-linkbutton" data-options="iconCls:\'icon-remove\',plain:true" ' +
+                    //        'onclick="removeEngineering()">删除</a>';
+                    //document.getElementById('fileList').innerHTML += '<b></b></div><br/>';*/
                 });
+                uploader.start();
+                alert("start");
             },
 
             UploadProgress: function(up, file) {
+                //alert("progress");
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent
                         + "%</span>";
             },

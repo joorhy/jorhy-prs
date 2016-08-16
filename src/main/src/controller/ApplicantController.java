@@ -55,6 +55,7 @@ public class ApplicantController extends Controller {
         String fileName = uploadFile.getOriginalFileName();
         File file = uploadFile.getFile();
         file.delete();
+        renderJson();
     }
 
     public void applicantTree() {
