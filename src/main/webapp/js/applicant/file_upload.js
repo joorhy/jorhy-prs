@@ -40,4 +40,8 @@ var uploader = new plupload.Uploader({
         }
     }
 });
+
+function delAttachFile() {
+
+}
 uploader.init();

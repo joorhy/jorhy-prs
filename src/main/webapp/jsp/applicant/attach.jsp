@@ -8,25 +8,21 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-    <!--link rel="stylesheet" href="../js/plupload-2.1.9/js/jquery.plupload.queue/css/jquery.plupload.queue.css"
-          type="text/css"/>
-    <script type="text/javascript" src="../js/jquery-3.1.0/jquery-3.1.0.min.js"></script-->
-    <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.full.min.js"></script>
-    <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.dev.js"></script>
-    <script type="text/javascript" src="../../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
-    <script type="text/javascript" src="../../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+    <head>
+        <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.full.min.js"></script>
+        <script type="text/javascript" src="../../js/plupload-2.1.9/js/plupload.dev.js"></script>
+        <script type="text/javascript" src="../../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
+        <script type="text/javascript" src="../../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+    </head>
 <body>
 <div id="fileList"></div>
-<div id="container">
-</div>
+<div id="container"></div>
 
 <!--br/>
 <pre id="console"></pre-->
-
 <script type="text/javascript">
     // Custom example logic
-    var uploader = new plupload.Uploader({
+    /*var uploader = new plupload.Uploader({
         runtimes : 'html5,html4',
         browse_button : 'pickfiles', // you can pass in id...
         container: document.getElementById('container'), // ... or DOM Element itself
@@ -41,23 +37,23 @@
         init: {
             PostInit: function() {
                 document.getElementById('fileList').innerHTML = '';
-                /*document.getElementById('uploadfiles').onclick = function() {
-                    uploader.start();
-                    return false;
-                };*/
+                ///document.getElementById('uploadfiles').onclick = function() {
+                //    uploader.start();
+                //    return false;
+                //};
             },
 
             FilesAdded: function(up, files) {
                 plupload.each(files, function(file) {
                     //document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' + file.name +
                     //' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-                    /*document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">';*/
+                    //document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">';
                     document.getElementById('fileList').innerHTML += '<a id="' + file.id + '"  href="javascript:;">'
-                            + file.name + ' (' + plupload.formatSize(file.size) + ') </a><b></b><tr/>';
-                    //document.getElementById('fileList').innerHTML += '<a id="uploadFiles" href="javascript:void(0)" ' +
-                    //        'class="easyui-linkbutton" data-options="iconCls:\'icon-remove\',plain:true" ' +
-                    //        'onclick="removeEngineering()">删除</a>';
-                    //document.getElementById('fileList').innerHTML += '<b></b></div><br/>';*/
+                            + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></a>&nbsp;';
+                    document.getElementById('fileList').innerHTML += '<a id="uploadFiles" href="javascript:void(0)" ' +
+                            'class="easyui-linkbutton" data-options="iconCls:\'icon-remove\',plain:true" ' +
+                            'onclick="delAttachFile()">删除</a>';
+                    //document.getElementById('fileList').innerHTML += '<b></b></div><br/>';
                 });
                 uploader.start();
                 alert("start");
@@ -74,7 +70,7 @@
             }
         }
     });
-    uploader.init();
+    uploader.init();*/
 </script>
 </body>
 </html>
