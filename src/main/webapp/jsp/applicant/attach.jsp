@@ -74,11 +74,8 @@
     });
 
     function delAttachFile(file_id) {
-        alert(typeof file_id);
-        alert(file_id.id);
-        file_id.remove();
-        //document.getElementById(file_id.id).remove();
-        uploader.removeFile(file_id);
+        file_id.parentNode.removeChild(file_id);
+        uploader.removeFile(file_id.id);
     }
     uploader.init();
 </script>

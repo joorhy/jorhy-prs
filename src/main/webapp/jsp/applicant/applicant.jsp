@@ -68,12 +68,14 @@
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/applicant/applicantTree',method:'get',
                     animate:true,onContextMenu: function(e,node){
                         e.preventDefault();
+                        if (node.id == 'new_proj') {
                         $(this).tree('select',node.target);
                         $('#mm').menu('show',{
                             left: e.pageX,
                             top: e.pageY
-                        });},onClick: function(node) { showContent(node); }"></ul>
-                <div id="mm" class="easyui-menu" style="width:120px;">
+                        });}},onClick: function(node) { showContent(node); }">
+                </ul>
+                <div id="mm" align="left" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPage()" data-options="iconCls:'icon-add'">新建</div>
                 </div>
             </div>
