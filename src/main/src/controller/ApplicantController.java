@@ -51,11 +51,20 @@ public class ApplicantController extends Controller {
     }
 
     public void uploadFile() {
+        String fileID = getPara("id");
         UploadFile uploadFile = getFile();
         String fileName = uploadFile.getOriginalFileName();
+
         File file = uploadFile.getFile();
         file.delete();
+
+        setAttr("result", "success");
         renderJson();
+    }
+
+    public void downloadFile() {
+        String strFileName = getPara("name");
+        renderFile(new File("D:\\New Microsoft Word Document.docx"));
     }
 
     public void applicantTree() {

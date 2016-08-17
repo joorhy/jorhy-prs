@@ -32,7 +32,7 @@
                 <td align="left">
                     <td style="width:15%;">资金性质</td>
                     <td style="width:35%;">
-                        <select id="funds_nature" class="easyui-combobox" style="width:55%;">
+                        <select id="funds_nature" class="easyui-combobox" style="width:50%;">
                             <option value="ncys">年初预算</option>
                             <option value="zxzj">专项资金</option>
                             <option value="zczj">自筹资金</option>
@@ -89,8 +89,6 @@
     </div><br/>
     <div style="padding:0px 0px 0px 0px">
         <div class="easyui-panel" title="附件" style="width:100%;height:225px;" data-options="fit:false,border:true">
-            <a id='pickfiles' href="javascript:void(0)" class="easyui-linkbutton"
-               data-options="iconCls:'icon-add',plain:true">添加附件</a>
             <jsp:include page="attach.jsp"/>
         </div>
     </div><br/>
