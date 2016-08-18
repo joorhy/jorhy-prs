@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Joo on 2016/7/30.
  */
-public class PrjData {
+public class PurchasingData {
     public static final String SUCCESS = "success";
 
     public static final String COMMODITY = "commodity";
@@ -28,6 +28,7 @@ public class PrjData {
     private ArrayList<ProductItem> lstCommodity = new ArrayList<ProductItem>();
     private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();
     private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();
+    private ArrayList<AttachFileItem> lstAttachFile = new ArrayList<AttachFileItem>();
 
     public String getPurCode() {
         return strPurCode;
@@ -71,6 +72,10 @@ public class PrjData {
 
     public ArrayList<ProductItem> getEngineeringList() {
         return lstEngineering;
+    }
+
+    public ArrayList<AttachFileItem> getAttachFileList() {
+        return lstAttachFile;
     }
 
     public String ReadBaseData(JSONObject obj) {
@@ -151,5 +156,18 @@ public class PrjData {
             productArray.add(obj);
         }
         return productArray;
+    }
+
+    public void addAttachFile(AttachFileItem item) {
+        lstAttachFile.add(item);
+    }
+
+    public void delAttachFile(String strFileID) {
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
+                lstAttachFile.remove(i);
+                break;
+            }
+        }
     }
 }

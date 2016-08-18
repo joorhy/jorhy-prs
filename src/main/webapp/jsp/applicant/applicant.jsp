@@ -10,56 +10,6 @@
         <style>
             html,body{text-align:center;margin:0px auto;width:1200px;}
         </style>
-        <script type="text/javascript">
-            function showNewPage() {
-                $('#contentDiv').panel('setTitle','新建采购过程');
-                $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
-            }
-
-            //获取菜单中的数量
-            function loadData(){
-                /*$.ajax({
-                    type: 'POST',
-                    url: '/leftMenu',
-                    data:{},
-                    dataType: 'json',
-                    success: function(data){
-                        var newPrj = $('#menuTree').tree('find', "new");
-                        if(newPrj){
-                            $('#menuTree').tree('update', {
-                                target: newPrj.target,
-                                text:"新建采购过程（"+ data.toApprove +"）"
-                            });
-                        }
-
-                        var toApprove = $('#menuTree').tree('find', "toApprove");
-                        if(toApprove){
-                            $('#menuTree').tree('update', {
-                                target: toApprove.target,
-                                text:"已提交采购过程（"+ data.toApprove +"）"
-                            });
-                        }
-
-                        var approved = $('#menuTree').tree('find', "approved");
-                        if(approved){
-                            $('#menuTree').tree('update', {
-                                target: approved.target,
-                                text:"已执行采购过程（"+ data.approved +"）"
-                            });
-                        }
-
-                        var rejected = $('#menuTree').tree('find', "rejected");
-                        if(rejected){
-                            $('#menuTree').tree('update', {
-                                target: rejected.target,
-                                text:"已完成采购过程（"+ data.rejected +"）"
-                            });
-                        }
-                    }
-                });*/
-            }
-        </script>
-
     </head>
     <body onload=" loadData();">
         <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
@@ -69,11 +19,12 @@
                     animate:true,onContextMenu: function(e,node){
                         e.preventDefault();
                         if (node.id == 'new_proj') {
-                        $(this).tree('select',node.target);
-                        $('#mm').menu('show',{
-                            left: e.pageX,
-                            top: e.pageY
-                        });}},onClick: function(node) { showContent(node); }">
+                            $(this).tree('select',node.target);
+                            $('#mm').menu('show',{
+                                left: e.clientX,
+                                top: e.clientY
+                            });}
+                        },onClick: function(node) { showContent(node); }">
                 </ul>
                 <div id="mm" align="left" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPage()" data-options="iconCls:'icon-add'">新建</div>

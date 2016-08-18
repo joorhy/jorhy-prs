@@ -1,9 +1,10 @@
 package controller;
 
+import bean.AttachFileItem;
 import com.jfinal.core.Controller;
-import bean.PrjData;
+import bean.PurchasingData;
 import com.jfinal.upload.UploadFile;
-import model.ProjectInfo;
+import model.PurchasingInfo;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -30,33 +31,34 @@ public class ApplicantController extends Controller {
         String strService = getPara("service");
         String strEngineering = getPara("engineering");
 
-        PrjData prjData = new PrjData();
+        PurchasingData purchasingData = new PurchasingData();
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        prjData.ReadBaseData(objBaseData);
+        purchasingData.ReadBaseData(objBaseData);
 
         JSONObject objCommodity = new JSONObject(strCommodity);
-        prjData.ReadProductData(objCommodity, PrjData.COMMODITY);
+        purchasingData.ReadProductData(objCommodity, PurchasingData.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        prjData.ReadProductData(objService, PrjData.SERVICE);
+        purchasingData.ReadProductData(objService, PurchasingData.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
-        prjData.ReadProductData(objEngineering, PrjData.ENGINEERING);
+        purchasingData.ReadProductData(objEngineering, PurchasingData.ENGINEERING);
 
-        ProjectInfo.dao.addProject(prjData);
+        PurchasingInfo.dao.addPurchasing(purchasingData);
 
         setAttr("result", "success");
         renderJson();
     }
 
     public void uploadFile() {
-        String fileID = getPara("id");
-        UploadFile uploadFile = getFile();
-        String fileName = uploadFile.getOriginalFileName();
+        AttachFileItem item = new AttachFileItem();
+        item.strPurID = getPara("pur_id");
+        item.strFileID = getPara("file_id");
 
-        File file = uploadFile.getFile();
-        file.delete();
+        UploadFile uploadFile = getFile();
+        item.strFileName = uploadFile.getOriginalFileName();
+        System.setProperty("UPLOAD_PATH", uploadFile.getUploadPath());
 
         setAttr("result", "success");
         renderJson();
@@ -64,17 +66,19 @@ public class ApplicantController extends Controller {
 
     public void downloadFile() {
         String strFileName = getPara("name");
-        renderFile(new File("D:\\New Microsoft Word Document.docx"));
+        String strFilePath = System.getProperty("UPLOAD_PATH");
+        String strFile = strFilePath + File.separator + strFileName;
+        renderFile(new File(strFilePath + File.separator + strFileName));
     }
 
     public void applicantTree() {
-        ArrayList<PrjData> lstPrjData = ProjectInfo.dao.getPrjDataList();
+        ArrayList<PurchasingData> lstPurchasingData = PurchasingInfo.dao.getPrjDataList();
 
         JSONArray newProjChildren = new JSONArray();
-        for (int i=0; i<lstPrjData.size(); i++) {
+        for (int i = 0; i< lstPurchasingData.size(); i++) {
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", String.valueOf(i));
-            childrenNode.put("text", lstPrjData.get(i).getPurCode());
+            childrenNode.put("text", lstPurchasingData.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             newProjChildren.put(childrenNode);
         }
@@ -116,7 +120,7 @@ public class ApplicantController extends Controller {
 
     public void getBaseData() {
         String strID = getPara("id");
-        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        PurchasingData data = PurchasingInfo.dao.getPrjData(strID);
         if (data != null) {
             setAttr("result", "success");
             setAttr("base", data.GetBaseDataObj().toString());
@@ -128,10 +132,10 @@ public class ApplicantController extends Controller {
 
     public void commodityList() {
         String strID = getPara("id");
-        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        PurchasingData data = PurchasingInfo.dao.getPrjData(strID);
         if (data != null) {
-            setAttr("rows", data.getProductDataObj(PrjData.COMMODITY));
-            setAttr("total", data.getProductDataObj(PrjData.COMMODITY).size());
+            setAttr("rows", data.getProductDataObj(PurchasingData.COMMODITY));
+            setAttr("total", data.getProductDataObj(PurchasingData.COMMODITY).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -141,10 +145,10 @@ public class ApplicantController extends Controller {
 
     public void serviceList() {
         String strID = getPara("id");
-        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        PurchasingData data = PurchasingInfo.dao.getPrjData(strID);
         if (data != null) {
-            setAttr("rows", data.getProductDataObj(PrjData.SERVICE));
-            setAttr("total", data.getProductDataObj(PrjData.SERVICE).size());
+            setAttr("rows", data.getProductDataObj(PurchasingData.SERVICE));
+            setAttr("total", data.getProductDataObj(PurchasingData.SERVICE).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -154,10 +158,10 @@ public class ApplicantController extends Controller {
 
     public void engineeringList() {
         String strID = getPara("id");
-        PrjData data = ProjectInfo.dao.getPrjData(strID);
+        PurchasingData data = PurchasingInfo.dao.getPrjData(strID);
         if (data != null) {
-            setAttr("rows", data.getProductDataObj(PrjData.ENGINEERING));
-            setAttr("total", data.getProductDataObj(PrjData.ENGINEERING).size());
+            setAttr("rows", data.getProductDataObj(PurchasingData.ENGINEERING));
+            setAttr("total", data.getProductDataObj(PurchasingData.ENGINEERING).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);

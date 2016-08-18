@@ -15,6 +15,7 @@
     <div>
         <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadCreate()">
             <table>
+                <input id="purchasing_id" type="hidden" value="fdafas"/></td>
                 <td align="left">
                     <td style="width:15%">采购函编号</td>
                     <td style="width:35%;"><input id="pur_code" class="easyui-textbox"/></td>
@@ -33,7 +34,7 @@
                     <td style="width:15%;">资金性质</td>
                     <td style="width:35%;">
                         <select id="funds_nature" class="easyui-combobox" style="width:50%;">
-                            <option value="ncys">年初预算</option>
+                            <option value="ncys" selected>年初预算</option>
                             <option value="zxzj">专项资金</option>
                             <option value="zczj">自筹资金</option>
                             <option value="jzzj">捐赠资金</option>
@@ -96,11 +97,11 @@
     <div align="right">
         <td align="right">
             <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                   onclick="savePrj()">保存</a></td>
+                   onclick="savePurchasing()">保存</a></td>
             <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                   onclick="submitPrj()">提交审核</a></td>
+                   onclick="submitPurchasing()">提交审核</a></td>
             <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-                   onclick="cancelPrj()">撤销</a></td>
+                   onclick="cancelPurchasing()">撤销</a></td>
         </td>
     </div>
     <div id="tbCommodity" style="height:auto">
@@ -134,7 +135,7 @@
     <div id="tbEngineering" style="height:auto">
         <td align="left">
             <td>工程类预算总价</td>
-            <td><input id="engineering_pre_price" class="easyui-textbox" /></td>
+            <td><input id="engineering_pre_price" class="easyui-textbox"/></td>
             <td>工程类实际总价</td>
             <td><input id="engineering_total_price" class="easyui-textbox" /></td>
         </td>

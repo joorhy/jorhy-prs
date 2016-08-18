@@ -1,12 +1,9 @@
 package config;
 
 import com.jfinal.config.*;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
 import controller.*;
-import model.ProjectInfo;
 
 /**
  * Created by JooLiu on 2016/6/22.
@@ -46,7 +43,7 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 配置映射表到模型
          */
-        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", ProjectInfo.class);
+        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", PurchasingInfo.class);
     }
     public void configInterceptor(Interceptors me) {
 

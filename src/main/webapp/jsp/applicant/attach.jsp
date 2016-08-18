@@ -43,9 +43,10 @@
             },
             FilesAdded: function(up, files) {
                 plupload.each(files, function(file) {
-                    uploader.settings.url = "/applicant/uploadFile?id=" + file.id;
+                    uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
+                            "&pur_id=" + document.getElementById("purchasing_id").value;
                     document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                            '<a href="/applicant/downloadFile?name=file.name">' + file.name +
+                            '<a href=/applicant/downloadFile?name=' + file.name + '> ' + file.name +
                             '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
                             '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
                             'data-options="iconCls:\'icon-remove\',plain:true" ' +
