@@ -89,7 +89,8 @@
         </table>
     </div><br/>
     <div style="padding:0px 0px 0px 0px">
-        <div class="easyui-panel" title="附件" style="width:100%;height:225px;" data-options="fit:false,border:true">
+        <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
+             data-options="fit:false,border:true,onLoad:onLoadAttachFile()">
             <jsp:include page="attach.jsp"/>
         </div>
     </div><br/>

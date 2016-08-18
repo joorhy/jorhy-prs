@@ -41,7 +41,7 @@ function showContent(nodeId){
     $.ajax({
         type: 'post',
         url:'/applicant/getBaseData',
-        data: {id:nodeId.text},
+        data: {id:nodeId.id},
         dataType: 'json',
         success: function (data) {
             if(data.result == "success") {
@@ -59,6 +59,7 @@ function showContent(nodeId){
 
 function onLoadCreate() {
     if (baseData != null) {
+        document.getElementById("purchasing_id").value = baseData['purchasing_id'];
         $('#pur_code').textbox('setText', baseData['pur_code']);
         $('#funds_src').textbox('setText', baseData['funds_src']);
         $('#contacts').textbox('setText', baseData['contacts']);
@@ -76,10 +77,15 @@ function onLoadCreate() {
     }
 }
 
+function onLoadAttachFile() {
+    loadAttachFile();
+}
+
 function savePurchasing() {
     $.messager.confirm('操作提示','是否确认保存此项目?',function(r){
         if (r){
             var baseData = {};
+            baseData['purchasing_id'] = document.getElementById("purchasing_id").value;
             baseData['pur_code'] = $('#pur_code').textbox('getText');
             baseData['funds_src'] = $('#funds_src').textbox('getText');
             baseData['contacts'] = $('#contacts').textbox('getText');

@@ -35,9 +35,9 @@ public class PurchasingInfo extends Model<PurchasingInfo> {
         return lstPurchasingData;
     }
 
-    public PurchasingData getPrjData(String strPurCode) {
+    public PurchasingData getPrjData(String strPurchasingID) {
         for (int i = 0; i< lstPurchasingData.size(); i++) {
-            if (lstPurchasingData.get(i).getPurCode().equals(strPurCode)) {
+            if (lstPurchasingData.get(i).getPurchasingID().equals(strPurchasingID)) {
                 return lstPurchasingData.get(i);
             }
         }

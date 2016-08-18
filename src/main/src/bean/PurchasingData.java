@@ -17,6 +17,7 @@ public class PurchasingData {
     public static final String SERVICE = "service";
     public static final String ENGINEERING = "engineering";
 
+    private String strPurchasingID;
     private String strPurCode;
     private String strFundsSrc;
     private String strContacts;
@@ -30,23 +31,27 @@ public class PurchasingData {
     private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();
     private ArrayList<AttachFileItem> lstAttachFile = new ArrayList<AttachFileItem>();
 
+    public String getPurchasingID() {
+        return strPurchasingID;
+    }
+
     public String getPurCode() {
         return strPurCode;
     }
 
-    public String getStrFundsSrc() {
+    public String getFundsSrc() {
         return strFundsSrc;
     }
 
-    public String getStrContacts() {
+    public String getContacts() {
         return strContacts;
     }
 
-    public String getStrPhoneNum() {
+    public String getPhoneNum() {
         return strPhoneNum;
     }
 
-    public String getStrFundsNature() {
+    public String getFundsNature() {
         return strFundsNature;
     }
 
@@ -74,8 +79,17 @@ public class PurchasingData {
         return lstEngineering;
     }
 
-    public ArrayList<AttachFileItem> getAttachFileList() {
-        return lstAttachFile;
+    public ArrayList<Map<String, String>> getAttachFileList() {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            AttachFileItem item = lstAttachFile.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("id", item.strFileID);
+            m.put("name", item.strFileName);
+            m.put("size", item.strFileSize);
+            lst.add(m);
+        }
+        return lst;
     }
 
     public String ReadBaseData(JSONObject obj) {
@@ -83,6 +97,7 @@ public class PurchasingData {
         lstService.clear();
         lstEngineering.clear();
 
+        strPurchasingID = obj.getString("purchasing_id");
         strPurCode = obj.getString("pur_code");
         strFundsSrc = obj.getString("funds_src");
         strContacts = obj.getString("contacts");
@@ -97,6 +112,7 @@ public class PurchasingData {
 
     public JSONObject GetBaseDataObj() {
         JSONObject obj = new JSONObject();
+        obj.put("purchasing_id", strPurchasingID);
         obj.put("pur_code", strPurCode);
         obj.put("funds_src", strFundsSrc);
         obj.put("contacts", strContacts);
@@ -156,6 +172,15 @@ public class PurchasingData {
             productArray.add(obj);
         }
         return productArray;
+    }
+
+    public AttachFileItem getAttachFileItem(String strFileID) {
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
+                return lstAttachFile.get(i);
+            }
+        }
+        return null;
     }
 
     public void addAttachFile(AttachFileItem item) {

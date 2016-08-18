@@ -31,9 +31,11 @@ public class ApplicantController extends Controller {
         String strService = getPara("service");
         String strEngineering = getPara("engineering");
 
-        PurchasingData purchasingData = new PurchasingData();
-
         JSONObject objBaseData = new JSONObject(strBaseData);
+        PurchasingData purchasingData = PurchasingInfo.dao.getPrjData(objBaseData.getString("purchasing_id"));
+        if (purchasingData == null) {
+            purchasingData = new PurchasingData();
+        }
         purchasingData.ReadBaseData(objBaseData);
 
         JSONObject objCommodity = new JSONObject(strCommodity);
@@ -53,22 +55,60 @@ public class ApplicantController extends Controller {
 
     public void uploadFile() {
         AttachFileItem item = new AttachFileItem();
-        item.strPurID = getPara("pur_id");
+        item.strPurchasingID = getPara("purchasing_id");
         item.strFileID = getPara("file_id");
 
         UploadFile uploadFile = getFile();
         item.strFileName = uploadFile.getOriginalFileName();
+
+        File file = uploadFile.getFile();
+        item.strFileSize = String.valueOf(file.length());
         System.setProperty("UPLOAD_PATH", uploadFile.getUploadPath());
+
+        PurchasingData purchasingData = PurchasingInfo.dao.getPrjData(item.strPurchasingID);
+        if (purchasingData == null) {
+            purchasingData = new PurchasingData();
+        }
+        purchasingData.addAttachFile(item);
 
         setAttr("result", "success");
         renderJson();
     }
 
     public void downloadFile() {
-        String strFileName = getPara("name");
-        String strFilePath = System.getProperty("UPLOAD_PATH");
-        String strFile = strFilePath + File.separator + strFileName;
-        renderFile(new File(strFilePath + File.separator + strFileName));
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingData purchasingData = PurchasingInfo.dao.getPrjData(strPurchasingID);
+        if (purchasingData != null) {
+            String strFileID = getPara("file_id");
+            AttachFileItem item = purchasingData.getAttachFileItem(strFileID);
+            if (item != null) {
+                String strFilePath = System.getProperty("UPLOAD_PATH");
+                renderFile(new File(strFilePath + File.separator + item.strFileName));
+            }
+        } else {
+            renderJson();
+        }
+    }
+
+    public void getAttachFiles() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingData purchasingData = PurchasingInfo.dao.getPrjData(strPurchasingID);
+        if (purchasingData != null) {
+            ArrayList<Map<String, String>> lst = purchasingData.getAttachFileList();
+            setAttr("files", lst);
+        }
+        renderJson();
+    }
+
+    public void removeFile() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingData purchasingData = PurchasingInfo.dao.getPrjData(strPurchasingID);
+        if (purchasingData != null) {
+            String strFileID = getPara("file_id");
+            purchasingData.delAttachFile(strFileID);
+        }
+        setAttr("result", "success");
+        renderJson();
     }
 
     public void applicantTree() {
@@ -77,7 +117,7 @@ public class ApplicantController extends Controller {
         JSONArray newProjChildren = new JSONArray();
         for (int i = 0; i< lstPurchasingData.size(); i++) {
             JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", String.valueOf(i));
+            childrenNode.put("id", lstPurchasingData.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasingData.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             newProjChildren.put(childrenNode);

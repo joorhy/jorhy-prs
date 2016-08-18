@@ -24,6 +24,30 @@
 <pre id="console"></pre>
 
 <script type="text/javascript">
+    function loadAttachFile() {
+        $.ajax({
+            type: 'post',
+            url:'/applicant/getAttachFiles',
+            data: {purchasing_id:document.getElementById("purchasing_id").value},
+            dataType: 'json',
+            success: function (data) {
+                for(var key in data.files) {
+                    var file = data.files[key];
+                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                            '<a href=/applicant/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                            document.getElementById("purchasing_id").value + '> ' + file.name +
+                            '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
+                            '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                            'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                            'onclick=delAttachFile(' + file.id + ')> 删除</a><br/></div>';
+                }
+            },
+            error: function (x, e) {
+                alert("error");
+            }
+        });
+    }
+
     var uploader = new plupload.Uploader({
         runtimes : 'html5,html4',
         browse_button : 'pickFiles', // you can pass in id...
@@ -39,14 +63,15 @@
         unique_names: true,
         init: {
             PostInit: function() {
-                document.getElementById('fileList').innerHTML = '';
+                //document.getElementById('fileList').innerHTML = '';
             },
             FilesAdded: function(up, files) {
                 plupload.each(files, function(file) {
                     uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
-                            "&pur_id=" + document.getElementById("purchasing_id").value;
+                            "&purchasing_id=" + document.getElementById("purchasing_id").value;
                     document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                            '<a href=/applicant/downloadFile?name=' + file.name + '> ' + file.name +
+                            '<a href=/applicant/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                            document.getElementById("purchasing_id").value + '> ' + file.name +
                             '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
                             '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
                             'data-options="iconCls:\'icon-remove\',plain:true" ' +
@@ -75,8 +100,21 @@
     });
 
     function delAttachFile(file_id) {
-        file_id.parentNode.removeChild(file_id);
-        uploader.removeFile(file_id.id);
+        $.ajax({
+            type: 'post',
+            url:'/applicant/removeFile',
+            data: {file_id:file_id.id,purchasing_id:document.getElementById("purchasing_id").value},
+            dataType: 'json',
+            success: function (data) {
+                if(data.result == "success") {
+                    file_id.parentNode.removeChild(file_id);
+                    uploader.removeFile(file_id.id);
+                }
+            },
+            error: function (x, e) {
+                alert("error");
+            }
+        });
     }
     uploader.init();
 </script>
