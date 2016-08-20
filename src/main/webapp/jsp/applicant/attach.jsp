@@ -24,17 +24,17 @@
 <pre id="console"></pre>
 
 <script type="text/javascript">
-    function loadAttachFile() {
+    function onLoadAttachCreate() {
         $.ajax({
             type: 'post',
-            url:'/applicant/getAttachFiles',
+            url:'/common/getAttachFiles',
             data: {purchasing_id:document.getElementById("purchasing_id").value},
             dataType: 'json',
             success: function (data) {
                 for(var key in data.files) {
                     var file = data.files[key];
                     document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                            '<a href=/applicant/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                            '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
                             document.getElementById("purchasing_id").value + '> ' + file.name +
                             '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
                             '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
@@ -47,7 +47,6 @@
             }
         });
     }
-
     var uploader = new plupload.Uploader({
         runtimes : 'html5,html4',
         browse_button : 'pickFiles', // you can pass in id...
@@ -70,7 +69,7 @@
                     uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
                             "&purchasing_id=" + document.getElementById("purchasing_id").value;
                     document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                            '<a href=/applicant/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                            '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
                             document.getElementById("purchasing_id").value + '> ' + file.name +
                             '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
                             '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
@@ -98,24 +97,6 @@
             }
         }
     });
-
-    function delAttachFile(file_id) {
-        $.ajax({
-            type: 'post',
-            url:'/applicant/removeFile',
-            data: {file_id:file_id.id,purchasing_id:document.getElementById("purchasing_id").value},
-            dataType: 'json',
-            success: function (data) {
-                if(data.result == "success") {
-                    file_id.parentNode.removeChild(file_id);
-                    uploader.removeFile(file_id.id);
-                }
-            },
-            error: function (x, e) {
-                alert("error");
-            }
-        });
-    }
     uploader.init();
 </script>
 </body>

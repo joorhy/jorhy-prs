@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="../../js/common/common.js"></script>
     <script type="text/javascript" src="../../js/accounting/accounting.js"></script>
     <jsp:include page="../easyui_header.jsp"/>
     <title>采购过程管理平台</title>

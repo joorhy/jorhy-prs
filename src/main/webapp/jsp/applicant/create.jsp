@@ -46,7 +46,7 @@
     </div><br/>
     <div region="center">
         <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'/applicant/commodityList',method:'post',
+               data-options="rownumbers:true,singleSelect:true,url:'/common/commodityList',method:'post',
                queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbCommodity">
             <thead>
                 <tr>
@@ -60,7 +60,7 @@
             </thead>
         </table>
         <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'/applicant/serviceList',method:'post',
+               data-options="rownumbers:true,singleSelect:true,url:'/common/serviceList',method:'post',
                queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbService">
             <thead>
                 <tr>
@@ -74,7 +74,7 @@
             </thead>
         </table><br/>
         <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'/applicant/engineeringList',method:'post',
+               data-options="rownumbers:true,singleSelect:true,url:'/common/engineeringList',method:'post',
                queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbEngineering">
             <thead>
                 <tr>
@@ -90,7 +90,7 @@
     </div><br/>
     <div style="padding:0px 0px 0px 0px">
         <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
-             data-options="fit:false,border:true,onLoad:onLoadAttachFile()">
+             data-options="fit:false,border:true,onLoad:onLoadAttachCreate()">
             <jsp:include page="attach.jsp"/>
         </div>
     </div><br/>
@@ -148,8 +148,8 @@
            onclick="removeProjectItem('engineering')">删除</a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px"
-         closed="true" buttons="#dlg-buttons">
+    <div id="dlgCreate" class="easyui-dialog" style="width:400px"
+         closed="true" buttons="#dlg_buttons_create">
         <div style="margin:0;padding:20px 50px">
             <div style="margin-bottom:10px">
                 <td>项目名称</td>
@@ -179,11 +179,11 @@
             </div>
         </div>
     </div>
-    <div id="dlg-buttons">
+    <div id="dlg_buttons_create">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveProjectItem()"
            style="width:90px">保存</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-           onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+           onclick="javascript:$('#dlgCreate').dialog('close')" style="width:90px">取消</a>
     </div>
 </body>
 </html>

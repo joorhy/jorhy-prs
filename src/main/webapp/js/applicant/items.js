@@ -6,7 +6,7 @@ var dlg_type;
 var edit_index;
 var project;
 function addProjectItem(prj_type){
-    $('#dlg').dialog('open').dialog('center').dialog('setTitle','新增项目');
+    $('#dlgCreate').dialog('open').dialog('center').dialog('setTitle','新增项目');
     $('#prj_name').textbox('clear');
     $('#prj_count').textbox('clear');
     $('#prj_price').textbox('clear');
@@ -35,7 +35,7 @@ function editProjectItem(prj_type){
 
     var row = project.datagrid('getSelected');
     if (row){
-        $('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑项目');
+        $('#dlgCreate').dialog('open').dialog('center').dialog('setTitle','编辑项目');
         $('#prj_name').textbox('setText', row["prj_name"]);
         $('#prj_count').textbox('setText',row["prj_count"]);
         $('#prj_price').textbox('setText',row["prj_price"]);
@@ -67,7 +67,7 @@ function saveProjectItem(){
     } else {
         project.datagrid('appendRow', data);
     }
-    $('#dlg').dialog('close');
+    $('#dlgCreate').dialog('close');
 }
 
 function removeProjectItem(prj_type){

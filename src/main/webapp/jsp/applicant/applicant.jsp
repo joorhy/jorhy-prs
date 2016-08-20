@@ -2,6 +2,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
+        <script type="text/javascript" src="../../js/common/common.js"></script>
         <script type="text/javascript" src="../../js/applicant/items.js"></script>
         <script type="text/javascript" src="../../js/applicant/applicant.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,8 +12,10 @@
             html,body{text-align:center;margin:0px auto;width:1200px;}
         </style>
     </head>
-    <body onload=" loadData();">
-        <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
+    <body>
+        <div id="header" style="min-height:100px;width:100%;border:1px green solid;">
+            <jsp:include page="../header.jsp"/>
+        </div>
         <div class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/applicant/applicantTree',method:'get',
