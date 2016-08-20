@@ -47,6 +47,10 @@ function editProjectItem(prj_type){
     }
 }
 
+function viewOpinion() {
+
+}
+
 function saveProjectItem(){
     var data = {};
     data["prj_name"] = $('#prj_name').textbox('getText');

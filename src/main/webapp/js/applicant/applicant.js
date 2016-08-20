@@ -45,8 +45,14 @@ function showContent(nodeId){
         dataType: 'json',
         success: function (data) {
             if(data.result == "success") {
-                $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
-                baseData = JSON.parse(data.base);
+                if (nodeId.type == 'new') {
+                    $('#contentDiv').panel('setTitle','新建采购过程');
+                    $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
+                } else {
+                    $('#contentDiv').panel('setTitle','已提交采购过程');
+                    $('#contentDiv').panel('refresh', '../jsp/applicant/submitted.jsp');
+                }
+                baseData = data.base;
             } else {
                 baseData = null;
             }
@@ -61,6 +67,7 @@ function onLoadCreate() {
     if (baseData != null) {
         document.getElementById("purchasing_id").value = baseData['purchasing_id'];
         $('#pur_code').textbox('setText', baseData['pur_code']);
+        $('#pur_code').textbox('disable');
         $('#funds_src').textbox('setText', baseData['funds_src']);
         $('#contacts').textbox('setText', baseData['contacts']);
         $('#phone_num').textbox('setText', baseData['phone_num']);
@@ -70,10 +77,20 @@ function onLoadCreate() {
         $('#engineering_pre_price').textbox('setText', baseData['engineering_pre_price']);
     } else {
         document.getElementById("purchasing_id").value = Math.uuid(36, 62);
-        /*$('#funds_nature').combobox('setValue', 'ncys');
-        $('#commodity_pre_price').textbox('setText', '0');
-        $('#service_pre_price').textbox('setText', '0');
-        $('#engineering_pre_price').textbox('setText', '0');*/
+    }
+}
+
+function onLoadSubmitted() {
+    if (baseData != null) {
+        document.getElementById("purchasing_id").value = baseData['purchasing_id'];
+        $('#pur_code').textbox('setText', baseData['pur_code']);
+        $('#funds_src').textbox('setText', baseData['funds_src']);
+        $('#contacts').textbox('setText', baseData['contacts']);
+        $('#phone_num').textbox('setText', baseData['phone_num']);
+        $('#funds_nature').combobox('setValue', baseData['funds_nature']);
+        $('#commodity_pre_price').textbox('setText', baseData['commodity_pre_price']);
+        $('#service_pre_price').textbox('setText', baseData['service_pre_price']);
+        $('#engineering_pre_price').textbox('setText', baseData['engineering_pre_price']);
     }
 }
 
@@ -107,6 +124,7 @@ function savePurchasing() {
                 success: function (data) {
                     if(data.result == "success") {
                         $('#menuTree').tree('reload', $('#new_proj').target);
+                        $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
                     } else {
                         /*if(data.errorType == "user") {
                             showAlertMsg("提示",data.msg,"warning");
@@ -124,7 +142,31 @@ function savePurchasing() {
 }
 
 function submitPurchasing() {
-
+    $.messager.confirm('操作提示','是否确认提交审核?',function(r){
+        if (r){
+            $.ajax({
+                type: 'post',
+                url:'/applicant/submit',
+                data: {purchasing_id:document.getElementById("purchasing_id").value},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.result == "success") {
+                        $('#menuTree').tree('reload', $('#new_proj').target);
+                        $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
+                    } else {
+                        /*if(data.errorType == "user") {
+                         showAlertMsg("提示",data.msg,"warning");
+                         } else {
+                         showRightBottomMsg("系统提示",data.msg,'slide',5000);
+                         }*/
+                    }
+                },
+                error: function (x, e) {
+                    alert("error");
+                }
+            });
+        }
+    });
 }
 
 function cancelPurchasing() {

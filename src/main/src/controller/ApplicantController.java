@@ -24,7 +24,7 @@ public class ApplicantController extends Controller {
         renderJsp("/jsp/applicant/attach.jsp");
     }
 
-    // 提交按钮
+    // 保存按钮
     public void save() {
         String strBaseData = getPara("base");
         String strCommodity = getPara("commodity");
@@ -53,6 +53,14 @@ public class ApplicantController extends Controller {
         renderJson();
     }
 
+    // 提交审核按钮
+    public void submit() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingInfo.dao.submitPurchasing(strPurchasingID);
+        setAttr("result", "success");
+        renderJson();
+    }
+
     public void uploadFile() {
         AttachFileItem item = new AttachFileItem();
         item.strPurchasingID = getPara("purchasing_id");
@@ -63,14 +71,9 @@ public class ApplicantController extends Controller {
 
         File file = uploadFile.getFile();
         item.strFileSize = String.valueOf(file.length());
-        System.setProperty("UPLOAD_PATH", uploadFile.getUploadPath());
+        item.strFilePath = file.getPath();
 
-        PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(item.strPurchasingID);
-        if (purchasingData == null) {
-            purchasingData = new PurchasingData();
-        }
-        purchasingData.addAttachFile(item);
-
+        PurchasingInfo.dao.addAttachFile(item.strPurchasingID, item);
         setAttr("result", "success");
         renderJson();
     }
@@ -82,8 +85,7 @@ public class ApplicantController extends Controller {
             String strFileID = getPara("file_id");
             AttachFileItem item = purchasingData.getAttachFileItem(strFileID);
             if (item != null) {
-                String strFilePath = System.getProperty("UPLOAD_PATH");
-                renderFile(new File(strFilePath + File.separator + item.strFileName));
+                renderFile(new File(item.strFilePath));
             }
         } else {
             renderJson();
@@ -105,6 +107,13 @@ public class ApplicantController extends Controller {
         PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(strPurchasingID);
         if (purchasingData != null) {
             String strFileID = getPara("file_id");
+            AttachFileItem item = purchasingData.getAttachFileItem(strFileID);
+            if (item != null) {
+                File file = new File(item.strFilePath);
+                if (file != null) {
+                    file.delete();
+                }
+            }
             purchasingData.delAttachFile(strFileID);
         }
         setAttr("result", "success");
@@ -112,7 +121,7 @@ public class ApplicantController extends Controller {
     }
 
     public void applicantTree() {
-        renderText(PurchasingData.getTree().toString());
+        renderText(PurchasingData.getApplicantTree().toString());
     }
 
     public void getBaseData() {

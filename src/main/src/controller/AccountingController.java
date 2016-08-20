@@ -1,5 +1,6 @@
 package controller;
 
+import bean.PurchasingData;
 import com.jfinal.core.Controller;
 
 /**
@@ -9,5 +10,9 @@ public class AccountingController extends Controller {
     // 页面初始化
     public void index() {
         renderJsp("/jsp/accounting/accounting.jsp");
+    }
+
+    public void accountingTree() {
+        renderText(PurchasingData.getAccountingTree().toString());
     }
 }

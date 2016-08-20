@@ -15,7 +15,7 @@
     <div>
         <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadCreate()">
             <table>
-                <input id="purchasing_id" type="hidden" value="fdafas"/></td>
+                <input id="purchasing_id" type="hidden" value=""/></td>
                 <td align="left">
                     <td style="width:15%">采购函编号</td>
                     <td style="width:35%;"><input id="pur_code" class="easyui-textbox"/></td>
@@ -47,7 +47,7 @@
     <div region="center">
         <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
                data-options="rownumbers:true,singleSelect:true,url:'/applicant/commodityList',method:'post',
-               queryParams:{id:$('#pur_code').textbox('getText')},toolbar:tbCommodity">
+               queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbCommodity">
             <thead>
                 <tr>
                     <th data-options="field:'prj_name',width:80">项目名称</th>
@@ -61,7 +61,7 @@
         </table>
         <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
                data-options="rownumbers:true,singleSelect:true,url:'/applicant/serviceList',method:'post',
-               queryParams:{id:$('#pur_code').textbox('getText')},toolbar:tbService">
+               queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbService">
             <thead>
                 <tr>
                     <th data-options="field:'prj_name',width:80">项目名称</th>
@@ -75,7 +75,7 @@
         </table><br/>
         <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
                data-options="rownumbers:true,singleSelect:true,url:'/applicant/engineeringList',method:'post',
-               queryParams:{id:$('#pur_code').textbox('getText')},toolbar:tbEngineering">
+               queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbEngineering">
             <thead>
                 <tr>
                     <th data-options="field:'prj_name',width:80">项目名称</th>

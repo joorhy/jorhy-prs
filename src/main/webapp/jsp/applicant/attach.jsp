@@ -38,7 +38,7 @@
                             document.getElementById("purchasing_id").value + '> ' + file.name +
                             '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
                             '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                            'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                            'data-options="iconCls:\'icon-remove\',plain:false" ' +
                             'onclick=delAttachFile(' + file.id + ')> 删除</a><br/></div>';
                 }
             },

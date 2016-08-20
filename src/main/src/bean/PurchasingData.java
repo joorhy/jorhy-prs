@@ -18,11 +18,13 @@ public class PurchasingData {
     public static final String COMMODITY        = "commodity";
     public static final String SERVICE          = "service";
     public static final String ENGINEERING      = "engineering";
-    /** 定义采购状态 */
-    public static final String NEW              = "new";
-    public static final String COMMITTED        = "committed";
-    public static final String EXECUTED         = "executed";
-    public static final String IMPLEMENTED      = "implemented";
+    /** 定义采购工作流状态 */
+    public static final String NEW              = "new";                                // 新建采购函
+    public static final String SUBMITTED        = "submitted";                          // 已提交
+    public static final String ACC_APPROVE      = "accounting_approve";                 // 财务审批
+    public static final String DIR_APPROVE      = "director_approve";                   // 局长审批
+    public static final String EXECUTED         = "executed";                           // 已执行
+    public static final String IMPLEMENTED      = "implemented";                        // 已完成
 
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -34,13 +36,13 @@ public class PurchasingData {
     private String strCommodityPrePrice;                                                // 商品类预算总金额
     private String strServicePrePrice;                                                  // 服务类预算总金额
     private String strEngineeringPrePrice;                                              // 工程类预算总金额
-    private ArrayList<ProductItem> lstCommodity = new ArrayList<ProductItem>();         // 商品类
-    private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();           // 服务类
-    private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();       // 工程类
-    private ArrayList<AttachFileItem> lstAttachFile = new ArrayList<AttachFileItem>();  // 附件
+    private ArrayList<ProductItem> lstCommodity = new ArrayList<ProductItem>();                   // 商品类
+    private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();                     // 服务类
+    private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();                 // 工程类
+    private ArrayList<AttachFileItem> lstAttachFile = new ArrayList<AttachFileItem>();               // 附件
 
     /** 定义静态函数 */
-    static public JSONArray getTree() {
+    static public JSONArray getApplicantTree() {
         ArrayList<PurchasingData> lstPurchasing = PurchasingInfo.dao.getPurchasingList();
 
         JSONArray newPrjChildren = new JSONArray();
@@ -53,12 +55,16 @@ public class PurchasingData {
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             if (lstPurchasing.get(i).getStatus().equals(NEW)) {
+                childrenNode.put("type", NEW);
                 newPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(COMMITTED)) {
+            } else if (lstPurchasing.get(i).getStatus().equals(SUBMITTED)) {
+                childrenNode.put("type", SUBMITTED);
                 committedPrjChildren.put(childrenNode);
             } else if (lstPurchasing.get(i).getStatus().equals(EXECUTED)) {
+                childrenNode.put("type", EXECUTED);
                 executedPrjChildren.put(childrenNode);
             } else {
+                childrenNode.put("type", IMPLEMENTED);
                 implementedPrjChildren.put(childrenNode);
             }
         }
@@ -96,6 +102,64 @@ public class PurchasingData {
         JSONObject rootNode = new JSONObject();
         rootNode.put("id", "root");
         rootNode.put("text", "采购信息管理中心");
+        rootNode.put("iconCls", "icon-cut");
+        rootNode.put("children", lstChildren);
+
+        JSONArray lstRoot = new JSONArray();
+        lstRoot.put(rootNode);
+
+        return lstRoot;
+    }
+
+    static public JSONArray getAccountingTree() {
+        ArrayList<PurchasingData> lstPurchasing = PurchasingInfo.dao.getPurchasingList();
+
+        JSONArray toApprovePrjChildren = new JSONArray();
+        JSONArray approvedPrjChildren = new JSONArray();
+        JSONArray rejectedPrjChildren = new JSONArray();
+        for (int i = 0; i< lstPurchasing.size(); i++) {
+            JSONObject childrenNode = new JSONObject();
+            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
+            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("iconCls", "icon-cut");
+            if (lstPurchasing.get(i).getStatus().equals(SUBMITTED)) {
+                childrenNode.put("type", SUBMITTED);
+                toApprovePrjChildren.put(childrenNode);
+            } else if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE)) {
+                childrenNode.put("type", ACC_APPROVE);
+                approvedPrjChildren.put(childrenNode);
+            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE)) {
+                childrenNode.put("type", DIR_APPROVE);
+                rejectedPrjChildren.put(childrenNode);
+            }
+        }
+
+        JSONObject newPrj = new JSONObject();
+        newPrj.put("id", "to_approve_prj");
+        newPrj.put("text", "待审批项目");
+        newPrj.put("iconCls", "icon-cut");
+        newPrj.put("children", toApprovePrjChildren);
+
+        JSONObject committedPrj = new JSONObject();
+        committedPrj.put("id", "approved_prj");
+        committedPrj.put("text", "已审批项目");
+        committedPrj.put("iconCls", "icon-cut");
+        committedPrj.put("children", approvedPrjChildren);
+
+        JSONObject executedPrj = new JSONObject();
+        executedPrj.put("id", "executed_prj");
+        executedPrj.put("text", "审批未通过项目");
+        executedPrj.put("iconCls", "icon-cut");
+        executedPrj.put("children", rejectedPrjChildren);
+
+        JSONArray lstChildren = new JSONArray();
+        lstChildren.put(newPrj);
+        lstChildren.put(committedPrj);
+        lstChildren.put(executedPrj);
+
+        JSONObject rootNode = new JSONObject();
+        rootNode.put("id", "root");
+        rootNode.put("text", "项目审批管理中心");
         rootNode.put("iconCls", "icon-cut");
         rootNode.put("children", lstChildren);
 

@@ -19,12 +19,14 @@ public class LoginController  extends Controller{
 
     // 登录按钮
     public void login(){
-        String randomCode = getPara("randomCode");
-        boolean loginSuccess = CaptchaRender.validate(this, randomCode);
-        if (loginSuccess) {
-            redirect("/accounting");
-        } else {
+        String strUsername = getPara("uName");
+        String strPassword = getPara("uPass");
+        String strRandomCode = getPara("randomCode");
+        boolean loginSuccess = CaptchaRender.validate(this, strRandomCode);
+        if (strUsername.equals("1")) {
             redirect("/applicant");
+        } else if (strUsername.equals("2")) {
+            redirect("/accounting");
         }
     }
 

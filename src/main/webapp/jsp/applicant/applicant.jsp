@@ -18,7 +18,7 @@
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/applicant/applicantTree',method:'get',
                     animate:true,onContextMenu: function(e,node){
                         e.preventDefault();
-                        if (node.id == 'new_proj') {
+                        if (node.id == 'new_prj') {
                             $(this).tree('select',node.target);
                             $('#mm').menu('show',{
                                 left: e.clientX,
@@ -30,7 +30,7 @@
                     <div onclick="showNewPage()" data-options="iconCls:'icon-add'">新建</div>
                 </div>
             </div>
-            <div id="contentDiv" class="easyui-panel" region="center" title="详细信息" style="padding:5px;width:100%;">
+            <div id="contentDiv" class="easyui-panel" region="center" title="简介" style="padding:5px;width:100%;">
                 <jsp:include page="welcome.jsp" />
             </div>
         </div>
