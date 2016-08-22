@@ -1,6 +1,17 @@
 /**
  * Created by Joo on 2016/8/20.
  */
+function getReadableFileSizeString(fileSizeInBytes) {
+    var i = -1;
+    var byteUnits = [' kb', ' mb', ' gb', ' tb', 'pb', 'eb', 'zb', 'yb'];
+    do {
+        fileSizeInBytes = fileSizeInBytes / 1024;
+        i++;
+    } while (fileSizeInBytes > 1024);
+
+    return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+};
+
 function onLoadBase() {
     if (baseData != null) {
         document.getElementById("purchasing_id").value = baseData['purchasing_id'];
@@ -27,7 +38,7 @@ function onLoadAttachFile() {
                 document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
                     '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
                     document.getElementById("purchasing_id").value + '> ' + file.name +
-                    '(' + Math.round(file.size / 1024)  + 'kb)</a> <b></b><br/></div>';
+                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
             }
         },
         error: function (x, e) {
@@ -74,4 +85,8 @@ function viewProjectItem(prj_type) {
         dlg_type = 'edit';
         edit_index = project.datagrid('getRowIndex', row);
     }
+}
+
+function viewOpinion() {
+
 }

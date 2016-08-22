@@ -1,6 +1,6 @@
 package bean;
 
-import model.PurchasingInfo;
+import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -11,39 +11,52 @@ import java.util.Map;
 /**
  * Created by Joo on 2016/7/30.
  */
-public class PurchasingData {
+public class PurchasingBean {
     /** 定义错误码 */
-    public static final String SUCCESS          = "success";
+    public static final String SUCCESS                  = "success";
     /** 定义项目类别 */
-    public static final String COMMODITY        = "commodity";
-    public static final String SERVICE          = "service";
-    public static final String ENGINEERING      = "engineering";
+    public static final String COMMODITY                = "commodity";
+    public static final String SERVICE                  = "service";
+    public static final String ENGINEERING              = "engineering";
     /** 定义采购工作流状态 */
-    public static final String NEW              = "new";                                // 新建采购函
-    public static final String SUBMITTED        = "submitted";                          // 已提交
-    public static final String ACC_APPROVE      = "accounting_approve";                 // 财务审批
-    public static final String DIR_APPROVE      = "director_approve";                   // 局长审批
-    public static final String EXECUTED         = "executed";                           // 已执行
-    public static final String IMPLEMENTED      = "implemented";                        // 已完成
-
+    public static final String ACC_APPROVE_FAILED       = "accounting_approve_failed";          // 财务审批失败
+    public static final String ACC_APPROVE              = "accounting_approve";                 // 财务审批
+    public static final String DIR_APPROVE_FAILED       = "director_approve_failed";            // 局长审批失败
+    public static final String DIR_APPROVE              = "director_approve";                   // 局长审批
+    public static final String FINANCIAL_APPROVE_FAILED = "financial_approve_failed";           // 财政股审批失败
+    public static final String FINANCIAL_APPROVE        = "financial_approve";                  // 财政股审批
+    /** 定义申请者目录结构 */
+    public static final String CREATE                   = "create";                            // 新建采购函
+    public static final String SUBMITTED                = "submitted";                          // 已提交
+    public static final String EXECUTED                 = "executed";                           // 已执行
+    public static final String IMPLEMENTED              = "implemented";                        // 已完成
+    /** 定义审批者目录结构 */
+    public static final String TO_APPROVE               = "to_approve";                         // 待审批
+    public static final String APPROVED                 = "approved";                           // 已审批
+    public static final String REJECT                   = "reject";                             // 审批未通过
+    /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
     private String strFundsSrc;                                                         // 资金来源
     private String strContacts;                                                         // 联系人
     private String strPhoneNum;                                                         // 联系电话
     private String strFundsNature;                                                      // 资金性质
-    private String strStatus;                                                           // 采购函状态
+    /** 购买项目详细内容 */
     private String strCommodityPrePrice;                                                // 商品类预算总金额
     private String strServicePrePrice;                                                  // 服务类预算总金额
     private String strEngineeringPrePrice;                                              // 工程类预算总金额
-    private ArrayList<ProductItem> lstCommodity = new ArrayList<ProductItem>();                   // 商品类
-    private ArrayList<ProductItem> lstService = new ArrayList<ProductItem>();                     // 服务类
-    private ArrayList<ProductItem> lstEngineering = new ArrayList<ProductItem>();                 // 工程类
-    private ArrayList<AttachFileItem> lstAttachFile = new ArrayList<AttachFileItem>();               // 附件
+    private ArrayList<ProductBean> lstCommodity = new ArrayList<ProductBean>();                   // 商品类
+    private ArrayList<ProductBean> lstService = new ArrayList<ProductBean>();                     // 服务类
+    private ArrayList<ProductBean> lstEngineering = new ArrayList<ProductBean>();                 // 工程类
+    /** 采购函附件 */
+    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();               // 附件
+    /** 审批流状态及内容 */
+    private String strStatus;                                                           // 采购函状态
+    private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();
 
     /** 定义静态函数 */
     static public JSONArray getApplicantTree() {
-        ArrayList<PurchasingData> lstPurchasing = PurchasingInfo.dao.getPurchasingList();
+        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray newPrjChildren = new JSONArray();
         JSONArray committedPrjChildren = new JSONArray();
@@ -54,10 +67,13 @@ public class PurchasingData {
             childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            if (lstPurchasing.get(i).getStatus().equals(NEW)) {
-                childrenNode.put("type", NEW);
+            if (lstPurchasing.get(i).getStatus().equals(CREATE)) {
+                childrenNode.put("type", CREATE);
                 newPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(SUBMITTED)) {
+            } else if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE_FAILED) ||
+                       lstPurchasing.get(i).getStatus().equals(ACC_APPROVE) ||
+                       lstPurchasing.get(i).getStatus().equals(DIR_APPROVE) ||
+                       lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
                 childrenNode.put("type", SUBMITTED);
                 committedPrjChildren.put(childrenNode);
             } else if (lstPurchasing.get(i).getStatus().equals(EXECUTED)) {
@@ -112,7 +128,7 @@ public class PurchasingData {
     }
 
     static public JSONArray getAccountingTree() {
-        ArrayList<PurchasingData> lstPurchasing = PurchasingInfo.dao.getPurchasingList();
+        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray toApprovePrjChildren = new JSONArray();
         JSONArray approvedPrjChildren = new JSONArray();
@@ -122,40 +138,99 @@ public class PurchasingData {
             childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            if (lstPurchasing.get(i).getStatus().equals(SUBMITTED)) {
-                childrenNode.put("type", SUBMITTED);
+            if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE)) {
+                childrenNode.put("type", TO_APPROVE);
                 toApprovePrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE)) {
-                childrenNode.put("type", ACC_APPROVE);
+            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE) ||
+                       lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
+                childrenNode.put("type", APPROVED);
                 approvedPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE)) {
-                childrenNode.put("type", DIR_APPROVE);
+            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
+                childrenNode.put("type", REJECT);
                 rejectedPrjChildren.put(childrenNode);
             }
         }
 
-        JSONObject newPrj = new JSONObject();
-        newPrj.put("id", "to_approve_prj");
-        newPrj.put("text", "待审批项目");
-        newPrj.put("iconCls", "icon-cut");
-        newPrj.put("children", toApprovePrjChildren);
+        JSONObject toApprovePrj = new JSONObject();
+        toApprovePrj.put("id", "to_approve_prj");
+        toApprovePrj.put("text", "待审批项目");
+        toApprovePrj.put("iconCls", "icon-cut");
+        toApprovePrj.put("children", toApprovePrjChildren);
 
-        JSONObject committedPrj = new JSONObject();
-        committedPrj.put("id", "approved_prj");
-        committedPrj.put("text", "已审批项目");
-        committedPrj.put("iconCls", "icon-cut");
-        committedPrj.put("children", approvedPrjChildren);
+        JSONObject approvedPrj = new JSONObject();
+        approvedPrj.put("id", "approved_prj");
+        approvedPrj.put("text", "已审批项目");
+        approvedPrj.put("iconCls", "icon-cut");
+        approvedPrj.put("children", approvedPrjChildren);
 
-        JSONObject executedPrj = new JSONObject();
-        executedPrj.put("id", "executed_prj");
-        executedPrj.put("text", "审批未通过项目");
-        executedPrj.put("iconCls", "icon-cut");
-        executedPrj.put("children", rejectedPrjChildren);
+        JSONObject rejectPrj = new JSONObject();
+        rejectPrj.put("id", "executed_prj");
+        rejectPrj.put("text", "审批未通过项目");
+        rejectPrj.put("iconCls", "icon-cut");
+        rejectPrj.put("children", rejectedPrjChildren);
 
         JSONArray lstChildren = new JSONArray();
-        lstChildren.put(newPrj);
-        lstChildren.put(committedPrj);
-        lstChildren.put(executedPrj);
+        lstChildren.put(toApprovePrj);
+        lstChildren.put(approvedPrj);
+        lstChildren.put(rejectPrj);
+
+        JSONObject rootNode = new JSONObject();
+        rootNode.put("id", "root");
+        rootNode.put("text", "项目审批管理中心");
+        rootNode.put("iconCls", "icon-cut");
+        rootNode.put("children", lstChildren);
+
+        JSONArray lstRoot = new JSONArray();
+        lstRoot.put(rootNode);
+
+        return lstRoot;
+    }
+
+    static public JSONArray getDirectorTree() {
+        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+
+        JSONArray toApprovePrjChildren = new JSONArray();
+        JSONArray approvedPrjChildren = new JSONArray();
+        JSONArray rejectedPrjChildren = new JSONArray();
+        for (int i = 0; i< lstPurchasing.size(); i++) {
+            JSONObject childrenNode = new JSONObject();
+            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
+            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("iconCls", "icon-cut");
+            if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE)) {
+                childrenNode.put("type", TO_APPROVE);
+                toApprovePrjChildren.put(childrenNode);
+            } else if (lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
+                childrenNode.put("type", APPROVED);
+                approvedPrjChildren.put(childrenNode);
+            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
+                childrenNode.put("type", REJECT);
+                rejectedPrjChildren.put(childrenNode);
+            }
+        }
+
+        JSONObject toApprovePrj = new JSONObject();
+        toApprovePrj.put("id", "to_approve_prj");
+        toApprovePrj.put("text", "待审批项目");
+        toApprovePrj.put("iconCls", "icon-cut");
+        toApprovePrj.put("children", toApprovePrjChildren);
+
+        JSONObject approvedPrj = new JSONObject();
+        approvedPrj.put("id", "approved_prj");
+        approvedPrj.put("text", "已审批项目");
+        approvedPrj.put("iconCls", "icon-cut");
+        approvedPrj.put("children", approvedPrjChildren);
+
+        JSONObject rejectPrj = new JSONObject();
+        rejectPrj.put("id", "executed_prj");
+        rejectPrj.put("text", "审批未通过项目");
+        rejectPrj.put("iconCls", "icon-cut");
+        rejectPrj.put("children", rejectedPrjChildren);
+
+        JSONArray lstChildren = new JSONArray();
+        lstChildren.put(toApprovePrj);
+        lstChildren.put(approvedPrj);
+        lstChildren.put(rejectPrj);
 
         JSONObject rootNode = new JSONObject();
         rootNode.put("id", "root");
@@ -214,20 +289,24 @@ public class PurchasingData {
         return strEngineeringPrePrice;
     }
 
-    public ArrayList<ProductItem> getCommodityList() {
+    public ArrayList<ProductBean> getCommodityList() {
         return lstCommodity;
     }
 
-    public ArrayList<ProductItem> getServiceList() {
+    public ArrayList<ProductBean> getServiceList() {
         return lstService;
     }
 
-    public ArrayList<ProductItem> getEngineeringList() {
+    public ArrayList<ProductBean> getEngineeringList() {
         return lstEngineering;
     }
 
-    public ArrayList<AttachFileItem> getAttachFileList() {
+    public ArrayList<AttachFileBean> getAttachFileList() {
         return lstAttachFile;
+    }
+
+    public ArrayList<OpinionBean> getOpinionList() {
+        return lstOpinion;
     }
 
     /** 定义 Controller 接口 */
@@ -254,7 +333,7 @@ public class PurchasingData {
         JSONArray arr = obj.getJSONArray("rows");
         for (int i=0; i<nTotal; i++) {
             JSONObject item = (JSONObject)arr.get(i);
-            ProductItem prjItem = new ProductItem();
+            ProductBean prjItem = new ProductBean();
             prjItem.strPrjName = item.getString("prj_name");
             prjItem.nPrjCount = item.getInt("prj_count");
             prjItem.fPrjPrice = item.getDouble("prj_price");
@@ -273,7 +352,7 @@ public class PurchasingData {
         return SUCCESS;
     }
 
-    public void addAttachFile(AttachFileItem item) {
+    public void addAttachFile(AttachFileBean item) {
         lstAttachFile.add(item);
     }
 
@@ -286,13 +365,17 @@ public class PurchasingData {
         }
     }
 
-    public AttachFileItem getAttachFileItem(String strFileID) {
+    public AttachFileBean getAttachFileItem(String strFileID) {
         for (int i=0; i<lstAttachFile.size(); i++) {
             if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
                 return lstAttachFile.get(i);
             }
         }
         return null;
+    }
+
+    public void addOpinion(OpinionBean opinionBean) {
+        lstOpinion.add(opinionBean);
     }
 
     /** 定义 JSON 接口 */
@@ -312,7 +395,7 @@ public class PurchasingData {
     }
 
     public ArrayList<Map<String, String>> getJSONProductData(String strProductType) {
-        ArrayList<ProductItem> lstProduct = null;
+        ArrayList<ProductBean> lstProduct = null;
         if (strProductType == COMMODITY) {
             lstProduct = lstCommodity;
         } else if (strProductType == SERVICE) {
@@ -323,7 +406,7 @@ public class PurchasingData {
 
         ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
-            ProductItem item = lstProduct.get(i);
+            ProductBean item = lstProduct.get(i);
             Map<String, String> obj = new HashMap<String, String>();
             obj.put("prj_name", item.strPrjName);
             obj.put("prj_count", String.valueOf(item.nPrjCount));
@@ -339,11 +422,25 @@ public class PurchasingData {
     public ArrayList<Map<String, String>> getJSONAttachFile() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstAttachFile.size(); i++) {
-            AttachFileItem item = lstAttachFile.get(i);
+            AttachFileBean item = lstAttachFile.get(i);
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", item.strFileID);
             m.put("name", item.strFileName);
             m.put("size", item.strFileSize);
+            lst.add(m);
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getJSONOpinionData() {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstOpinion.size(); i++) {
+            OpinionBean item = lstOpinion.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("op_department", item.strApproveDepartment);
+            m.put("op_approve_person", item.strApprovePerson);
+            m.put("op_approve_date", item.strApproveDate);
+            m.put("op_content", item.strOpinion);
             lst.add(m);
         }
         return lst;

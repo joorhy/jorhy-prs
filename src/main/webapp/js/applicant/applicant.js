@@ -29,7 +29,6 @@ Math.uuid = function (len, radix) {
     return uuid.join('');
 }
 
-var baseData = {};
 function showNewPage() {
     baseData = null;
     $('#contentDiv').panel('setTitle','新建采购过程');
@@ -41,13 +40,12 @@ function showContent(nodeId){
     $.ajax({
         type: 'post',
         url:'/common/getBaseData',
-        data: {id:nodeId.id},
+        data: {purchasing_id:nodeId.id},
         dataType: 'json',
         success: function (data) {
             if(data.result == "success") {
-                if (nodeId.type == 'new') {
-                    $('#contentDiv').panel('setTitle','新建采购过程');
-                    $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
+                if (nodeId.type == 'create') {
+                    showNewPage();
                 } else {
                     $('#contentDiv').panel('setTitle','已提交采购过程');
                     $('#contentDiv').panel('refresh', '../jsp/applicant/submitted.jsp');
@@ -81,7 +79,7 @@ function onLoadCreate() {
 }
 
 function savePurchasing() {
-    $.messager.confirm('操作提示','是否确认保存此项目?',function(r){
+    $.messager.confirm('操作提示','确认保存此项目?',function(r){
         if (r){
             var baseData = {};
             baseData['purchasing_id'] = document.getElementById("purchasing_id").value;
@@ -105,18 +103,13 @@ function savePurchasing() {
                 dataType: 'json',
                 success: function (data) {
                     if(data.result == "success") {
-                        $('#menuTree').tree('reload', $('#new_proj').target);
-                        $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
+                        $('#menuTree').tree('reload', $('#new_prj').target);
+                        showNewPage();
                     } else {
-                        /*if(data.errorType == "user") {
-                            showAlertMsg("提示",data.msg,"warning");
-                        } else {
-                            showRightBottomMsg("系统提示",data.msg,'slide',5000);
-                        }*/
                     }
                 },
                 error: function (x, e) {
-                    alert("error");
+                    alert("error savePurchasing");
                 }
             });
         }
@@ -124,7 +117,7 @@ function savePurchasing() {
 }
 
 function submitPurchasing() {
-    $.messager.confirm('操作提示','是否确认提交审核?',function(r){
+    $.messager.confirm('操作提示','确认提交审核?',function(r){
         if (r){
             $.ajax({
                 type: 'post',
@@ -134,17 +127,12 @@ function submitPurchasing() {
                 success: function (data) {
                     if(data.result == "success") {
                         $('#menuTree').tree('reload', $('#new_proj').target);
-                        $('#contentDiv').panel('refresh', '../jsp/applicant/create.jsp');
+                        showNewPage();
                     } else {
-                        /*if(data.errorType == "user") {
-                         showAlertMsg("提示",data.msg,"warning");
-                         } else {
-                         showRightBottomMsg("系统提示",data.msg,'slide',5000);
-                         }*/
                     }
                 },
                 error: function (x, e) {
-                    alert("error");
+                    alert("error submitPurchasing");
                 }
             });
         }
@@ -152,5 +140,106 @@ function submitPurchasing() {
 }
 
 function cancelPurchasing() {
+    $.messager.confirm('操作提示','确认撤销此项目?',function(r){
+        if (r){
+            $.ajax({
+                type: 'post',
+                url:'/applicant/cancel',
+                data: {purchasing_id:document.getElementById("purchasing_id").value},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.result == "success") {
+                        $('#menuTree').tree('reload', $('#new_proj').target);
+                        showNewPage();
+                    } else {
+                    }
+                },
+                error: function (x, e) {
+                    alert("error cancelPurchasing");
+                }
+            });
+        }
+    });
+}
 
+function getProjectByType(prj_type) {
+    if (prj_type == "commodity") {
+        project = $('#dgCommodity');
+    } else if (prj_type == "service") {
+        project = $('#dgService');
+    } else if (prj_type == "engineering") {
+        project = $('#dgEngineering');
+    }
+}
+
+function clearItemsData() {
+    $('#prj_name').textbox('clear');
+    $('#prj_count').textbox('clear');
+    $('#prj_price').textbox('clear');
+    $('#prj_spec').textbox('clear');
+    $('#prj_param').textbox('clear');
+    $('#prj_pre_price').textbox('clear');
+}
+function fillItmesData(row) {
+    $('#prj_name').textbox('setText', row["prj_name"]);
+    $('#prj_count').textbox('setText',row["prj_count"]);
+    $('#prj_price').textbox('setText',row["prj_price"]);
+    $('#prj_spec').textbox('setText', row["prj_spec"]);
+    $('#prj_param').textbox('setText', row["prj_param"]);
+    $('#prj_pre_price').textbox('setText', row["prj_pre_price"]);
+}
+
+function getItemsData() {
+    var data = {};
+    data["prj_name"] = $('#prj_name').textbox('getText');
+    data["prj_count"] = $('#prj_count').textbox('getText');
+    data["prj_price"] = $('#prj_price').textbox('getText');
+    data["prj_spec"] = $('#prj_spec').textbox('getText');
+    data["prj_param"] = $('#prj_param').textbox('getText');
+    data["prj_pre_price"] = $('#prj_pre_price').textbox('getText');
+    return data;
+}
+
+function addProjectItem(prj_type){
+    $('#dlgCreate').dialog('open').dialog('center').dialog('setTitle','新增项目');
+    clearItemsData();
+    dlg_type = 'new';
+    getProjectByType(prj_type);
+}
+
+function editProjectItem(prj_type){
+    getProjectByType(prj_type);
+    var row = project.datagrid('getSelected');
+    if (row){
+        $('#dlgCreate').dialog('open').dialog('center').dialog('setTitle','编辑项目');
+        fillItmesData(row);
+        dlg_type = 'edit';
+        edit_index = project.datagrid('getRowIndex', row);
+    }
+}
+
+function saveProjectItem(){
+    var data = getItemsData();
+    if (dlg_type == 'edit') {
+        var updateData = {};
+        updateData['index'] = edit_index;
+        updateData['row'] = data;
+        project.datagrid('updateRow', updateData);
+    } else {
+        project.datagrid('appendRow', data);
+    }
+    $('#dlgCreate').dialog('close');
+}
+
+function removeProjectItem(prj_type){
+    getProjectByType(prj_type);
+    var row = project.datagrid('getSelected');
+    if (row){
+        $.messager.confirm('操作提示','是否确认删除此项目?',function(r){
+            if (r){
+                var index =  project.datagrid('getRowIndex', row);
+                project.datagrid('deleteRow', index);
+            }
+        });
+    }
 }

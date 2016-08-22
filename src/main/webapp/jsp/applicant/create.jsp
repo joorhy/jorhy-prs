@@ -46,7 +46,7 @@
     </div><br/>
     <div region="center">
         <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-               data-options="rownumbers:true,singleSelect:true,url:'/common/commodityList',method:'post',
+               data-options="rownumbers:true,singleSelect:true,url:'/common/commodityList',method:'post',nowrap:false,
                queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbCommodity">
             <thead>
                 <tr>

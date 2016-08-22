@@ -1,7 +1,9 @@
 package controller;
 
+import bean.RoleBean;
 import com.jfinal.core.Controller;
 import com.jfinal.render.CaptchaRender;
+import model.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +25,18 @@ public class LoginController  extends Controller{
         String strPassword = getPara("uPass");
         String strRandomCode = getPara("randomCode");
         boolean loginSuccess = CaptchaRender.validate(this, strRandomCode);
-        if (strUsername.equals("1")) {
-            redirect("/applicant");
-        } else if (strUsername.equals("2")) {
-            redirect("/accounting");
+        String strUserRole = UserModel.dao.login(strUsername, strPassword);
+        if (strUserRole != null) {
+            getSession().setAttribute("loginUser", strUsername);
+            if (strUserRole.equals(RoleBean.APPLICANT)) {
+                redirect("/applicant");
+            } else if (strUserRole.equals(RoleBean.ACCOUNTING)) {
+                redirect("/accounting");
+            } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
+                redirect("/director");
+            }
         }
+       //renderJson();
     }
 
     // 验证码

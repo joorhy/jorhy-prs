@@ -23,8 +23,7 @@ public class JFWebConfig extends JFinalConfig {
         me.add("/common", CommonController.class);
         me.add("/applicant", ApplicantController.class);
         me.add("/accounting", AccountingController.class);
-        me.add("/leftMenu", LeftMenuController.class);
-        me.add("/toApprove", ToApproveController.class);
+        me.add("director", DirectorController.class);
     }
     public void configPlugin(Plugins me) {
         me.add(new EhCachePlugin());
@@ -44,7 +43,7 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 配置映射表到模型
          */
-        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", PurchasingInfo.class);
+        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", PurchasingModel.class);
     }
     public void configInterceptor(Interceptors me) {
 

@@ -12,7 +12,7 @@
 <body>
     <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
            data-options="rownumbers:true,singleSelect:true,url:'/common/commodityList',method:'post',
-                   queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbCommodity">
+                   queryParams:{purchasing_id:document.getElementById('purchasing_id').value},toolbar:tbCommodity">
         <thead>
         <tr>
             <th data-options="field:'prj_name',width:80">项目名称</th>
@@ -26,7 +26,7 @@
     </table>
     <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
            data-options="rownumbers:true,singleSelect:true,url:'/common/serviceList',method:'post',
-                   queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbService">
+                   queryParams:{purchasing_id:document.getElementById('purchasing_id').value},toolbar:tbService">
         <thead>
         <tr>
             <th data-options="field:'prj_name',width:80">项目名称</th>
@@ -40,7 +40,7 @@
     </table>
     <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
            data-options="rownumbers:true,singleSelect:true,url:'/common/engineeringList',method:'post',
-                   queryParams:{id:document.getElementById('purchasing_id').value},toolbar:tbEngineering">
+                   queryParams:{purchasing_id:document.getElementById('purchasing_id').value},toolbar:tbEngineering">
         <thead>
         <tr>
             <th data-options="field:'prj_name',width:80">项目名称</th>

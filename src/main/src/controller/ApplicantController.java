@@ -1,15 +1,13 @@
 package controller;
 
-import bean.AttachFileItem;
+import bean.AttachFileBean;
 import com.jfinal.core.Controller;
-import bean.PurchasingData;
+import bean.PurchasingBean;
 import com.jfinal.upload.UploadFile;
-import model.PurchasingInfo;
-import org.activiti.engine.impl.util.json.JSONArray;
+import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.io.File;
-import java.util.*;
 
 /**
  * Created by JooLiu on 2016/7/28.
@@ -24,6 +22,10 @@ public class ApplicantController extends Controller {
         renderJsp("/jsp/applicant/attach.jsp");
     }
 
+    public void applicantTree() {
+        renderText(PurchasingBean.getApplicantTree().toString());
+    }
+
     // 保存按钮
     public void save() {
         String strBaseData = getPara("base");
@@ -32,22 +34,22 @@ public class ApplicantController extends Controller {
         String strEngineering = getPara("engineering");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(objBaseData.getString("purchasing_id"));
-        if (purchasingData == null) {
-            purchasingData = new PurchasingData();
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(objBaseData.getString("purchasing_id"));
+        if (purchasingBean == null) {
+            purchasingBean = new PurchasingBean();
         }
-        purchasingData.parseBaseData(objBaseData);
+        purchasingBean.parseBaseData(objBaseData);
 
         JSONObject objCommodity = new JSONObject(strCommodity);
-        purchasingData.parseProductData(objCommodity, PurchasingData.COMMODITY);
+        purchasingBean.parseProductData(objCommodity, PurchasingBean.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        purchasingData.parseProductData(objService, PurchasingData.SERVICE);
+        purchasingBean.parseProductData(objService, PurchasingBean.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
-        purchasingData.parseProductData(objEngineering, PurchasingData.ENGINEERING);
+        purchasingBean.parseProductData(objEngineering, PurchasingBean.ENGINEERING);
 
-        PurchasingInfo.dao.savePurchasing(purchasingData);
+        PurchasingModel.dao.savePurchasing(purchasingBean);
 
         setAttr("result", "success");
         renderJson();
@@ -56,13 +58,21 @@ public class ApplicantController extends Controller {
     // 提交审核按钮
     public void submit() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingInfo.dao.submitPurchasing(strPurchasingID);
+        PurchasingModel.dao.submitPurchasing(strPurchasingID);
+        setAttr("result", "success");
+        renderJson();
+    }
+
+    // 撤销按钮
+    public void cancel() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingModel.dao.cancelPurchasing(strPurchasingID);
         setAttr("result", "success");
         renderJson();
     }
 
     public void uploadFile() {
-        AttachFileItem item = new AttachFileItem();
+        AttachFileBean item = new AttachFileBean();
         item.strPurchasingID = getPara("purchasing_id");
         item.strFileID = getPara("file_id");
 
@@ -73,12 +83,8 @@ public class ApplicantController extends Controller {
         item.strFileSize = String.valueOf(file.length());
         item.strFilePath = file.getPath();
 
-        PurchasingInfo.dao.addAttachFile(item.strPurchasingID, item);
+        PurchasingModel.dao.addAttachFile(item.strPurchasingID, item);
         setAttr("result", "success");
         renderJson();
-    }
-
-    public void applicantTree() {
-        renderText(PurchasingData.getApplicantTree().toString());
     }
 }

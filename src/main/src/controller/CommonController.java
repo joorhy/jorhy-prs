@@ -1,9 +1,9 @@
 package controller;
 
-import bean.AttachFileItem;
-import bean.PurchasingData;
+import bean.AttachFileBean;
+import bean.PurchasingBean;
 import com.jfinal.core.Controller;
-import model.PurchasingInfo;
+import model.PurchasingModel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import java.util.Map;
  */
 public class CommonController extends Controller {
     public void getBaseData() {
-        String strID = getPara("id");
-        PurchasingData data = PurchasingInfo.dao.getPurchasing(strID);
-        if (data != null) {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
             setAttr("result", "success");
-            setAttr("base", data.getJSONBaseData());
+            setAttr("base", purchasingBean.getJSONBaseData());
         } else {
             setAttr("result", "failed");
         }
@@ -26,11 +26,11 @@ public class CommonController extends Controller {
     }
 
     public void commodityList() {
-        String strID = getPara("id");
-        PurchasingData data = PurchasingInfo.dao.getPurchasing(strID);
-        if (data != null) {
-            setAttr("rows", data.getJSONProductData(PurchasingData.COMMODITY));
-            setAttr("total", data.getJSONProductData(PurchasingData.COMMODITY).size());
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.COMMODITY));
+            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.COMMODITY).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -39,11 +39,11 @@ public class CommonController extends Controller {
     }
 
     public void serviceList() {
-        String strID = getPara("id");
-        PurchasingData data = PurchasingInfo.dao.getPurchasing(strID);
-        if (data != null) {
-            setAttr("rows", data.getJSONProductData(PurchasingData.SERVICE));
-            setAttr("total", data.getJSONProductData(PurchasingData.SERVICE).size());
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.SERVICE));
+            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.SERVICE).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -52,11 +52,24 @@ public class CommonController extends Controller {
     }
 
     public void engineeringList() {
-        String strID = getPara("id");
-        PurchasingData data = PurchasingInfo.dao.getPurchasing(strID);
-        if (data != null) {
-            setAttr("rows", data.getJSONProductData(PurchasingData.ENGINEERING));
-            setAttr("total", data.getJSONProductData(PurchasingData.ENGINEERING).size());
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.ENGINEERING));
+            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.ENGINEERING).size());
+        } else {
+            setAttr("rows", new ArrayList<Map<String, String>>());
+            setAttr("total", 0);
+        }
+        renderJson();
+    }
+
+    public void opinionList() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            setAttr("rows", purchasingBean.getJSONOpinionData());
+            setAttr("total", purchasingBean.getJSONOpinionData().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -66,10 +79,10 @@ public class CommonController extends Controller {
 
     public void downloadFile() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(strPurchasingID);
-        if (purchasingData != null) {
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
             String strFileID = getPara("file_id");
-            AttachFileItem item = purchasingData.getAttachFileItem(strFileID);
+            AttachFileBean item = purchasingBean.getAttachFileItem(strFileID);
             if (item != null) {
                 renderFile(new File(item.strFilePath));
             }
@@ -80,9 +93,9 @@ public class CommonController extends Controller {
 
     public void getAttachFiles() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(strPurchasingID);
-        if (purchasingData != null) {
-            ArrayList<Map<String, String>> lst = purchasingData.getJSONAttachFile();
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            ArrayList<Map<String, String>> lst = purchasingBean.getJSONAttachFile();
             setAttr("files", lst);
         }
         renderJson();
@@ -90,17 +103,17 @@ public class CommonController extends Controller {
 
     public void removeFile() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingData purchasingData = PurchasingInfo.dao.getPurchasing(strPurchasingID);
-        if (purchasingData != null) {
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
             String strFileID = getPara("file_id");
-            AttachFileItem item = purchasingData.getAttachFileItem(strFileID);
+            AttachFileBean item = purchasingBean.getAttachFileItem(strFileID);
             if (item != null) {
                 File file = new File(item.strFilePath);
                 if (file != null) {
                     file.delete();
                 }
             }
-            purchasingData.delAttachFile(strFileID);
+            purchasingBean.delAttachFile(strFileID);
         }
         setAttr("result", "success");
         renderJson();

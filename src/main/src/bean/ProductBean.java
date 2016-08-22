@@ -3,7 +3,7 @@ package bean;
 /**
  * Created by Joo on 2016/7/30.
  */
-public class ProductItem {
+public class ProductBean {
     public String   strPrjName;               // 项目名称
     public int      nPrjCount;                // 数量
     public double   fPrjPrice;                // 单价

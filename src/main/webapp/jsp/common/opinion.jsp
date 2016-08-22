@@ -11,15 +11,14 @@
 </head>
 <body>
     <table id="dgOpinionLst" class="easyui-datagrid" title="已经审批单位意见" style="width:100%;height:225px"
-           data-options="rownumbers:true,singleSelect:true,url:'/new/serviceList',method:'get',
-                       toolbar:tbOpinion">
+           data-options="rownumbers:true,singleSelect:true,url:'/common/opinionList',method:'post',
+                         queryParams:{purchasing_id:document.getElementById('purchasing_id').value},toolbar:tbOpinion">
         <thead>
         <tr>
-            <th data-options="field:'prj_name',width:80">单位</th>
-            <th data-options="field:'prj_count',width:80">意见</th>
-            <th data-options="field:'prj_price',width:80">审批人</th>
-            <th data-options="field:'prj_spec',width:80">审批日期</th>
-            <th data-options="field:'prj_total_price',width:80">备注</th>
+            <th data-options="field:'op_department',width:80">单位</th>
+            <th data-options="field:'op_approve_person',width:80">审批人</th>
+            <th data-options="field:'op_approve_date',width:80">审批日期</th>
+            <th data-options="field:'op_content',width:320">意见</th>
         </tr>
         </thead>
     </table>
