@@ -26,14 +26,14 @@ public class PurchasingBean {
     public static final String FINANCIAL_APPROVE_FAILED = "financial_approve_failed";           // 财政股审批失败
     public static final String FINANCIAL_APPROVE        = "financial_approve";                  // 财政股审批
     /** 定义申请者目录结构 */
-    public static final String CREATE                   = "create";                            // 新建采购函
+    public static final String CREATE                   = "create";                             // 新建采购函
     public static final String SUBMITTED                = "submitted";                          // 已提交
     public static final String EXECUTED                 = "executed";                           // 已执行
     public static final String IMPLEMENTED              = "implemented";                        // 已完成
     /** 定义审批者目录结构 */
     public static final String TO_APPROVE               = "to_approve";                         // 待审批
     public static final String APPROVED                 = "approved";                           // 已审批
-    public static final String REJECT                   = "reject";                             // 审批未通过
+    public static final String REJECTED                 = "rejected";                             // 审批未通过
     /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -70,18 +70,15 @@ public class PurchasingBean {
             if (lstPurchasing.get(i).getStatus().equals(CREATE)) {
                 childrenNode.put("type", CREATE);
                 newPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE_FAILED) ||
-                       lstPurchasing.get(i).getStatus().equals(ACC_APPROVE) ||
-                       lstPurchasing.get(i).getStatus().equals(DIR_APPROVE) ||
-                       lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
-                childrenNode.put("type", SUBMITTED);
-                committedPrjChildren.put(childrenNode);
+            } else if (lstPurchasing.get(i).getStatus().equals(IMPLEMENTED)) {
+                childrenNode.put("type", IMPLEMENTED);
+                implementedPrjChildren.put(childrenNode);
             } else if (lstPurchasing.get(i).getStatus().equals(EXECUTED)) {
                 childrenNode.put("type", EXECUTED);
                 executedPrjChildren.put(childrenNode);
             } else {
-                childrenNode.put("type", IMPLEMENTED);
-                implementedPrjChildren.put(childrenNode);
+                childrenNode.put("type", SUBMITTED);
+                committedPrjChildren.put(childrenNode);
             }
         }
 
@@ -146,7 +143,7 @@ public class PurchasingBean {
                 childrenNode.put("type", APPROVED);
                 approvedPrjChildren.put(childrenNode);
             } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
-                childrenNode.put("type", REJECT);
+                childrenNode.put("type", REJECTED);
                 rejectedPrjChildren.put(childrenNode);
             }
         }
@@ -204,7 +201,7 @@ public class PurchasingBean {
                 childrenNode.put("type", APPROVED);
                 approvedPrjChildren.put(childrenNode);
             } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
-                childrenNode.put("type", REJECT);
+                childrenNode.put("type", REJECTED);
                 rejectedPrjChildren.put(childrenNode);
             }
         }

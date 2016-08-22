@@ -17,6 +17,9 @@ function showContent(nodeId){
                 } else if (nodeId.type == 'approved') {
                     $('#contentDiv').panel('setTitle','已审批项目');
                     $('#contentDiv').panel('refresh', '../jsp/accounting/approved.jsp');
+                } else if (nodeId.type == 'rejected') {
+                    $('#contentDiv').panel('setTitle','审批未通过项目');
+                    $('#contentDiv').panel('refresh', '../jsp/accounting/rejected.jsp');
                 }
                 baseData = data.base;
             } else {
@@ -73,6 +76,7 @@ function disagreePurchasing() {
                 dataType: 'json',
                 success: function (data) {
                     if(data.result == "success") {
+                        $('#menuTree').tree('reload', $('#approved_prj').target);
                     } else {
                     }
                 },

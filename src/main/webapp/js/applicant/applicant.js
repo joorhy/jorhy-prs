@@ -104,7 +104,10 @@ function savePurchasing() {
                 success: function (data) {
                     if(data.result == "success") {
                         $('#menuTree').tree('reload', $('#new_prj').target);
-                        showNewPage();
+                        var cur_node = {};
+                        cur_node.id = document.getElementById("purchasing_id").value;
+                        cur_node.type = "create";
+                        showContent(cur_node);
                     } else {
                     }
                 },

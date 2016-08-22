@@ -24,6 +24,9 @@
     <jsp:include page="../common/attach_file.jsp"/>
 </div><br/>
 <div>
+    <jsp:include page="../common/opinion.jsp"/>
+</div><br/>
+<div>
     <td align="left">
     <td style="width:15%;">审批意见</td><br/>
     <td >
@@ -34,22 +37,23 @@
 </div><br/>
 <div align="right">
     <td>
-    <td>上级审核人</td>
+    <td>财政局资金分管股室</td>
     <td>
         <select id="approve_person" class="easyui-combobox" style="width:120px">
-            <option value="default">请选择审批人</option>
-            <option value="nyjjz">农业局局长</option>
-            <option value="czjjz">财政局局长</option>
-            <option value="xcbz">宣传部长</option>
-            <option value="zzbz">组织部长</option>
+            <option value="default">请选择分管股室</option>
+            <option value="nyg">农业股</option>
+            <option value="jkwg">教科文股</option>
+            <option value="tzg">投资股</option>
+            <option value="xcg">行财股</option>
+            <option value="sbg">社保股</option>
         </select>
     </td>
     </td>
     <td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:120"
-           onclick="agreePurchasing()">同意并提交审核</a></td>
+           onclick="agreePurchasing()">同意并提交政府采购管理股审核</a></td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="disagreePurchasing()">不同意</a></td>
+           onclick="disagreePurchasing()">退回下一级</a></td>
     </td>
 </div>
 </body>

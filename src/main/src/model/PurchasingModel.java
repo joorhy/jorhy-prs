@@ -72,6 +72,8 @@ public class PurchasingModel extends Model<PurchasingModel> {
         if (data != null) {
             if (data.getStatus().equals(PurchasingBean.ACC_APPROVE)) {
                 data.setStatus(PurchasingBean.DIR_APPROVE);
+            } else if (data.getStatus().equals(PurchasingBean.DIR_APPROVE)) {
+                data.setStatus(PurchasingBean.FINANCIAL_APPROVE);
             }
             data.addOpinion(opinionBean);
         }
@@ -83,6 +85,8 @@ public class PurchasingModel extends Model<PurchasingModel> {
         if (data != null) {
             if (data.getStatus().equals(PurchasingBean.ACC_APPROVE)) {
                 data.setStatus(PurchasingBean.ACC_APPROVE_FAILED);
+            } else if (data.getStatus().equals(PurchasingBean.DIR_APPROVE)) {
+                data.setStatus(PurchasingBean.DIR_APPROVE_FAILED);
             }
             data.addOpinion(opinionBean);
         }
