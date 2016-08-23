@@ -30,6 +30,8 @@ public class LoginController  extends Controller{
             getSession().setAttribute("loginUser", strUsername);
             if (strUserRole.equals(RoleBean.APPLICANT)) {
                 redirect("/applicant");
+            } else if (strUserRole.equals(RoleBean.PURCHASE)) {
+                redirect("/purchase");
             } else {
                 redirect("/approval");
             }

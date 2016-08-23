@@ -39,6 +39,12 @@ public class PurchasingBean {
     public static final String TO_APPROVE               = "to_approve";                         // 待审批
     public static final String APPROVED                 = "approved";                           // 已审批
     public static final String REJECTED                 = "rejected";                           // 审批未通过
+    /** 定义采购执行者目录结构 */
+    public static final String TO_DIVIDE                = "to_divide";                          // 未分包
+    public static final String DIVIDED                  = "divided";                            // 已分包
+    public static final String FINISHED                 = "finished";                           // 已结束
+    public static final String INTERRUPT                = "interrupt";                          // 被投诉
+    public static final String FAILED                   = "failed";                             // 流标
     /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -57,10 +63,12 @@ public class PurchasingBean {
     private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();               // 附件
     /** 审批流状态及内容 */
     private int nApproveStatus;                                                         // 采购函状态
-    private int nComplaintsStatus;
+    private int nComplaintsStatus;                                                      // 投诉处理状态
     private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
-
+    /** 分包 */
+    private int nPacketStatus;                                                          // 分包完成标志
+    private ArrayList<PacketBean> lstPacket = new ArrayList<PacketBean>();              // 分包信息
     /** 定义静态函数 */
     static public JSONArray getApplicantTree() {
         ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
@@ -246,6 +254,10 @@ public class PurchasingBean {
         lstRoot.put(rootNode);
 
         return lstRoot;
+    }
+
+    static public JSONArray getPurchaseTree() {
+        return null;
     }
 
     /** 定义 Model 接口 */

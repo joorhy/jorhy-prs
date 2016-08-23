@@ -43,6 +43,12 @@ public class UserModel extends Model<UserModel> {
         bureau.strRealName = "马局长";
         bureau.strDepartment = "财政局";
         lstUser.add(bureau);
+        // 采购实施单位
+        UserBean purchase = new UserBean();
+        purchase.strUsername = "6";
+        purchase.strRealName = "小杨";
+        purchase.strDepartment = "采购执行中心";
+        lstUser.add(purchase);
     }
 
     public String getUserRole(String userName){
@@ -56,6 +62,8 @@ public class UserModel extends Model<UserModel> {
             return RoleBean.REGULATORY;
         } else if (userName.equals("5")) {
             return RoleBean.BUREAU;
+        } else if (userName.equals("6")) {
+            return RoleBean.PURCHASE;
         }
         return null;
     }
