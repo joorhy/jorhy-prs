@@ -25,15 +25,13 @@ public class LoginController  extends Controller{
         String strPassword = getPara("uPass");
         String strRandomCode = getPara("randomCode");
         boolean loginSuccess = CaptchaRender.validate(this, strRandomCode);
-        String strUserRole = UserModel.dao.login(strUsername, strPassword);
+        String strUserRole = UserModel.dao.getUserRole(strUsername);
         if (strUserRole != null) {
             getSession().setAttribute("loginUser", strUsername);
             if (strUserRole.equals(RoleBean.APPLICANT)) {
                 redirect("/applicant");
-            } else if (strUserRole.equals(RoleBean.ACCOUNTING)) {
-                redirect("/accounting");
-            } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
-                redirect("/director");
+            } else {
+                redirect("/approval");
             }
         }
        //renderJson();

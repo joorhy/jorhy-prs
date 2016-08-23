@@ -90,3 +90,7 @@ function viewProjectItem(prj_type) {
 function viewOpinion() {
 
 }
+
+function viewComplaints() {
+
+}

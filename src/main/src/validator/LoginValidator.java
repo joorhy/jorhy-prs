@@ -2,7 +2,6 @@ package validator;
 
 import com.jfinal.validate.Validator;
 import com.jfinal.core.Controller;
-import model.UserInfo;
 
 /**
  * Created by Joo on 2016/6/28.

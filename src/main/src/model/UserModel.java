@@ -31,27 +31,36 @@ public class UserModel extends Model<UserModel> {
         director.strRealName = "王五";
         director.strDepartment = "农业局";
         lstUser.add(director);
+        // 监管股
+        UserBean regulatory = new UserBean();
+        regulatory.strUsername = "4";
+        regulatory.strRealName = "赵六";
+        regulatory.strDepartment = "财政监管股";
+        lstUser.add(regulatory);
+        // 财政分管副局长
+        UserBean bureau = new UserBean();
+        bureau.strUsername = "5";
+        bureau.strRealName = "马局长";
+        bureau.strDepartment = "财政局";
+        lstUser.add(bureau);
     }
 
-    public UserModel getUserInfo(String userName, String password){
-        //@Before(CacheInterceptor.class)
-        //@CacheName("userList")
-
-        //@Before(EvictInterceptor.class)
-        //@CacheName("userList")
-        //String sql = "select * from user_info where user_name = ? and password = ?";
-        //UserModel userModel = UserModel.dao.findFirst(sql, userName, password);
-        return null;//userInfo;
-    }
-
-    public String login(String userName, String password) {
+    public String getUserRole(String userName){
         if (userName.equals("1")) {
             return RoleBean.APPLICANT;
         } else if(userName.equals("2")) {
             return RoleBean.ACCOUNTING;
         } else if (userName.equals("3")) {
             return RoleBean.DIRECTOR;
+        } else if (userName.equals("4")) {
+            return RoleBean.REGULATORY;
+        } else if (userName.equals("5")) {
+            return RoleBean.BUREAU;
         }
+        return null;
+    }
+
+    public String login(String userName, String password) {
         return null;
     }
 

@@ -1,12 +1,17 @@
 package controller;
 
 import bean.AttachFileBean;
+import bean.OpinionBean;
 import bean.PurchasingBean;
+import bean.UserBean;
 import com.jfinal.core.Controller;
 import model.PurchasingModel;
+import model.UserModel;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -77,6 +82,19 @@ public class CommonController extends Controller {
         renderJson();
     }
 
+    public void complaintsList() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchasingBean != null) {
+            setAttr("rows", purchasingBean.getJSONComplaintsData());
+            setAttr("total", purchasingBean.getJSONComplaintsData().size());
+        } else {
+            setAttr("rows", new ArrayList<Map<String, String>>());
+            setAttr("total", 0);
+        }
+        renderJson();
+    }
+
     public void downloadFile() {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
@@ -114,6 +132,31 @@ public class CommonController extends Controller {
                 }
             }
             purchasingBean.delAttachFile(strFileID);
+        }
+        setAttr("result", "success");
+        renderJson();
+    }
+
+    // 提交审核
+    public void approve() {
+        String strPurchasingID = getPara("purchasing_id");
+        String strContent = getPara("content");
+        String strOpinion = getPara("opinion");
+
+        String strUsername = String.valueOf(getSession().getAttribute("loginUser"));
+        UserBean userBean = UserModel.dao.getUser(strUsername);
+
+        OpinionBean opinionBean = new OpinionBean();
+        opinionBean.strApprovePerson = userBean.strRealName;
+        opinionBean.strApproveDepartment = userBean.strDepartment;
+        opinionBean.strOpinion = strContent;
+        Date currentTime = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+        opinionBean.strApproveDate = sdf.format(currentTime);
+        if (strOpinion.equals("agree")) {
+            PurchasingModel.dao.agreePurchasing(strPurchasingID, opinionBean);
+        } else {
+            PurchasingModel.dao.disagreePurchasing(strPurchasingID, opinionBean);
         }
         setAttr("result", "success");
         renderJson();

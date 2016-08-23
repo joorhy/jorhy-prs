@@ -19,12 +19,17 @@ public class PurchasingBean {
     public static final String SERVICE                  = "service";
     public static final String ENGINEERING              = "engineering";
     /** 定义采购工作流状态 */
-    public static final String ACC_APPROVE_FAILED       = "accounting_approve_failed";          // 财务审批失败
-    public static final String ACC_APPROVE              = "accounting_approve";                 // 财务审批
-    public static final String DIR_APPROVE_FAILED       = "director_approve_failed";            // 局长审批失败
-    public static final String DIR_APPROVE              = "director_approve";                   // 局长审批
-    public static final String FINANCIAL_APPROVE_FAILED = "financial_approve_failed";           // 财政股审批失败
-    public static final String FINANCIAL_APPROVE        = "financial_approve";                  // 财政股审批
+    public static final int INITIALIZE                  = 0;          // 新创建项目
+    public static final int ACC_APPROVE                 = 1;          // 单位会计审批
+    public static final int DIR_APPROVE                 = 2;          // 分管股室局长审批
+    public static final int FINANCIAL_APPROVE           = 3;          // 财政监管股室股审批
+    public static final int FIN_BUREAU_APPROVE          = 4;          // 财政局审批
+    public static final int SUBCONTRACTING              = 5;          // 分包
+    public static final int ACC_APPROVE_FAILED          = 101;        // 单位会计审批失败
+    public static final int DIR_APPROVE_FAILED          = 102;        // 分管股室局长审批失败
+    public static final int FINANCIAL_APPROVE_FAILED    = 103;        // 财政监管股室股审批失败
+    public static final int FIN_BUREAU_APPROVE_FAILED   = 104;        // 财政局审批失败
+
     /** 定义申请者目录结构 */
     public static final String CREATE                   = "create";                             // 新建采购函
     public static final String SUBMITTED                = "submitted";                          // 已提交
@@ -33,7 +38,7 @@ public class PurchasingBean {
     /** 定义审批者目录结构 */
     public static final String TO_APPROVE               = "to_approve";                         // 待审批
     public static final String APPROVED                 = "approved";                           // 已审批
-    public static final String REJECTED                 = "rejected";                             // 审批未通过
+    public static final String REJECTED                 = "rejected";                           // 审批未通过
     /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -51,8 +56,10 @@ public class PurchasingBean {
     /** 采购函附件 */
     private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();               // 附件
     /** 审批流状态及内容 */
-    private String strStatus;                                                           // 采购函状态
-    private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();
+    private int nApproveStatus;                                                         // 采购函状态
+    private int nComplaintsStatus;
+    private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
+    private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
 
     /** 定义静态函数 */
     static public JSONArray getApplicantTree() {
@@ -67,18 +74,20 @@ public class PurchasingBean {
             childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            if (lstPurchasing.get(i).getStatus().equals(CREATE)) {
-                childrenNode.put("type", CREATE);
-                newPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(IMPLEMENTED)) {
-                childrenNode.put("type", IMPLEMENTED);
-                implementedPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(EXECUTED)) {
-                childrenNode.put("type", EXECUTED);
-                executedPrjChildren.put(childrenNode);
-            } else {
-                childrenNode.put("type", SUBMITTED);
-                committedPrjChildren.put(childrenNode);
+            switch (lstPurchasing.get(i).getApproveStatus()) {
+                case PurchasingBean.INITIALIZE:
+                    childrenNode.put("type", CREATE);
+                    newPrjChildren.put(childrenNode);
+                    break;
+                case PurchasingBean.ACC_APPROVE:
+                case PurchasingBean.ACC_APPROVE_FAILED:
+                case PurchasingBean.DIR_APPROVE:
+                case PurchasingBean.FINANCIAL_APPROVE:
+                case PurchasingBean.FIN_BUREAU_APPROVE:
+                case PurchasingBean.SUBCONTRACTING:
+                    childrenNode.put("type", SUBMITTED);
+                    committedPrjChildren.put(childrenNode);
+                    break;
             }
         }
 
@@ -124,66 +133,64 @@ public class PurchasingBean {
         return lstRoot;
     }
 
-    static public JSONArray getAccountingTree() {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
-
-        JSONArray toApprovePrjChildren = new JSONArray();
-        JSONArray approvedPrjChildren = new JSONArray();
-        JSONArray rejectedPrjChildren = new JSONArray();
-        for (int i = 0; i< lstPurchasing.size(); i++) {
-            JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
-            childrenNode.put("iconCls", "icon-cut");
-            if (lstPurchasing.get(i).getStatus().equals(ACC_APPROVE)) {
-                childrenNode.put("type", TO_APPROVE);
-                toApprovePrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE) ||
-                       lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
-                childrenNode.put("type", APPROVED);
-                approvedPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
-                childrenNode.put("type", REJECTED);
-                rejectedPrjChildren.put(childrenNode);
+    static private String getNodeType(String strUserRole, int nStatus) {
+        String strNodeType = "";
+        if (strUserRole.equals(RoleBean.ACCOUNTING)){
+            switch (nStatus) {
+                case PurchasingBean.ACC_APPROVE:
+                    strNodeType = PurchasingBean.TO_APPROVE;
+                    break;
+                case PurchasingBean.DIR_APPROVE:
+                case PurchasingBean.FINANCIAL_APPROVE:
+                case PurchasingBean.FIN_BUREAU_APPROVE:
+                case PurchasingBean.SUBCONTRACTING:
+                    strNodeType = PurchasingBean.APPROVED;
+                    break;
+                case PurchasingBean.DIR_APPROVE_FAILED:
+                    strNodeType = PurchasingBean.REJECTED;
+                    break;
+            }
+        } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
+            switch (nStatus) {
+                case PurchasingBean.DIR_APPROVE:
+                    strNodeType = PurchasingBean.TO_APPROVE;
+                    break;
+                case PurchasingBean.FINANCIAL_APPROVE:
+                case PurchasingBean.FIN_BUREAU_APPROVE:
+                case PurchasingBean.SUBCONTRACTING:
+                    strNodeType = PurchasingBean.APPROVED;
+                    break;
+                case PurchasingBean.FINANCIAL_APPROVE_FAILED:
+                    strNodeType = PurchasingBean.REJECTED;
+                    break;
+            }
+        } else if (strUserRole.equals(RoleBean.REGULATORY)) {
+            switch (nStatus) {
+                case PurchasingBean.FINANCIAL_APPROVE:
+                    strNodeType = PurchasingBean.TO_APPROVE;
+                    break;
+                case PurchasingBean.FIN_BUREAU_APPROVE:
+                case PurchasingBean.SUBCONTRACTING:
+                    strNodeType = PurchasingBean.APPROVED;
+                    break;
+                case PurchasingBean.FIN_BUREAU_APPROVE_FAILED:
+                    strNodeType = PurchasingBean.REJECTED;
+                    break;
+            }
+        } else if (strUserRole.equals(RoleBean.BUREAU)) {
+            switch (nStatus) {
+                case PurchasingBean.FIN_BUREAU_APPROVE:
+                    strNodeType = PurchasingBean.TO_APPROVE;
+                    break;
+                case PurchasingBean.SUBCONTRACTING:
+                    strNodeType = PurchasingBean.APPROVED;
+                    break;
             }
         }
-
-        JSONObject toApprovePrj = new JSONObject();
-        toApprovePrj.put("id", "to_approve_prj");
-        toApprovePrj.put("text", "待审批项目");
-        toApprovePrj.put("iconCls", "icon-cut");
-        toApprovePrj.put("children", toApprovePrjChildren);
-
-        JSONObject approvedPrj = new JSONObject();
-        approvedPrj.put("id", "approved_prj");
-        approvedPrj.put("text", "已审批项目");
-        approvedPrj.put("iconCls", "icon-cut");
-        approvedPrj.put("children", approvedPrjChildren);
-
-        JSONObject rejectPrj = new JSONObject();
-        rejectPrj.put("id", "executed_prj");
-        rejectPrj.put("text", "审批未通过项目");
-        rejectPrj.put("iconCls", "icon-cut");
-        rejectPrj.put("children", rejectedPrjChildren);
-
-        JSONArray lstChildren = new JSONArray();
-        lstChildren.put(toApprovePrj);
-        lstChildren.put(approvedPrj);
-        lstChildren.put(rejectPrj);
-
-        JSONObject rootNode = new JSONObject();
-        rootNode.put("id", "root");
-        rootNode.put("text", "项目审批管理中心");
-        rootNode.put("iconCls", "icon-cut");
-        rootNode.put("children", lstChildren);
-
-        JSONArray lstRoot = new JSONArray();
-        lstRoot.put(rootNode);
-
-        return lstRoot;
+        return strNodeType;
     }
 
-    static public JSONArray getDirectorTree() {
+    static public JSONArray getApprovalTree(String strUserRole) {
         ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray toApprovePrjChildren = new JSONArray();
@@ -194,14 +201,14 @@ public class PurchasingBean {
             childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE)) {
-                childrenNode.put("type", TO_APPROVE);
+            childrenNode.put("role", strUserRole);
+            String strNodeType = getNodeType(strUserRole, lstPurchasing.get(i).getApproveStatus());
+            childrenNode.put("type", strNodeType);
+            if (strNodeType.equals(PurchasingBean.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(FINANCIAL_APPROVE)) {
-                childrenNode.put("type", APPROVED);
+            } else if (strNodeType.equals(PurchasingBean.APPROVED)) {
                 approvedPrjChildren.put(childrenNode);
-            } else if (lstPurchasing.get(i).getStatus().equals(DIR_APPROVE_FAILED)) {
-                childrenNode.put("type", REJECTED);
+            } else if (strNodeType.equals(PurchasingBean.REJECTED)) {
                 rejectedPrjChildren.put(childrenNode);
             }
         }
@@ -270,12 +277,20 @@ public class PurchasingBean {
         return strCommodityPrePrice;
     }
 
-    public String getStatus() {
-        return strStatus;
+    public int getApproveStatus() {
+        return nApproveStatus;
     }
 
-    public void setStatus(String strStatus) {
-        this.strStatus = strStatus;
+    public void setApproveStatus(int nStatus) {
+        this.nApproveStatus = nStatus;
+    }
+
+    public int getComplaintsStatus() {
+        return nComplaintsStatus;
+    }
+
+    public void setComplaintsStatus(int nStatus) {
+        this.nComplaintsStatus = nStatus;
     }
 
     public String getServicePrePrice() {
@@ -304,6 +319,10 @@ public class PurchasingBean {
 
     public ArrayList<OpinionBean> getOpinionList() {
         return lstOpinion;
+    }
+
+    public ArrayList<ComplaintsBean> getComplaintsList() {
+        return lstComplaints;
     }
 
     /** 定义 Controller 接口 */
@@ -375,6 +394,10 @@ public class PurchasingBean {
         lstOpinion.add(opinionBean);
     }
 
+    public void addComplaints(ComplaintsBean complaintsBean) {
+        lstComplaints.add(complaintsBean);
+    }
+
     /** 定义 JSON 接口 */
     public Map<String, String> getJSONBaseData() {
         Map<String, String> obj = new HashMap<String, String>();
@@ -438,6 +461,18 @@ public class PurchasingBean {
             m.put("op_approve_person", item.strApprovePerson);
             m.put("op_approve_date", item.strApproveDate);
             m.put("op_content", item.strOpinion);
+            lst.add(m);
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getJSONComplaintsData() {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstComplaints.size(); i++) {
+            ComplaintsBean item = lstComplaints.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("comp_deal_date", item.strDealwithDate);
+            m.put("comp_content", item.strDealwithOpinion);
             lst.add(m);
         }
         return lst;

@@ -112,7 +112,7 @@
             </div>
             <div style="margin-bottom:10px">
                 <td>技术参数及售后</td>
-                <input id="prj_param" class="easyui-textbox" required="true" multiline="true" label="Email:"
+                <input id="prj_param" class="easyui-textbox" required="true" multiline="true"
                        style="width:100%;height:120px" data-options="disabled:true">
             </div>
         </div>

@@ -39,7 +39,7 @@
     <td>
     <td>财政局资金分管股室</td>
     <td>
-        <select id="approve_person" class="easyui-combobox" style="width:120px">
+        <select id="approve_department" class="easyui-combobox" style="width:120px">
             <option value="default">请选择分管股室</option>
             <option value="nyg">农业股</option>
             <option value="jkwg">教科文股</option>
@@ -51,10 +51,10 @@
     </td>
     <td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:120"
-           onclick="agreePurchasing()">同意并提交政府采购管理股审核</a></td>
+           onclick="agreePurchasing()">同意并提交审核</a></td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="disagreePurchasing()">退回下一级</a></td>
+           onclick="disagreePurchasing()">不同意</a></td>
     </td>
-</div>
+</div><br/>
 </body>
 </html>

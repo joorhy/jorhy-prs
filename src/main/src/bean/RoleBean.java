@@ -6,5 +6,7 @@ package bean;
 public class RoleBean {
     public static final String APPLICANT    = "APPLICANT";
     public static final String ACCOUNTING   = "ACCOUNTING";
-    public static final String DIRECTOR    = "DIRECTOR";
+    public static final String DIRECTOR     = "DIRECTOR";
+    public static final String REGULATORY   = "REGULATORY";
+    public static final String BUREAU       = "BUREAU";
 }
