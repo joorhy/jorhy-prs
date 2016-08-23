@@ -50,7 +50,7 @@ public class PurchasingModel extends Model<PurchasingModel> {
     public String submitPurchasing(String strPurchasingID) {
         PurchasingBean data = getPurchasing(strPurchasingID);
         if (data != null) {
-            data.setApproveStatus(PurchasingBean.ACC_APPROVE);
+            data.setApproveStatus(PurchasingBean.SUBCONTRACTING);
         }
         return SUCCESS;
     }

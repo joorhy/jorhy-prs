@@ -7,6 +7,7 @@ public class PacketBean {
     public String strPackID;                        // 包ID
     public String strPackName;                      // 包名
     public String strPackCode;                      // 采购文号
+    public String strPurAddress;                    // 采购地点
     public String strPurDate;                       // 采购日期
     public String strExpertCount;                   // 抽取专家人数
     public String strPurMethod;                     // 采购方式

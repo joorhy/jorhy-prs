@@ -12,7 +12,7 @@ public class PurchaseController extends Controller {
         renderJsp("/jsp/purchase/purchase.jsp");
     }
 
-    public void approvalTree() {
+    public void purchaseTree() {
         renderText(PurchasingBean.getPurchaseTree().toString());
     }
 }

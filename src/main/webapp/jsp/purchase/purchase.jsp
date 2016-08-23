@@ -22,7 +22,20 @@
 <div class="easyui-layout" style="width:1200px;height:100%;">
     <div region="west" split="true" title="导航" style="width:250px;">
         <ul id="menuTree" class="easyui-tree" data-options="url:'/purchase/purchaseTree',method:'get',
-        animate:true,onClick: function(node) { showContent(node); }"></ul>
+        animate:true,onContextMenu: function(e,node){
+                        e.preventDefault();
+                        if (node.type == 'to_divide') {
+                            $(this).tree('select',node.target);
+                            $('#mm').menu('show',{
+                                left: e.clientX,
+                                top: e.clientY
+                            });}
+                        },onClick: function(node) { showContent(node); }">
+        </ul>
+        <div id="mm" align="left" class="easyui-menu" style="width:120px;">
+            <div onclick="showNewPacket()" data-options="iconCls:'icon-add'">新建包</div>
+            <div onclick="savePackets()" data-options="iconCls:'icon-save'">保存</div>
+        </div>
     </div>
     <div id="contentDiv" class="easyui-panel" region="center" title="简介" style="padding:5px;width:100%;">
         <jsp:include page="welcome.jsp" />

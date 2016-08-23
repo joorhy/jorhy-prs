@@ -24,7 +24,9 @@ public class PurchasingBean {
     public static final int DIR_APPROVE                 = 2;          // 分管股室局长审批
     public static final int FINANCIAL_APPROVE           = 3;          // 财政监管股室股审批
     public static final int FIN_BUREAU_APPROVE          = 4;          // 财政局审批
-    public static final int SUBCONTRACTING              = 5;          // 分包
+    public static final int SUBCONTRACTING              = 5;          // 未分包
+    public static final int SUBCONTRACTED               = 6;          // 已分包
+    public static final int COMPLETED                   = 7;          // 已完成
     public static final int ACC_APPROVE_FAILED          = 101;        // 单位会计审批失败
     public static final int DIR_APPROVE_FAILED          = 102;        // 分管股室局长审批失败
     public static final int FINANCIAL_APPROVE_FAILED    = 103;        // 财政监管股室股审批失败
@@ -60,14 +62,13 @@ public class PurchasingBean {
     private ArrayList<ProductBean> lstService = new ArrayList<ProductBean>();                     // 服务类
     private ArrayList<ProductBean> lstEngineering = new ArrayList<ProductBean>();                 // 工程类
     /** 采购函附件 */
-    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();               // 附件
+    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();            // 附件
     /** 审批流状态及内容 */
     private int nApproveStatus;                                                         // 采购函状态
     private int nComplaintsStatus;                                                      // 投诉处理状态
     private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
     /** 分包 */
-    private int nPacketStatus;                                                          // 分包完成标志
     private ArrayList<PacketBean> lstPacket = new ArrayList<PacketBean>();              // 分包信息
     /** 定义静态函数 */
     static public JSONArray getApplicantTree() {
@@ -84,7 +85,7 @@ public class PurchasingBean {
             childrenNode.put("iconCls", "icon-cut");
             switch (lstPurchasing.get(i).getApproveStatus()) {
                 case PurchasingBean.INITIALIZE:
-                    childrenNode.put("type", CREATE);
+                    childrenNode.put("type", PurchasingBean.CREATE);
                     newPrjChildren.put(childrenNode);
                     break;
                 case PurchasingBean.ACC_APPROVE:
@@ -93,7 +94,7 @@ public class PurchasingBean {
                 case PurchasingBean.FINANCIAL_APPROVE:
                 case PurchasingBean.FIN_BUREAU_APPROVE:
                 case PurchasingBean.SUBCONTRACTING:
-                    childrenNode.put("type", SUBMITTED);
+                    childrenNode.put("type", PurchasingBean.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
                     break;
             }
@@ -257,7 +258,94 @@ public class PurchasingBean {
     }
 
     static public JSONArray getPurchaseTree() {
-        return null;
+        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+
+        JSONArray subcontractingChildren = new JSONArray();
+        JSONArray subcontractedChildren = new JSONArray();
+        JSONArray completedChildren = new JSONArray();
+        JSONArray complaintsChildren = new JSONArray();
+        JSONArray failedChildren = new JSONArray();
+        for (int i=0; i<lstPurchasing.size(); i++) {
+            PurchasingBean purchasingBean = lstPurchasing.get(i);
+            JSONObject childrenNode = new JSONObject();
+            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
+            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("iconCls", "icon-cut");
+            switch (purchasingBean.getComplaintsStatus()) {
+                case 1:// 投诉
+                    childrenNode.put("type", PurchasingBean.INTERRUPT);
+                    complaintsChildren.put(childrenNode);
+                    break;
+                case 2:// 流标
+                    childrenNode.put("type", PurchasingBean.FAILED);
+                    failedChildren.put(childrenNode);
+                    break;
+                default:
+                    switch (purchasingBean.getApproveStatus()) {
+                        case PurchasingBean.SUBCONTRACTING:
+                            childrenNode.put("type", PurchasingBean.TO_DIVIDE);
+                            subcontractingChildren.put(childrenNode);
+                            break;
+                        case PurchasingBean.SUBCONTRACTED:
+                            childrenNode.put("type", PurchasingBean.DIVIDED);
+                            subcontractedChildren.put(childrenNode);
+                            break;
+                        case PurchasingBean.COMPLETED:
+                            childrenNode.put("type", PurchasingBean.FINISHED);
+                            completedChildren.put(childrenNode);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        JSONObject toDividePrj = new JSONObject();
+        toDividePrj.put("id", "to_divide_prj");
+        toDividePrj.put("text", "未分包项目");
+        toDividePrj.put("iconCls", "icon-cut");
+        toDividePrj.put("children", subcontractingChildren);
+
+        JSONObject dividedPrj = new JSONObject();
+        dividedPrj.put("id", "divided_prj");
+        dividedPrj.put("text", "已分包项目");
+        dividedPrj.put("iconCls", "icon-cut");
+        dividedPrj.put("children", subcontractedChildren);
+
+        JSONObject finishPrj = new JSONObject();
+        finishPrj.put("id", "finish_prj");
+        finishPrj.put("text", "已结束项目");
+        finishPrj.put("iconCls", "icon-cut");
+        finishPrj.put("children", completedChildren);
+
+        JSONObject interruptPrj = new JSONObject();
+        interruptPrj.put("id", "interrupt_prj");
+        interruptPrj.put("text", "投诉项目");
+        interruptPrj.put("iconCls", "icon-cut");
+        interruptPrj.put("children", complaintsChildren);
+
+        JSONObject failedPrj = new JSONObject();
+        failedPrj.put("id", "failed_prj");
+        failedPrj.put("text", "流标项目");
+        failedPrj.put("iconCls", "icon-cut");
+        failedPrj.put("children", failedChildren);
+
+        JSONArray lstChildren = new JSONArray();
+        lstChildren.put(toDividePrj);
+        lstChildren.put(dividedPrj);
+        lstChildren.put(finishPrj);
+        lstChildren.put(interruptPrj);
+        lstChildren.put(failedPrj);
+
+        JSONObject rootNode = new JSONObject();
+        rootNode.put("id", "root");
+        rootNode.put("text", "采购执行中心");
+        rootNode.put("iconCls", "icon-cut");
+        rootNode.put("children", lstChildren);
+
+        JSONArray lstRoot = new JSONArray();
+        lstRoot.put(rootNode);
+
+        return lstRoot;
     }
 
     /** 定义 Model 接口 */

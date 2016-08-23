@@ -35,16 +35,16 @@ function showNewPage() {
     $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
 }
 
-function showContent(nodeId){
+function showContent(node){
     baseData = {};
     $.ajax({
         type: 'post',
         url:'/common/getBaseData',
-        data: {purchasing_id:nodeId.id},
+        data: {purchasing_id:node.id},
         dataType: 'json',
         success: function (data) {
             if(data.result == "success") {
-                if (nodeId.type == 'create') {
+                if (node.type == 'create') {
                     showNewPage();
                 } else {
                     $('#contentDiv').panel('setTitle','已提交采购过程');

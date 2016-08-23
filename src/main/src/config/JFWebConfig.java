@@ -23,6 +23,7 @@ public class JFWebConfig extends JFinalConfig {
         me.add("/common", CommonController.class);
         me.add("/applicant", ApplicantController.class);
         me.add("/approval", ApprovalController.class);
+        me.add("/purchase", PurchaseController.class);
     }
     public void configPlugin(Plugins me) {
         me.add(new EhCachePlugin());
