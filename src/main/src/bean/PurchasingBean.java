@@ -58,18 +58,16 @@ public class PurchasingBean {
     private String strCommodityPrePrice;                                                // 商品类预算总金额
     private String strServicePrePrice;                                                  // 服务类预算总金额
     private String strEngineeringPrePrice;                                              // 工程类预算总金额
-    private ArrayList<ProductBean> lstCommodity = new ArrayList<ProductBean>();                   // 商品类
-    private ArrayList<ProductBean> lstService = new ArrayList<ProductBean>();                     // 服务类
-    private ArrayList<ProductBean> lstEngineering = new ArrayList<ProductBean>();                 // 工程类
+    private ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
     /** 采购函附件 */
-    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();            // 附件
+    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();  // 附件
     /** 审批流状态及内容 */
     private int nApproveStatus;                                                         // 采购函状态
     private int nComplaintsStatus;                                                      // 投诉处理状态
     private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
     /** 分包 */
-    private ArrayList<PacketBean> lstPacket = new ArrayList<PacketBean>();              // 分包信息
+    private ArrayList<PacketBean>  lstDividedPacket = new ArrayList<PacketBean>();      // 已分包项目
     /** 定义静态函数 */
     static public JSONArray getApplicantTree() {
         ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
@@ -401,16 +399,8 @@ public class PurchasingBean {
         return strEngineeringPrePrice;
     }
 
-    public ArrayList<ProductBean> getCommodityList() {
-        return lstCommodity;
-    }
-
-    public ArrayList<ProductBean> getServiceList() {
-        return lstService;
-    }
-
-    public ArrayList<ProductBean> getEngineeringList() {
-        return lstEngineering;
+    public ArrayList<ProductBean> getProductList() {
+        return lstProduct;
     }
 
     public ArrayList<AttachFileBean> getAttachFileList() {
@@ -427,10 +417,7 @@ public class PurchasingBean {
 
     /** 定义 Controller 接口 */
     public String parseBaseData(JSONObject obj) {
-        lstCommodity.clear();
-        lstService.clear();
-        lstEngineering.clear();
-
+        lstProduct.clear();
         strPurchasingID = obj.getString("purchasing_id");
         strPurCode = obj.getString("pur_code");
         strFundsSrc = obj.getString("funds_src");
@@ -450,20 +437,16 @@ public class PurchasingBean {
         for (int i=0; i<nTotal; i++) {
             JSONObject item = (JSONObject)arr.get(i);
             ProductBean prjItem = new ProductBean();
+            prjItem.strProdectID = item.getString("project_id");
             prjItem.strPrjName = item.getString("prj_name");
             prjItem.nPrjCount = item.getInt("prj_count");
             prjItem.fPrjPrice = item.getDouble("prj_price");
             prjItem.strPrjSpec = item.getString("prj_spec");
             prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
             prjItem.strPrjParam = item.getString("prj_param");
-
-            if (strProductType == COMMODITY) {
-                lstCommodity.add(prjItem);
-            } else if (strProductType == SERVICE) {
-                lstService.add(prjItem);
-            } else {
-                lstEngineering.add(prjItem);
-            }
+            prjItem.strPrjType = strProductType;
+            prjItem.nPackedCount = 0;
+            lstProduct.add(prjItem);
         }
         return SUCCESS;
     }
@@ -498,6 +481,53 @@ public class PurchasingBean {
         lstComplaints.add(complaintsBean);
     }
 
+    public void savePacket(JSONObject objBase, JSONObject objProducts) {
+        PacketBean packetBean = null;
+        for (int i=0; i<lstDividedPacket.size(); i++) {
+            if (lstDividedPacket.get(i).strPackID.equals(objBase.getString("purchasing_id"))) {
+                packetBean = lstDividedPacket.get(i);
+                lstDividedPacket.remove(packetBean);
+                break;
+            }
+        }
+        if (packetBean == null) {
+            packetBean = new PacketBean();
+        }
+        packetBean.strPackID = objBase.getString("packet_id");
+        packetBean.strPackCode = objBase.getString("pack_code");
+        packetBean.strPurAddress = objBase.getString("pur_address");
+        packetBean.strExpertCount = objBase.getString("expert_count");
+        packetBean.strPurDate = objBase.getString("pur_date");
+        packetBean.strPurMethod = objBase.getString("pur_method");
+        packetBean.strPublicity = objBase.getString("pur_publicity");
+        packetBean.strSupplier = objBase.getString("pur_supplier");
+        packetBean.strAmount = objBase.getString("pur_amount");
+        packetBean.lstProduct.clear();
+
+        int nTotal = objProducts.getInt("total");
+        JSONArray arr = objProducts.getJSONArray("rows");
+        for (int i=0; i<nTotal; i++) {
+            JSONObject item = (JSONObject)arr.get(i);
+            ProductBean prjItem = new ProductBean();
+            prjItem.strProdectID = item.getString("project_id");
+            prjItem.strPrjName = item.getString("prj_name");
+            prjItem.nPrjCount = item.getInt("prj_count");
+            prjItem.fPrjPrice = item.getDouble("prj_price");
+            prjItem.strPrjSpec = item.getString("prj_spec");
+            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
+            prjItem.strPrjParam = item.getString("prj_param");
+            packetBean.lstProduct.add(prjItem);
+
+            for (int j=0; j<lstProduct.size(); j++) {
+                if (lstProduct.get(j).strProdectID.equals(prjItem.strProdectID)) {
+                    lstProduct.get(j).nPackedCount = prjItem.nPrjCount;
+                    break;
+                }
+            }
+        }
+        lstDividedPacket.add(packetBean);
+    }
+
     /** 定义 JSON 接口 */
     public Map<String, String> getJSONBaseData() {
         Map<String, String> obj = new HashMap<String, String>();
@@ -514,32 +544,26 @@ public class PurchasingBean {
         return obj;
     }
 
-    public ArrayList<Map<String, String>> getJSONProductData(String strProductType) {
-        ArrayList<ProductBean> lstProduct = null;
-        if (strProductType == COMMODITY) {
-            lstProduct = lstCommodity;
-        } else if (strProductType == SERVICE) {
-            lstProduct = lstService;
-        } else {
-            lstProduct = lstEngineering;
-        }
-
+    public ArrayList<Map<String, String>> getJSONProductItems(String strProductType) {
         ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);
-            Map<String, String> obj = new HashMap<String, String>();
-            obj.put("prj_name", item.strPrjName);
-            obj.put("prj_count", String.valueOf(item.nPrjCount));
-            obj.put("prj_price",  String.valueOf(item.fPrjPrice));
-            obj.put("prj_pre_price",  String.valueOf(item.fPrjPrePrice));
-            obj.put("prj_param", item.strPrjParam);
-            obj.put("prj_spec", item.strPrjSpec);
-            productArray.add(obj);
+            if (item.strPrjType.equals(strProductType)) {
+                Map<String, String> obj = new HashMap<String, String>();
+                obj.put("project_id", item.strProdectID);
+                obj.put("prj_name", item.strPrjName);
+                obj.put("prj_count", String.valueOf(item.nPrjCount));
+                obj.put("prj_price", String.valueOf(item.fPrjPrice));
+                obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
+                obj.put("prj_param", item.strPrjParam);
+                obj.put("prj_spec", item.strPrjSpec);
+                productArray.add(obj);
+            }
         }
         return productArray;
     }
 
-    public ArrayList<Map<String, String>> getJSONAttachFile() {
+    public ArrayList<Map<String, String>> getJSONAttachFiles() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstAttachFile.size(); i++) {
             AttachFileBean item = lstAttachFile.get(i);
@@ -552,7 +576,7 @@ public class PurchasingBean {
         return lst;
     }
 
-    public ArrayList<Map<String, String>> getJSONOpinionData() {
+    public ArrayList<Map<String, String>> getJSONOpinionItems() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstOpinion.size(); i++) {
             OpinionBean item = lstOpinion.get(i);
@@ -566,7 +590,7 @@ public class PurchasingBean {
         return lst;
     }
 
-    public ArrayList<Map<String, String>> getJSONComplaintsData() {
+    public ArrayList<Map<String, String>> getJSONComplaintsItems() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstComplaints.size(); i++) {
             ComplaintsBean item = lstComplaints.get(i);
@@ -574,6 +598,24 @@ public class PurchasingBean {
             m.put("comp_deal_date", item.strDealwithDate);
             m.put("comp_content", item.strDealwithOpinion);
             lst.add(m);
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getJSONToDivideItems() {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i = 0; i < lstProduct.size(); i++) {
+            ProductBean item = lstProduct.get(i);
+            Map<String, String> obj = new HashMap<String, String>();
+            obj.put("project_id", item.strProdectID);
+            obj.put("product_type", item.strPrjType);
+            obj.put("prj_name", item.strPrjName);
+            obj.put("prj_count", String.valueOf(item.nPrjCount));
+            obj.put("prj_price", String.valueOf(item.fPrjPrice));
+            obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
+            obj.put("prj_param", item.strPrjParam);
+            obj.put("prj_spec", item.strPrjSpec);
+            lst.add(obj);
         }
         return lst;
     }

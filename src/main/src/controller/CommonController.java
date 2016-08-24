@@ -34,8 +34,8 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.COMMODITY));
-            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.COMMODITY).size());
+            setAttr("rows", purchasingBean.getJSONProductItems(PurchasingBean.COMMODITY));
+            setAttr("total", purchasingBean.getJSONProductItems(PurchasingBean.COMMODITY).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -47,8 +47,8 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.SERVICE));
-            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.SERVICE).size());
+            setAttr("rows", purchasingBean.getJSONProductItems(PurchasingBean.SERVICE));
+            setAttr("total", purchasingBean.getJSONProductItems(PurchasingBean.SERVICE).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -60,8 +60,8 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductData(PurchasingBean.ENGINEERING));
-            setAttr("total", purchasingBean.getJSONProductData(PurchasingBean.ENGINEERING).size());
+            setAttr("rows", purchasingBean.getJSONProductItems(PurchasingBean.ENGINEERING));
+            setAttr("total", purchasingBean.getJSONProductItems(PurchasingBean.ENGINEERING).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -73,8 +73,8 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONOpinionData());
-            setAttr("total", purchasingBean.getJSONOpinionData().size());
+            setAttr("rows", purchasingBean.getJSONOpinionItems());
+            setAttr("total", purchasingBean.getJSONOpinionItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -86,8 +86,8 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONComplaintsData());
-            setAttr("total", purchasingBean.getJSONComplaintsData().size());
+            setAttr("rows", purchasingBean.getJSONComplaintsItems());
+            setAttr("total", purchasingBean.getJSONComplaintsItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -113,7 +113,7 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
         if (purchasingBean != null) {
-            ArrayList<Map<String, String>> lst = purchasingBean.getJSONAttachFile();
+            ArrayList<Map<String, String>> lst = purchasingBean.getJSONAttachFiles();
             setAttr("files", lst);
         }
         renderJson();

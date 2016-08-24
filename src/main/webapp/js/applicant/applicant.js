@@ -1,34 +1,6 @@
 /**
  * Created by Joo on 2016/7/30.
  */
-
-
-// Private array of chars to use
-var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-Math.uuid = function (len, radix) {
-    var chars = CHARS, uuid = [], i;
-    radix = radix || chars.length;
-    if (len) {
-        // Compact form
-        for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
-    } else {
-        // rfc4122, version 4 form
-        var r;
-        // rfc4122 requires these characters
-        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-        uuid[14] = '4';
-        // Fill in random data.  At i==19 set the high bits of clock sequence as
-        // per rfc4122, sec. 4.1.5
-        for (i = 0; i < 36; i++) {
-            if (!uuid[i]) {
-                r = 0 | Math.random() * 16;
-                uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
-            }
-        }
-    }
-    return uuid.join('');
-}
-
 function showNewPage() {
     baseData = null;
     $('#contentDiv').panel('setTitle','新建采购过程');
@@ -194,6 +166,7 @@ function fillItmesData(row) {
 
 function getItemsData() {
     var data = {};
+    //data["project_id"] = $('#project_id').textbox('getText');
     data["prj_name"] = $('#prj_name').textbox('getText');
     data["prj_count"] = $('#prj_count').textbox('getText');
     data["prj_price"] = $('#prj_price').textbox('getText');
@@ -229,6 +202,7 @@ function saveProjectItem(){
         updateData['row'] = data;
         project.datagrid('updateRow', updateData);
     } else {
+        data["project_id"] = Math.uuid(36, 62);
         project.datagrid('appendRow', data);
     }
     $('#dlgCreate').dialog('close');

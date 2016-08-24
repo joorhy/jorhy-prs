@@ -8,53 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Basic TextBox - jQuery EasyUI Demo</title>
-    <link rel="stylesheet" href="../../js/jquery-easyui-1.4.5/demo/demo.css" type="text/css">
-    <link rel="stylesheet" href="../../js/jquery-easyui-1.4.5/themes/icon.css" type="text/css">
-    <link rel="stylesheet" href="../../js/jquery-easyui-1.4.5/themes/default/easyui.css" type="text/css">
-    <script type="text/javascript" src="../../js/jquery-easyui-1.4.5/jquery.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
-</head>
-<body>
-<h2>Basic TextBox</h2>
-<p>The textbox allows a user to enter information.</p>
-<div style="margin:20px 0;"></div>
-<div class="easyui-panel" title="Register" style="width:100%;max-width:400px;padding:30px 60px;">
-    <div style="margin-bottom:20px">
-        <input class="easyui-textbox" labelPosition="top" data-options="prompt:'Enter a email address...',validType:'email',label:'Email:'" style="width:100%;height:52px">
-    </div>
-    <div style="margin-bottom:20px">
-        <input class="easyui-textbox" style="width:100%;height:52px" data-options="label:'你好',labelPosition:'top'">
-    </div>
-    <div style="margin-bottom:20px">
-        <input class="easyui-textbox" label="Last Name:" labelPosition="top" style="width:100%;height:52px">
-    </div>
-    <div style="margin-bottom:20px">
-        <input id='t1' type="text" style="width:100%;height:52px">
-    </div>
-
-    <div>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px">Register</a>
-    </div>
-</div>
-<script>
-    $('#t1').textbox({
-        width: 300,
-        label: 'Name:'
-    });
-</script>
-</body>
-</html>
-<!--html>
-<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>新建分包</title>
 </head>
 <body>
 <div>
-    <div class="easyui-panel" title="基础信息" style="width:100%">
+    <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadCreatePacket()">
         <table>
             <input id="packet_id" type="hidden" value=""/></td>
             <td align="left">
@@ -102,5 +61,37 @@
         </table>
     </div>
 </div><br/>
+<table id="tbToDivide" class="easyui-datagrid" title="未分包项目" style="width:100%;height:500px"
+       data-options="
+                fitColumns:true,
+                url:'/purchase/toDivideItems',
+                method:'post',
+                queryParams:{purchasing_id:document.getElementById('purchasing_id').value},
+                view:groupview,
+                groupField:'product_type',
+                groupFormatter:function(value,rows){
+                    return value;
+                }
+            ">
+    <thead>
+    <tr>
+        <th data-options="field:'prj_name',width:80">项目名称</th>
+        <th data-options="field:'prj_count',width:80">数量</th>
+        <th data-options="field:'prj_price',width:80">单价</th>
+        <th data-options="field:'prj_spec',width:80">规格型号</th>
+        <th data-options="field:'prj_pre_price',width:80">预算总价</th>
+        <th data-options="field:'prj_param',width:160">技术参数及售后</th>
+        <th data-options="field:'prj_select',checkbox:true">分包状态</th>
+    </tr>
+    </thead>
+</table><br/>
+<div align="right">
+    <td align="right">
+    <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+           onclick="savePacket()">保存</a></td>
+    <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+           onclick="cancelPacket()">取消</a></td>
+    </td>
+</div>
 </body>
-</html-->
+</html>

@@ -1,5 +1,7 @@
 package bean;
 
+import java.util.ArrayList;
+
 /**
  * Created by JooLiu on 2016/8/23.
  */
@@ -14,4 +16,6 @@ public class PacketBean {
     public String strPublicity;                     // 采购需求公告
     public String strSupplier;                      // 中标供应商
     public String strAmount;                        // 中标金额
+
+    public ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
 }

@@ -19,12 +19,14 @@
 </head>
 <body>
 <div id="header" style="min-height:100px;width:100%;border:1px green solid;"><jsp:include page="../header.jsp"/></div>
+<input id="purchasing_id" type="hidden" value=""/></td>
 <div class="easyui-layout" style="width:1200px;height:100%;">
     <div region="west" split="true" title="导航" style="width:250px;">
         <ul id="menuTree" class="easyui-tree" data-options="url:'/purchase/purchaseTree',method:'get',
-        animate:true,onContextMenu: function(e,node){
+                animate:true,onContextMenu: function(e,node){
                         e.preventDefault();
                         if (node.type == 'to_divide') {
+						    document.getElementById('purchasing_id').value = node.id;
                             $(this).tree('select',node.target);
                             $('#mm').menu('show',{
                                 left: e.clientX,
@@ -34,7 +36,7 @@
         </ul>
         <div id="mm" align="left" class="easyui-menu" style="width:120px;">
             <div onclick="showNewPacket()" data-options="iconCls:'icon-add'">新建包</div>
-            <div onclick="savePackets()" data-options="iconCls:'icon-save'">保存</div>
+            <div onclick="savePackets()" data-options="iconCls:'icon-save'">提交分包</div>
         </div>
     </div>
     <div id="contentDiv" class="easyui-panel" region="center" title="简介" style="padding:5px;width:100%;">
