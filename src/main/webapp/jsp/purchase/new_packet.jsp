@@ -75,6 +75,7 @@
             ">
     <thead>
     <tr>
+        <th data-options="field:'project_id',hidden:true"></th>
         <th data-options="field:'prj_name',width:80">项目名称</th>
         <th data-options="field:'prj_count',width:80">数量</th>
         <th data-options="field:'prj_price',width:80">单价</th>

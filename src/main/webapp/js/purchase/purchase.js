@@ -47,7 +47,7 @@ function onLoadCreatePacket() {
         $('#pur_supplier').textbox('setText', baseData['pur_supplier']);
         $('#pur_amount').textbox('setText', baseData['pur_amount']);
     } else {
-        document.getElementById("purchasing_id").value = Math.uuid(36, 62);
+        document.getElementById("packet_id").value = Math.uuid(36, 62);
     }
 }
 
@@ -62,9 +62,11 @@ function savePacket() {
             baseData['expert_count'] = $('#expert_count').textbox('getText');
             baseData['pur_date'] = $('#pur_date').datebox('getValue');
             baseData['pur_method'] = $('#pur_method').combobox('getValue');
-            baseData['pur_publicity'] = $('#pur_publicity').switchbutton('getValue');
+            baseData['pur_publicity'] = $('#pur_publicity').switchbutton('options').checked;
             baseData['pur_supplier'] = $('#pur_supplier').textbox('getText') ;
             baseData['pur_amount'] = $('#pur_amount').textbox('getText');
+
+            var itemms = $('#tbToDivide').datagrid('getChecked');
             $.ajax({
                 type: 'post',
                 url:'/purchase/save',

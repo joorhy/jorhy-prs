@@ -41,7 +41,7 @@ public class PurchasingModel extends Model<PurchasingModel> {
             }
             lstFile.clear();
         }
-        data.setApproveStatus(PurchasingBean.INITIALIZE);
+        //data.setApproveStatus(PurchasingBean.INITIALIZE);
         lstPurchasingData.add(data);
 
         return SUCCESS;

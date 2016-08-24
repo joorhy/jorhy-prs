@@ -278,7 +278,18 @@ public class PurchasingBean {
                     childrenNode.put("type", PurchasingBean.FAILED);
                     failedChildren.put(childrenNode);
                     break;
-                default:
+                default: {
+                    JSONArray packetChildren = new JSONArray();
+                    for (int j=0; j<purchasingBean.lstDividedPacket.size(); j++) {
+                        JSONObject packetNode = new JSONObject();
+                        PacketBean item = purchasingBean.lstDividedPacket.get(j);
+                        packetNode.put("id", item.strPackID);
+                        packetNode.put("text", "第" + String.valueOf(j + 1) + "包");
+                        packetNode.put("iconCls", "icon-cut");
+                        packetNode.put("type", "packet");
+                        packetChildren.put(packetNode);
+                    }
+                    childrenNode.put("children", packetChildren);
                     switch (purchasingBean.getApproveStatus()) {
                         case PurchasingBean.SUBCONTRACTING:
                             childrenNode.put("type", PurchasingBean.TO_DIVIDE);
@@ -293,7 +304,8 @@ public class PurchasingBean {
                             completedChildren.put(childrenNode);
                             break;
                     }
-                    break;
+                }
+                break;
             }
         }
 
@@ -615,6 +627,7 @@ public class PurchasingBean {
             obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
             obj.put("prj_param", item.strPrjParam);
             obj.put("prj_spec", item.strPrjSpec);
+            obj.put("prj_select", "selected");
             lst.add(obj);
         }
         return lst;
