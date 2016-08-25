@@ -67,9 +67,9 @@ function showContent(node){
                     $('#contentDiv').panel('setTitle', node.text);
                     var parentNode = $('#menuTree').tree('getParent', node.target)
                     if (parentNode.type == 'to_divide') {
-                        $('#contentDiv').panel('refresh', '../jsp/purchase/temp_packet.jsp');
+                        $('#contentDiv').panel('refresh', '../jsp/purchase/to_packet.jsp');
                     } else {
-                        $('#contentDiv').panel('refresh', '../jsp/purchase/packeted.jsp');
+                        $('#contentDiv').panel('refresh', '../jsp/purchase/packaged.jsp');
                     }
 
                     baseData = data.base;
