@@ -13,7 +13,7 @@
 </head>
 <body>
 <div>
-    <jsp:include page="../common/base.jsp"/>
+    <jsp:include page="../common/purchase_base.jsp"/>
 </div>
 <br/><br/>
 <div>
@@ -21,7 +21,7 @@
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="../common/attach_file.jsp"/>
+    <jsp:include page="../common/view_files.jsp"/>
 </div><br/>
 <div>
     <jsp:include page="../common/opinion.jsp"/>

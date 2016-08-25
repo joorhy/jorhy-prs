@@ -51,6 +51,7 @@
             <thead>
                 <tr>
                     <th data-options="field:'project_id',hidden:true"></th>
+                    <th data-options="field:'product_type',hidden:true"></th>
                     <th data-options="field:'prj_name',width:80">项目名称</th>
                     <th data-options="field:'prj_count',width:80">数量</th>
                     <th data-options="field:'prj_price',width:80">单价</th>
@@ -66,6 +67,7 @@
             <thead>
                 <tr>
                     <th data-options="field:'project_id',hidden:true"></th>
+                    <th data-options="field:'product_type',hidden:true"></th>
                     <th data-options="field:'prj_name',width:80">项目名称</th>
                     <th data-options="field:'prj_count',width:80">数量</th>
                     <th data-options="field:'prj_price',width:80">单价</th>
@@ -81,6 +83,7 @@
             <thead>
                 <tr>
                     <th data-options="field:'project_id',hidden:true"></th>
+                    <th data-options="field:'product_type',hidden:true"></th>
                     <th data-options="field:'prj_name',width:80">项目名称</th>
                     <th data-options="field:'prj_count',width:80">数量</th>
                     <th data-options="field:'prj_price',width:80">单价</th>
@@ -94,7 +97,7 @@
     <div style="padding:0px 0px 0px 0px">
         <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
              data-options="fit:false,border:true,onLoad:onLoadAttachCreate()">
-            <jsp:include page="attach.jsp"/>
+            <jsp:include page="../common/attach_file.jsp"/>
         </div>
     </div><br/>
     <br/>

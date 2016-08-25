@@ -1,9 +1,7 @@
 package model;
 
-import bean.AttachFileBean;
-import bean.OpinionBean;
+import bean.*;
 import com.jfinal.plugin.activerecord.Model;
-import bean.PurchasingBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import java.util.Map;
  * Created by Joo on 2016/7/30.
  */
 public class PurchasingModel extends Model<PurchasingModel> {
-    public static final String SUCCESS = "success";
     public static final PurchasingModel dao = new PurchasingModel();
 
     private Map<String,ArrayList<AttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<AttachFileBean>>();
@@ -41,18 +38,18 @@ public class PurchasingModel extends Model<PurchasingModel> {
             }
             lstFile.clear();
         }
-        //data.setApproveStatus(PurchasingBean.INITIALIZE);
+        ActivityModel.dao.addPurchasing(data.getPurchasingID());
         lstPurchasingData.add(data);
 
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public String submitPurchasing(String strPurchasingID) {
         PurchasingBean data = getPurchasing(strPurchasingID);
         if (data != null) {
-            data.setApproveStatus(PurchasingBean.SUBCONTRACTING);
+            ActivityModel.dao.nextActivity(strPurchasingID);
         }
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public String cancelPurchasing(String strPurchasingID) {
@@ -62,27 +59,28 @@ public class PurchasingModel extends Model<PurchasingModel> {
             for (int i = 0; i< attachFileBeen.size(); i++) {
                 mapAttachFile.remove(attachFileBeen.get(i));
             }
+            ActivityModel.dao.removePurchasing(strPurchasingID);
             lstPurchasingData.remove(data);
         }
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public String agreePurchasing(String strPurchasingID, OpinionBean opinionBean) {
         PurchasingBean data = getPurchasing(strPurchasingID);
         if (data != null) {
-            data.setApproveStatus(data.getApproveStatus() + 1);
+            ActivityModel.dao.nextActivity(strPurchasingID);
             data.addOpinion(opinionBean);
         }
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public String disagreePurchasing(String strPurchasingID, OpinionBean opinionBean) {
         PurchasingBean data = getPurchasing(strPurchasingID);
         if (data != null) {
-            data.setApproveStatus(data.getApproveStatus() + 100);
+            ActivityModel.dao.prevActivity(strPurchasingID);
             data.addOpinion(opinionBean);
         }
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public ArrayList<PurchasingBean> getPurchasingList() {

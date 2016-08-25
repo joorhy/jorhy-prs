@@ -7,31 +7,81 @@ function showNewPacket() {
     $('#contentDiv').panel('refresh', '../jsp/purchase/new_packet.jsp');
 }
 
-function showContent(node){
-    baseData = {};
-    $.ajax({
-        type: 'post',
-        url:'/common/getBaseData',
-        data: {purchasing_id:node.id},
-        dataType: 'json',
-        success: function (data) {
-            if(data.result == "success") {
-                if (node.type == 'to_divide' || node.type == 'divided' || node.type == 'finished' ||
-                    node.type == 'interrupt' || node.type == 'failed') {
-                    $('#contentDiv').panel('setTitle', node.text);
-                    $('#contentDiv').panel('refresh', '../jsp/purchase/project.jsp');
-                } else {
-
+function submitPackets() {
+    $.messager.confirm('操作提示','确认提交分包?',function(r){
+        if (r){
+            $.ajax({
+                type: 'post',
+                url:'/purchase/submit',
+                data: {purchasing_id:document.getElementById("purchasing_id").value},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.result == "success") {
+                        $('#menuTree').tree('reload', $('#to_divide').target);
+                        var cur_node = {};
+                        cur_node.id = document.getElementById("purchasing_id").value;
+                        cur_node.type = "to_divide";
+                        showContent(cur_node);
+                    } else {
+                    }
+                },
+                error: function (x, e) {
+                    alert("error savePurchasing");
                 }
-                baseData = data.base;
-            } else {
-                baseData = null;
-            }
-        },
-        error: function (x, e) {
-            alert("error");
+            });
         }
     });
+}
+
+function showContent(node){
+    baseData = null;
+    if (node.type == 'to_divide' || node.type == 'divided' || node.type == 'finished' ||
+        node.type == 'interrupt' || node.type == 'failed') {
+        document.getElementById('purchasing_id').value = node.id;
+        $.ajax({
+            type: 'post',
+            url:'/common/getBaseData',
+            data: {purchasing_id:node.id},
+            dataType: 'json',
+            success: function (data) {
+                if(data.result == "success") {
+                    $('#contentDiv').panel('setTitle', node.text);
+                    $('#contentDiv').panel('refresh', '../jsp/purchase/project.jsp');
+                    baseData = data.base;
+                } else {
+                    baseData = null;
+                }
+            },
+            error: function (x, e) {
+                alert("error");
+            }
+        });
+    }else {
+        $.ajax({
+            type: 'post',
+            url:'/common/getPacketBase',
+            data: {packet_id:node.id},
+            dataType: 'json',
+            success: function (data) {
+                if(data.result == "success") {
+                    $('#contentDiv').panel('setTitle', node.text);
+                    var parentNode = $('#menuTree').tree('getParent', node.target)
+                    if (parentNode.type == 'to_divide') {
+                        $('#contentDiv').panel('refresh', '../jsp/purchase/temp_packet.jsp');
+                    } else {
+                        $('#contentDiv').panel('refresh', '../jsp/purchase/packeted.jsp');
+                    }
+
+                    baseData = data.base;
+                } else {
+                    baseData = null;
+                }
+            },
+            error: function (x, e) {
+                alert("error");
+            }
+        });
+    }
 }
 
 function onLoadCreatePacket() {
@@ -66,11 +116,14 @@ function savePacket() {
             baseData['pur_supplier'] = $('#pur_supplier').textbox('getText') ;
             baseData['pur_amount'] = $('#pur_amount').textbox('getText');
 
-            var itemms = $('#tbToDivide').datagrid('getChecked');
+            var items = $('#tbToDivide').datagrid('getChecked');
+            var checkedData = {};
+            checkedData['total'] = items.length;
+            checkedData['rows'] = items;
             $.ajax({
                 type: 'post',
                 url:'/purchase/save',
-                data: {base:JSON.stringify(baseData),products:JSON.stringify($('#tbToDivide').datagrid('getData'))},
+                data: {base:JSON.stringify(baseData),products:JSON.stringify(checkedData)},
                 dataType: 'json',
                 success: function (data) {
                     if(data.result == "success") {
@@ -91,5 +144,35 @@ function savePacket() {
 }
 
 function cancelPacket() {
+    $.messager.confirm('操作提示','确认取消此分包?',function(r) {
+        if (r) {
+            showNewPacket();
+        }
+    });
+}
 
+function repacket() {
+    $.messager.confirm('操作提示','确认重新分包?',function(r){
+        if (r){
+            $.ajax({
+                type: 'post',
+                url:'/purchase/repacket',
+                data: {packet_id:document.getElementById("packet_id").value},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.result == "success") {
+                        $('#menuTree').tree('reload', $('#to_divide').target);
+                        var cur_node = {};
+                        cur_node.id = document.getElementById("purchasing_id").value;
+                        cur_node.type = "to_divide";
+                        showContent(cur_node);
+                    } else {
+                    }
+                },
+                error: function (x, e) {
+                    alert("error savePurchasing");
+                }
+            });
+        }
+    });
 }

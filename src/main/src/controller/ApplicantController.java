@@ -1,6 +1,8 @@
 package controller;
 
+import bean.ApplicantLeftMenu;
 import bean.AttachFileBean;
+import bean.ProductTypeBean;
 import com.jfinal.core.Controller;
 import bean.PurchasingBean;
 import com.jfinal.upload.UploadFile;
@@ -23,7 +25,7 @@ public class ApplicantController extends Controller {
     }
 
     public void applicantTree() {
-        renderText(PurchasingBean.getApplicantTree().toString());
+        renderText(ApplicantLeftMenu.getTree().toString());
     }
 
     // 保存按钮
@@ -41,13 +43,13 @@ public class ApplicantController extends Controller {
         purchasingBean.parseBaseData(objBaseData);
 
         JSONObject objCommodity = new JSONObject(strCommodity);
-        purchasingBean.parseProductData(objCommodity, PurchasingBean.COMMODITY);
+        purchasingBean.parseProductData(objCommodity, ProductTypeBean.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        purchasingBean.parseProductData(objService, PurchasingBean.SERVICE);
+        purchasingBean.parseProductData(objService, ProductTypeBean.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
-        purchasingBean.parseProductData(objEngineering, PurchasingBean.ENGINEERING);
+        purchasingBean.parseProductData(objEngineering, ProductTypeBean.ENGINEERING);
 
         PurchasingModel.dao.savePurchasing(purchasingBean);
 

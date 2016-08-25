@@ -12,41 +12,6 @@ import java.util.Map;
  * Created by Joo on 2016/7/30.
  */
 public class PurchasingBean {
-    /** 定义错误码 */
-    public static final String SUCCESS                  = "success";
-    /** 定义项目类别 */
-    public static final String COMMODITY                = "commodity";
-    public static final String SERVICE                  = "service";
-    public static final String ENGINEERING              = "engineering";
-    /** 定义采购工作流状态 */
-    public static final int INITIALIZE                  = 0;          // 新创建项目
-    public static final int ACC_APPROVE                 = 1;          // 单位会计审批
-    public static final int DIR_APPROVE                 = 2;          // 分管股室局长审批
-    public static final int FINANCIAL_APPROVE           = 3;          // 财政监管股室股审批
-    public static final int FIN_BUREAU_APPROVE          = 4;          // 财政局审批
-    public static final int SUBCONTRACTING              = 5;          // 未分包
-    public static final int SUBCONTRACTED               = 6;          // 已分包
-    public static final int COMPLETED                   = 7;          // 已完成
-    public static final int ACC_APPROVE_FAILED          = 101;        // 单位会计审批失败
-    public static final int DIR_APPROVE_FAILED          = 102;        // 分管股室局长审批失败
-    public static final int FINANCIAL_APPROVE_FAILED    = 103;        // 财政监管股室股审批失败
-    public static final int FIN_BUREAU_APPROVE_FAILED   = 104;        // 财政局审批失败
-
-    /** 定义申请者目录结构 */
-    public static final String CREATE                   = "create";                             // 新建采购函
-    public static final String SUBMITTED                = "submitted";                          // 已提交
-    public static final String EXECUTED                 = "executed";                           // 已执行
-    public static final String IMPLEMENTED              = "implemented";                        // 已完成
-    /** 定义审批者目录结构 */
-    public static final String TO_APPROVE               = "to_approve";                         // 待审批
-    public static final String APPROVED                 = "approved";                           // 已审批
-    public static final String REJECTED                 = "rejected";                           // 审批未通过
-    /** 定义采购执行者目录结构 */
-    public static final String TO_DIVIDE                = "to_divide";                          // 未分包
-    public static final String DIVIDED                  = "divided";                            // 已分包
-    public static final String FINISHED                 = "finished";                           // 已结束
-    public static final String INTERRUPT                = "interrupt";                          // 被投诉
-    public static final String FAILED                   = "failed";                             // 流标
     /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -62,301 +27,9 @@ public class PurchasingBean {
     /** 采购函附件 */
     private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();  // 附件
     /** 审批流状态及内容 */
-    private int nApproveStatus;                                                         // 采购函状态
     private int nComplaintsStatus;                                                      // 投诉处理状态
     private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
-    /** 分包 */
-    private ArrayList<PacketBean>  lstDividedPacket = new ArrayList<PacketBean>();      // 已分包项目
-    /** 定义静态函数 */
-    static public JSONArray getApplicantTree() {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
-
-        JSONArray newPrjChildren = new JSONArray();
-        JSONArray committedPrjChildren = new JSONArray();
-        JSONArray executedPrjChildren = new JSONArray();
-        JSONArray implementedPrjChildren = new JSONArray();
-        for (int i = 0; i< lstPurchasing.size(); i++) {
-            JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
-            childrenNode.put("iconCls", "icon-cut");
-            switch (lstPurchasing.get(i).getApproveStatus()) {
-                case PurchasingBean.INITIALIZE:
-                    childrenNode.put("type", PurchasingBean.CREATE);
-                    newPrjChildren.put(childrenNode);
-                    break;
-                case PurchasingBean.ACC_APPROVE:
-                case PurchasingBean.ACC_APPROVE_FAILED:
-                case PurchasingBean.DIR_APPROVE:
-                case PurchasingBean.FINANCIAL_APPROVE:
-                case PurchasingBean.FIN_BUREAU_APPROVE:
-                case PurchasingBean.SUBCONTRACTING:
-                    childrenNode.put("type", PurchasingBean.SUBMITTED);
-                    committedPrjChildren.put(childrenNode);
-                    break;
-            }
-        }
-
-        JSONObject newPrj = new JSONObject();
-        newPrj.put("id", "new_prj");
-        newPrj.put("text", "新建采购过程");
-        newPrj.put("iconCls", "icon-cut");
-        newPrj.put("children", newPrjChildren);
-
-        JSONObject committedPrj = new JSONObject();
-        committedPrj.put("id", "committed_prj");
-        committedPrj.put("text", "已提交采购过程");
-        committedPrj.put("iconCls", "icon-cut");
-        committedPrj.put("children", committedPrjChildren);
-
-        JSONObject executedPrj = new JSONObject();
-        executedPrj.put("id", "executed_prj");
-        executedPrj.put("text", "已执行采购过程");
-        executedPrj.put("iconCls", "icon-cut");
-        executedPrj.put("children", executedPrjChildren);
-
-        JSONObject implementedPrj = new JSONObject();
-        implementedPrj.put("id", "implemented_prj");
-        implementedPrj.put("text", "已完成采购过程");
-        implementedPrj.put("iconCls", "icon-cut");
-        implementedPrj.put("children", implementedPrjChildren);
-
-        JSONArray lstChildren = new JSONArray();
-        lstChildren.put(newPrj);
-        lstChildren.put(committedPrj);
-        lstChildren.put(executedPrj);
-        lstChildren.put(implementedPrj);
-
-        JSONObject rootNode = new JSONObject();
-        rootNode.put("id", "root");
-        rootNode.put("text", "采购信息管理中心");
-        rootNode.put("iconCls", "icon-cut");
-        rootNode.put("children", lstChildren);
-
-        JSONArray lstRoot = new JSONArray();
-        lstRoot.put(rootNode);
-
-        return lstRoot;
-    }
-
-    static private String getNodeType(String strUserRole, int nStatus) {
-        String strNodeType = "";
-        if (strUserRole.equals(RoleBean.ACCOUNTING)){
-            switch (nStatus) {
-                case PurchasingBean.ACC_APPROVE:
-                    strNodeType = PurchasingBean.TO_APPROVE;
-                    break;
-                case PurchasingBean.DIR_APPROVE:
-                case PurchasingBean.FINANCIAL_APPROVE:
-                case PurchasingBean.FIN_BUREAU_APPROVE:
-                case PurchasingBean.SUBCONTRACTING:
-                    strNodeType = PurchasingBean.APPROVED;
-                    break;
-                case PurchasingBean.DIR_APPROVE_FAILED:
-                    strNodeType = PurchasingBean.REJECTED;
-                    break;
-            }
-        } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
-            switch (nStatus) {
-                case PurchasingBean.DIR_APPROVE:
-                    strNodeType = PurchasingBean.TO_APPROVE;
-                    break;
-                case PurchasingBean.FINANCIAL_APPROVE:
-                case PurchasingBean.FIN_BUREAU_APPROVE:
-                case PurchasingBean.SUBCONTRACTING:
-                    strNodeType = PurchasingBean.APPROVED;
-                    break;
-                case PurchasingBean.FINANCIAL_APPROVE_FAILED:
-                    strNodeType = PurchasingBean.REJECTED;
-                    break;
-            }
-        } else if (strUserRole.equals(RoleBean.REGULATORY)) {
-            switch (nStatus) {
-                case PurchasingBean.FINANCIAL_APPROVE:
-                    strNodeType = PurchasingBean.TO_APPROVE;
-                    break;
-                case PurchasingBean.FIN_BUREAU_APPROVE:
-                case PurchasingBean.SUBCONTRACTING:
-                    strNodeType = PurchasingBean.APPROVED;
-                    break;
-                case PurchasingBean.FIN_BUREAU_APPROVE_FAILED:
-                    strNodeType = PurchasingBean.REJECTED;
-                    break;
-            }
-        } else if (strUserRole.equals(RoleBean.BUREAU)) {
-            switch (nStatus) {
-                case PurchasingBean.FIN_BUREAU_APPROVE:
-                    strNodeType = PurchasingBean.TO_APPROVE;
-                    break;
-                case PurchasingBean.SUBCONTRACTING:
-                    strNodeType = PurchasingBean.APPROVED;
-                    break;
-            }
-        }
-        return strNodeType;
-    }
-
-    static public JSONArray getApprovalTree(String strUserRole) {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
-
-        JSONArray toApprovePrjChildren = new JSONArray();
-        JSONArray approvedPrjChildren = new JSONArray();
-        JSONArray rejectedPrjChildren = new JSONArray();
-        for (int i = 0; i< lstPurchasing.size(); i++) {
-            JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
-            childrenNode.put("iconCls", "icon-cut");
-            childrenNode.put("role", strUserRole);
-            String strNodeType = getNodeType(strUserRole, lstPurchasing.get(i).getApproveStatus());
-            childrenNode.put("type", strNodeType);
-            if (strNodeType.equals(PurchasingBean.TO_APPROVE)) {
-                toApprovePrjChildren.put(childrenNode);
-            } else if (strNodeType.equals(PurchasingBean.APPROVED)) {
-                approvedPrjChildren.put(childrenNode);
-            } else if (strNodeType.equals(PurchasingBean.REJECTED)) {
-                rejectedPrjChildren.put(childrenNode);
-            }
-        }
-
-        JSONObject toApprovePrj = new JSONObject();
-        toApprovePrj.put("id", "to_approve_prj");
-        toApprovePrj.put("text", "待审批项目");
-        toApprovePrj.put("iconCls", "icon-cut");
-        toApprovePrj.put("children", toApprovePrjChildren);
-
-        JSONObject approvedPrj = new JSONObject();
-        approvedPrj.put("id", "approved_prj");
-        approvedPrj.put("text", "已审批项目");
-        approvedPrj.put("iconCls", "icon-cut");
-        approvedPrj.put("children", approvedPrjChildren);
-
-        JSONObject rejectPrj = new JSONObject();
-        rejectPrj.put("id", "executed_prj");
-        rejectPrj.put("text", "审批未通过项目");
-        rejectPrj.put("iconCls", "icon-cut");
-        rejectPrj.put("children", rejectedPrjChildren);
-
-        JSONArray lstChildren = new JSONArray();
-        lstChildren.put(toApprovePrj);
-        lstChildren.put(approvedPrj);
-        lstChildren.put(rejectPrj);
-
-        JSONObject rootNode = new JSONObject();
-        rootNode.put("id", "root");
-        rootNode.put("text", "项目审批管理中心");
-        rootNode.put("iconCls", "icon-cut");
-        rootNode.put("children", lstChildren);
-
-        JSONArray lstRoot = new JSONArray();
-        lstRoot.put(rootNode);
-
-        return lstRoot;
-    }
-
-    static public JSONArray getPurchaseTree() {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
-
-        JSONArray subcontractingChildren = new JSONArray();
-        JSONArray subcontractedChildren = new JSONArray();
-        JSONArray completedChildren = new JSONArray();
-        JSONArray complaintsChildren = new JSONArray();
-        JSONArray failedChildren = new JSONArray();
-        for (int i=0; i<lstPurchasing.size(); i++) {
-            PurchasingBean purchasingBean = lstPurchasing.get(i);
-            JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
-            childrenNode.put("iconCls", "icon-cut");
-            switch (purchasingBean.getComplaintsStatus()) {
-                case 1:// 投诉
-                    childrenNode.put("type", PurchasingBean.INTERRUPT);
-                    complaintsChildren.put(childrenNode);
-                    break;
-                case 2:// 流标
-                    childrenNode.put("type", PurchasingBean.FAILED);
-                    failedChildren.put(childrenNode);
-                    break;
-                default: {
-                    JSONArray packetChildren = new JSONArray();
-                    for (int j=0; j<purchasingBean.lstDividedPacket.size(); j++) {
-                        JSONObject packetNode = new JSONObject();
-                        PacketBean item = purchasingBean.lstDividedPacket.get(j);
-                        packetNode.put("id", item.strPackID);
-                        packetNode.put("text", "第" + String.valueOf(j + 1) + "包");
-                        packetNode.put("iconCls", "icon-cut");
-                        packetNode.put("type", "packet");
-                        packetChildren.put(packetNode);
-                    }
-                    childrenNode.put("children", packetChildren);
-                    switch (purchasingBean.getApproveStatus()) {
-                        case PurchasingBean.SUBCONTRACTING:
-                            childrenNode.put("type", PurchasingBean.TO_DIVIDE);
-                            subcontractingChildren.put(childrenNode);
-                            break;
-                        case PurchasingBean.SUBCONTRACTED:
-                            childrenNode.put("type", PurchasingBean.DIVIDED);
-                            subcontractedChildren.put(childrenNode);
-                            break;
-                        case PurchasingBean.COMPLETED:
-                            childrenNode.put("type", PurchasingBean.FINISHED);
-                            completedChildren.put(childrenNode);
-                            break;
-                    }
-                }
-                break;
-            }
-        }
-
-        JSONObject toDividePrj = new JSONObject();
-        toDividePrj.put("id", "to_divide_prj");
-        toDividePrj.put("text", "未分包项目");
-        toDividePrj.put("iconCls", "icon-cut");
-        toDividePrj.put("children", subcontractingChildren);
-
-        JSONObject dividedPrj = new JSONObject();
-        dividedPrj.put("id", "divided_prj");
-        dividedPrj.put("text", "已分包项目");
-        dividedPrj.put("iconCls", "icon-cut");
-        dividedPrj.put("children", subcontractedChildren);
-
-        JSONObject finishPrj = new JSONObject();
-        finishPrj.put("id", "finish_prj");
-        finishPrj.put("text", "已结束项目");
-        finishPrj.put("iconCls", "icon-cut");
-        finishPrj.put("children", completedChildren);
-
-        JSONObject interruptPrj = new JSONObject();
-        interruptPrj.put("id", "interrupt_prj");
-        interruptPrj.put("text", "投诉项目");
-        interruptPrj.put("iconCls", "icon-cut");
-        interruptPrj.put("children", complaintsChildren);
-
-        JSONObject failedPrj = new JSONObject();
-        failedPrj.put("id", "failed_prj");
-        failedPrj.put("text", "流标项目");
-        failedPrj.put("iconCls", "icon-cut");
-        failedPrj.put("children", failedChildren);
-
-        JSONArray lstChildren = new JSONArray();
-        lstChildren.put(toDividePrj);
-        lstChildren.put(dividedPrj);
-        lstChildren.put(finishPrj);
-        lstChildren.put(interruptPrj);
-        lstChildren.put(failedPrj);
-
-        JSONObject rootNode = new JSONObject();
-        rootNode.put("id", "root");
-        rootNode.put("text", "采购执行中心");
-        rootNode.put("iconCls", "icon-cut");
-        rootNode.put("children", lstChildren);
-
-        JSONArray lstRoot = new JSONArray();
-        lstRoot.put(rootNode);
-
-        return lstRoot;
-    }
 
     /** 定义 Model 接口 */
     public String getPurchasingID() {
@@ -385,14 +58,6 @@ public class PurchasingBean {
 
     public String getCommodityPrePrice() {
         return strCommodityPrePrice;
-    }
-
-    public int getApproveStatus() {
-        return nApproveStatus;
-    }
-
-    public void setApproveStatus(int nStatus) {
-        this.nApproveStatus = nStatus;
     }
 
     public int getComplaintsStatus() {
@@ -440,7 +105,7 @@ public class PurchasingBean {
         strServicePrePrice = obj.getString("service_pre_price");
         strEngineeringPrePrice = obj.getString("engineering_pre_price");
 
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public String parseProductData(JSONObject obj, String strProductType) {
@@ -449,7 +114,7 @@ public class PurchasingBean {
         for (int i=0; i<nTotal; i++) {
             JSONObject item = (JSONObject)arr.get(i);
             ProductBean prjItem = new ProductBean();
-            prjItem.strProdectID = item.getString("project_id");
+            prjItem.strProductID = item.getString("project_id");
             prjItem.strPrjName = item.getString("prj_name");
             prjItem.nPrjCount = item.getInt("prj_count");
             prjItem.fPrjPrice = item.getDouble("prj_price");
@@ -460,7 +125,7 @@ public class PurchasingBean {
             prjItem.nPackedCount = 0;
             lstProduct.add(prjItem);
         }
-        return SUCCESS;
+        return ErrorCode.SUCCESS;
     }
 
     public void addAttachFile(AttachFileBean item) {
@@ -493,53 +158,6 @@ public class PurchasingBean {
         lstComplaints.add(complaintsBean);
     }
 
-    public void savePacket(JSONObject objBase, JSONObject objProducts) {
-        PacketBean packetBean = null;
-        for (int i=0; i<lstDividedPacket.size(); i++) {
-            if (lstDividedPacket.get(i).strPackID.equals(objBase.getString("purchasing_id"))) {
-                packetBean = lstDividedPacket.get(i);
-                lstDividedPacket.remove(packetBean);
-                break;
-            }
-        }
-        if (packetBean == null) {
-            packetBean = new PacketBean();
-        }
-        packetBean.strPackID = objBase.getString("packet_id");
-        packetBean.strPackCode = objBase.getString("pack_code");
-        packetBean.strPurAddress = objBase.getString("pur_address");
-        packetBean.strExpertCount = objBase.getString("expert_count");
-        packetBean.strPurDate = objBase.getString("pur_date");
-        packetBean.strPurMethod = objBase.getString("pur_method");
-        packetBean.strPublicity = objBase.getString("pur_publicity");
-        packetBean.strSupplier = objBase.getString("pur_supplier");
-        packetBean.strAmount = objBase.getString("pur_amount");
-        packetBean.lstProduct.clear();
-
-        int nTotal = objProducts.getInt("total");
-        JSONArray arr = objProducts.getJSONArray("rows");
-        for (int i=0; i<nTotal; i++) {
-            JSONObject item = (JSONObject)arr.get(i);
-            ProductBean prjItem = new ProductBean();
-            prjItem.strProdectID = item.getString("project_id");
-            prjItem.strPrjName = item.getString("prj_name");
-            prjItem.nPrjCount = item.getInt("prj_count");
-            prjItem.fPrjPrice = item.getDouble("prj_price");
-            prjItem.strPrjSpec = item.getString("prj_spec");
-            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
-            prjItem.strPrjParam = item.getString("prj_param");
-            packetBean.lstProduct.add(prjItem);
-
-            for (int j=0; j<lstProduct.size(); j++) {
-                if (lstProduct.get(j).strProdectID.equals(prjItem.strProdectID)) {
-                    lstProduct.get(j).nPackedCount = prjItem.nPrjCount;
-                    break;
-                }
-            }
-        }
-        lstDividedPacket.add(packetBean);
-    }
-
     /** 定义 JSON 接口 */
     public Map<String, String> getJSONBaseData() {
         Map<String, String> obj = new HashMap<String, String>();
@@ -562,7 +180,8 @@ public class PurchasingBean {
             ProductBean item = lstProduct.get(i);
             if (item.strPrjType.equals(strProductType)) {
                 Map<String, String> obj = new HashMap<String, String>();
-                obj.put("project_id", item.strProdectID);
+                obj.put("project_id", item.strProductID);
+                obj.put("product_type", item.strPrjType);
                 obj.put("prj_name", item.strPrjName);
                 obj.put("prj_count", String.valueOf(item.nPrjCount));
                 obj.put("prj_price", String.valueOf(item.fPrjPrice));
@@ -618,17 +237,19 @@ public class PurchasingBean {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);
-            Map<String, String> obj = new HashMap<String, String>();
-            obj.put("project_id", item.strProdectID);
-            obj.put("product_type", item.strPrjType);
-            obj.put("prj_name", item.strPrjName);
-            obj.put("prj_count", String.valueOf(item.nPrjCount));
-            obj.put("prj_price", String.valueOf(item.fPrjPrice));
-            obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
-            obj.put("prj_param", item.strPrjParam);
-            obj.put("prj_spec", item.strPrjSpec);
-            obj.put("prj_select", "selected");
-            lst.add(obj);
+            if (item.nPackedCount < item.nPrjCount) {
+                Map<String, String> obj = new HashMap<String, String>();
+                obj.put("project_id", item.strProductID);
+                obj.put("product_type", item.strPrjType);
+                obj.put("prj_name", item.strPrjName);
+                obj.put("prj_count", String.valueOf(item.nPrjCount));
+                obj.put("prj_price", String.valueOf(item.fPrjPrice));
+                obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
+                obj.put("prj_param", item.strPrjParam);
+                obj.put("prj_spec", item.strPrjSpec);
+                obj.put("prj_select", "selected");
+                lst.add(obj);
+            }
         }
         return lst;
     }

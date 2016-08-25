@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Administrator on 2016/7/4.
  */
-public class LoginController  extends Controller{
+public class LoginController extends Controller {
     private Logger log = LoggerFactory.getLogger(LoginController.class);
     // 页面初始化
     public void index() {
@@ -32,6 +32,8 @@ public class LoginController  extends Controller{
                 redirect("/applicant");
             } else if (strUserRole.equals(RoleBean.PURCHASE)) {
                 redirect("/purchase");
+            } else if (strUserRole.equals(RoleBean.PAYMENT)) {
+                redirect("/payment");
             } else {
                 redirect("/approval");
             }

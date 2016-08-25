@@ -1,5 +1,6 @@
 package controller;
 
+import bean.ApprovalLeftMenu;
 import bean.OpinionBean;
 import bean.PurchasingBean;
 import bean.UserBean;
@@ -24,7 +25,7 @@ public class ApprovalController extends Controller {
         if (strUsername != null) {
             String strUserRole = UserModel.dao.getUserRole(strUsername);
             if (strUserRole != null) {
-                renderText(PurchasingBean.getApprovalTree(strUserRole).toString());
+                renderText(ApprovalLeftMenu.getTree(strUserRole).toString());
             }
         }
     }

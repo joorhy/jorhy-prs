@@ -3,7 +3,6 @@
 <html>
     <head>
         <script type="text/javascript" src="../../js/common/common.js"></script>
-        <script type="text/javascript" src="../../js/applicant/items.js"></script>
         <script type="text/javascript" src="../../js/applicant/applicant.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <jsp:include page="../easyui_header.jsp"/>

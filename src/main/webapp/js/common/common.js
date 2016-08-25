@@ -56,7 +56,9 @@ function onLoadAttachFile() {
     $.ajax({
         type: 'post',
         url:'/common/getAttachFiles',
-        data: {purchasing_id:document.getElementById("purchasing_id").value},
+        data: {purchasing_id:document.getElementById("purchasing_id").value,
+               packet_id:document.getElementById("packet_id") == null ? null :
+                         document.getElementById("packet_id").value},
         dataType: 'json',
         success: function (data) {
             for(var key in data.files) {

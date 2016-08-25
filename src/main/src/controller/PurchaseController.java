@@ -1,7 +1,10 @@
 package controller;
 
+import bean.PacketBean;
+import bean.PurchaseLeftMenu;
 import bean.PurchasingBean;
 import com.jfinal.core.Controller;
+import model.PacketModel;
 import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -18,7 +21,7 @@ public class PurchaseController extends Controller {
     }
 
     public void purchaseTree() {
-        renderText(PurchasingBean.getPurchaseTree().toString());
+        renderText(PurchaseLeftMenu.getTree().toString());
     }
 
     public void toDivideItems() {
@@ -34,21 +37,37 @@ public class PurchaseController extends Controller {
         renderJson();
     }
 
-    public void dividedItems() {
-
-    }
-
     public void save() {
         String strBaseData = getPara("base");
         String strProducts = getPara("products");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(objBaseData.getString("purchasing_id"));
-        if (purchasingBean != null) {
-            JSONObject objProducts = new JSONObject(strProducts);
-            purchasingBean.savePacket(objBaseData, objProducts);
-            PurchasingModel.dao.savePurchasing(purchasingBean);
+        PacketBean packetBean = PacketModel.dao.getPacket(objBaseData.getString("packet_id"));
+        if (packetBean == null) {
+            packetBean = new PacketBean();
         }
+
+        JSONObject objProducts = new JSONObject(strProducts);
+        packetBean.parseBaseData(objBaseData);
+        packetBean.parseProductData(objProducts);
+        PacketModel.dao.savePacket(packetBean);
+
+        setAttr("result", "success");
+        renderJson();
+    }
+
+    public void submit() {
+        String strPurchasingID = getPara("purchasing_id");
+        PurchasingModel.dao.submitPurchasing(strPurchasingID);
+
+        setAttr("result", "success");
+        renderJson();
+    }
+
+    public void repacket() {
+        String strPacketID = getPara("packet_id");
+        PacketModel.dao.removePacket(strPacketID);
+
         setAttr("result", "success");
         renderJson();
     }

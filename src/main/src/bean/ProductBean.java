@@ -4,7 +4,7 @@ package bean;
  * Created by Joo on 2016/7/30.
  */
 public class ProductBean {
-    public String   strProdectID;             // 项目ID
+    public String   strProductID;            // 项目ID
     public String   strPrjType;               // 项目类别
     public String   strPrjName;               // 项目名称
     public int      nPrjCount;                // 数量

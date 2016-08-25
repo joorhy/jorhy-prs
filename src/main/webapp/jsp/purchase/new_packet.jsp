@@ -76,16 +76,23 @@
     <thead>
     <tr>
         <th data-options="field:'project_id',hidden:true"></th>
+        <th data-options="field:'product_type',hidden:true"></th>
         <th data-options="field:'prj_name',width:80">项目名称</th>
         <th data-options="field:'prj_count',width:80">数量</th>
         <th data-options="field:'prj_price',width:80">单价</th>
         <th data-options="field:'prj_spec',width:80">规格型号</th>
         <th data-options="field:'prj_pre_price',width:80">预算总价</th>
         <th data-options="field:'prj_param',width:160">技术参数及售后</th>
-        <th data-options="field:'prj_select',checkbox:true">分包状态</th>
+        <th data-options="field:'prj_select',checkbox:true"></th>
     </tr>
     </thead>
 </table><br/>
+<div style="padding:0px 0px 0px 0px">
+    <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
+         data-options="fit:false,border:true,onLoad:onLoadAttachCreate()">
+        <jsp:include page="../common/attach_file.jsp"/>
+    </div>
+</div><br/>
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"

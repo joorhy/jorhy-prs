@@ -4,7 +4,7 @@
 function showNewPage() {
     baseData = null;
     $('#contentDiv').panel('setTitle','新建采购过程');
-    $('#contentDiv').panel('refresh','../jsp/applicant/create.jsp');
+    $('#contentDiv').panel('refresh','../jsp/applicant/new_applicant.jsp');
 }
 
 function showContent(node){
