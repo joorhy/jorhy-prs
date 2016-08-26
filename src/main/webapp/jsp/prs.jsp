@@ -2,10 +2,8 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
     <head>
-        <script type="text/javascript" src="../js/prs.js"></script>
-        <script type="text/javascript" src="../js/common/common.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <jsp:include page="easyui_header.jsp"/>
+        <jsp:include page="includes.jsp"/>
         <title>采购过程管理平台</title>
         <style>
             html,body{text-align:center;margin:0px auto;width:1200px;}
@@ -31,7 +29,7 @@
             </div>
             <div id="contentDiv" class="easyui-panel" region="center" title="简介"
                  style="padding:5px;width:100%;">
-                <jsp:include page="welcome.jsp" />
+                <jsp:include page="pages/welcome.jsp" />
             </div>
         </div>
         <div id="footer" style="width:100%;border:1px goldenrod solid;"><jsp:include page="footer.jsp"/></div>

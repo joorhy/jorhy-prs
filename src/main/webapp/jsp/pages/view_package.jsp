@@ -1,28 +1,25 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Joo
-  Date: 2016/8/19
-  Time: 22:18
+  User: JooLiu
+  Date: 2016/8/25
+  Time: 11:29
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>已提交采购过程</title>
+    <title>已分包</title>
 </head>
 <body>
 <div>
-    <jsp:include page="common/purchase_base.jsp"/>
+    <jsp:include page="../element/package_base.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="view_purchase_products.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="common/view_files.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="common/opinion.jsp"/>
+    <jsp:include page="../element/packaged_products.jsp"/>
 </div>
+<div>
+    <jsp:include page="../element/view_files.jsp"/>
+</div><br/>
 </body>
 </html>

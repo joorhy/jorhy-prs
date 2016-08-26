@@ -13,18 +13,18 @@
 </head>
 <body>
 <div>
-    <jsp:include page="common/purchase_base.jsp"/>
+    <jsp:include page="../element/purchase_base.jsp"/>
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="view_purchase_products.jsp"/>
+    <jsp:include page="../element/view_purchase_products.jsp"/>
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="common/view_files.jsp"/>
+    <jsp:include page="../element/view_files.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="common/opinion.jsp"/>
+    <jsp:include page="../element/purchase_opinion.jsp"/>
 </div><br/>
 <div>
     <td align="left">

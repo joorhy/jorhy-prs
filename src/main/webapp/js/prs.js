@@ -1,6 +1,68 @@
 /**
  * Created by JooLiu on 2016/8/26.
  */
+function initializeUploader() {
+    var container = document.getElementById('container');
+    var url = "/applicant/uploadFile";
+    var filters = { max_file_size : '10mb',
+                    mime_types: [
+                        {title : "Image files", extensions : "jpg,gif,png"},
+                        {title : "Zip files", extensions : "zip"}]};
+    var init = { PostInit: onPostInit,
+                  FilesAdded: onFilesAdded,
+                  FilesRemoved: onFilesRemoved,
+                  UploadProgress: onUploadProgress,
+                  FileUploaded: onFileUploaded,
+                  Error: onError};
+
+    uploader = new plupload.Uploader({
+        runtimes : 'html5,html4',
+        browse_button : 'pickFiles', // you can pass in id...
+        container: container, // ... or DOM Element itself
+        url : url,
+        filters : filters,
+        unique_names: true,
+        init:init
+    });
+    uploader.init();
+
+    function onPostInit() {
+
+    }
+
+    function onFilesAdded(up, files) {
+        plupload.each(files, function(file) {
+            uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
+                "&purchasing_id=" + document.getElementById("purchasing_id").value;
+            document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                document.getElementById("purchasing_id").value + '> ' + file.name +
+                '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
+                '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+        });
+        uploader.start();
+    }
+
+    function onFilesRemoved(up, files) {
+
+    }
+
+    function onUploadProgress(up, file) {
+        document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent
+            + "%</span>";
+    }
+
+    function onFileUploaded(up, file, resp) {
+
+    }
+
+    function onError() {
+        document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+    }
+}
+
 var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 Math.uuid = function (len, radix) {
     var chars = CHARS, uuid = [], i;
@@ -40,13 +102,13 @@ function getReadableFileSizeString(fileSizeInBytes) {
 function showNewPurchasePage() {
     baseData = null;
     $('#contentDiv').panel('setTitle','新建采购过程');
-    $('#contentDiv').panel('refresh','../jsp/new_purchase.jsp');
+    $('#contentDiv').panel('refresh','../jsp/pages/new_purchase.jsp');
 }
 
 function showNewPackagePage() {
     baseData = null;
     $('#contentDiv').panel('setTitle', '新建分包');
-    $('#contentDiv').panel('refresh', '../jsp/new_package.jsp');
+    $('#contentDiv').panel('refresh', '../jsp/pages/new_package.jsp');
 }
 
 function onLeftMenuRightClick(e,node) {
@@ -132,10 +194,10 @@ function onLeftMenuLeftClick(node) {
     function showApplicantPage() {
         if (node.type == 'create') {
             $('#contentDiv').panel('setTitle','新建采购过程');
-            $('#contentDiv').panel('refresh','../jsp/new_purchase.jsp');
+            $('#contentDiv').panel('refresh','../jsp/pages/new_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle',node.text);
-            $('#contentDiv').panel('refresh','../jsp/view_purchase.jsp');
+            $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
         }
     }
 
@@ -143,24 +205,24 @@ function onLeftMenuLeftClick(node) {
         if (node.type == 'to_approve') {
             $('#contentDiv').panel('setTitle','待审批项目');
             if (rootNode.type == "accounting") {
-                $('#contentDiv').panel('refresh', '../jsp/accounting_unapproved.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/accounting_unapproved.jsp');
             } else if (rootNode.type == "director") {
-                $('#contentDiv').panel('refresh', '../jsp/director_unapproved.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/director_unapproved.jsp');
             } else if (rootNode.type == "regulatory") {
-                $('#contentDiv').panel('refresh', '../jsp/regulatory_unapproved.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/regulatory_unapproved.jsp');
             }else if (rootNode.type == "bureau") {
-                $('#contentDiv').panel('refresh', '../jsp/unapproved.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/unapproved.jsp');
             }
         } else if (node.type == 'approved') {
             $('#contentDiv').panel('setTitle','已审批项目');
             if (rootNode.type == "regulatory") {
-                $('#contentDiv').panel('refresh', '../jsp/regulatory_approved.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/regulatory_approved.jsp');
             } else {
-                $('#contentDiv').panel('refresh', '../jsp/view_purchase.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/view_purchase.jsp');
             }
         } else if (node.type == 'rejected') {
             $('#contentDiv').panel('setTitle','审批未通过项目');
-            $('#contentDiv').panel('refresh', '../jsp/view_purchase.jsp');
+            $('#contentDiv').panel('refresh', '../jsp/pages/view_purchase.jsp');
         }
     }
 
@@ -168,14 +230,14 @@ function onLeftMenuLeftClick(node) {
         if (node.type == 'to_divide' || node.type == 'divided' || node.type == 'finished' ||
             node.type == 'interrupt' || node.type == 'failed') {
             $('#contentDiv').panel('setTitle', node.text);
-            $('#contentDiv').panel('refresh', '../jsp/view_purchase.jsp');
+            $('#contentDiv').panel('refresh', '../jsp/pages/view_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle', node.text);
             var parentNode = $('#menuTree').tree('getParent', node.target)
             if (parentNode.type == 'to_divide') {
-                $('#contentDiv').panel('refresh', '../jsp/un_packaged.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/un_packaged.jsp');
             } else {
-                $('#contentDiv').panel('refresh', '../jsp/purchase/packaged.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/view_package.jsp');
             }
         }
     }
@@ -183,14 +245,14 @@ function onLeftMenuLeftClick(node) {
     function showPaymentPage() {
         if (node.type == 'to_pay' || node.type == 'paid') {
             $('#contentDiv').panel('setTitle', node.text);
-            $('#contentDiv').panel('refresh', '../jsp/view_purchase.jsp');
+            $('#contentDiv').panel('refresh', '../jsp/pages/view_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle', node.text);
             var parentNode = $('#menuTree').tree('getParent', node.target)
             if (parentNode.type == 'to_pay') {
-                $('#contentDiv').panel('refresh', '../jsp/payment/to_pay.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
             } else {
-                $('#contentDiv').panel('refresh', '../jsp/payment/paid.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/paid.jsp');
             }
         }
     }
@@ -555,3 +617,187 @@ function rePackage() {
         alert("error savePurchasing");
     }
 }
+
+function savePurchase() {
+    $.messager.confirm('操作提示','确认保存此项目?',function(r){
+        if (r){
+            var url = '/applicant/save';
+            var data = {base:JSON.stringify(getData()),
+                        commodity:JSON.stringify($('#dgCommodity').datagrid('getData')),
+                        service:JSON.stringify($('#dgService').datagrid('getData')),
+                        engineering:JSON.stringify($('#dgEngineering').datagrid('getData'))}
+            $.ajax({
+                type: 'post',
+                url:url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
+
+    function getData() {
+        var baseData = {};
+        baseData['purchasing_id'] = document.getElementById("purchasing_id").value;
+        baseData['pur_code'] = $('#pur_code').textbox('getText');
+        baseData['funds_src'] = $('#funds_src').textbox('getText');
+        baseData['contacts'] = $('#contacts').textbox('getText');
+        baseData['phone_num'] = $('#phone_num').textbox('getText');
+        baseData['funds_nature'] = $('#funds_nature').combobox('getValue');
+        baseData['commodity_pre_price'] = $('#commodity_pre_price').textbox('getText') == ''
+            ? '0' : $('#commodity_pre_price').textbox('getText');
+        baseData['service_pre_price'] = $('#service_pre_price').textbox('getText') == ''
+            ? '0' : $('#service_pre_price').textbox('getText');
+        baseData['engineering_pre_price'] = $('#engineering_pre_price').textbox('getText') == ''
+            ? '0' : $('#engineering_pre_price').textbox('getText');
+
+        return baseData;
+    }
+
+    function onSuccess(r) {
+        if(r.result == "success") {
+            $('#menuTree').tree('reload', $('#new_prj').target);
+            var cur_node = {};
+            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.type = "create";
+        } else {
+        }
+    }
+
+    function onError(x, e) {
+        alert("error savePurchasing");
+    }
+}
+
+function submitPurchase() {
+    $.messager.confirm('操作提示','确认提交审核?',function(r){
+        if (r){
+            var url = '/applicant/submit';
+            var data = {purchasing_id:document.getElementById("purchasing_id").value};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
+
+    function onSuccess(r) {
+        if(r.result == "success") {
+            $('#menuTree').tree('reload', $('#new_proj').target);
+            showNewPurchasePage();
+        } else {
+        }
+    }
+
+    function onError(x, e) {
+        alert("error submitPurchasing");
+    }
+}
+
+function cancelPurchase() {
+    $.messager.confirm('操作提示','确认撤销此项目?',function(r){
+        if (r){
+            var url = '/applicant/cancel';
+            var data = {purchasing_id:document.getElementById("purchasing_id").value};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
+
+    function onSuccess(r) {
+        if(r.result == "success") {
+            $('#menuTree').tree('reload', $('#new_proj').target);
+            showNewPurchasePage();
+        } else {
+        }
+    }
+
+    function onError(x, e) {
+        alert("error cancelPurchasing");
+    }
+}
+
+function viewPurchaseOpinion() {
+
+}
+
+function viePurchaseComplaints() {
+
+}
+
+function onLoadAttachFiles() {
+    var url = '/common/getAttachFiles';
+    var data = {purchasing_id:document.getElementById("purchasing_id").value,
+                packet_id:document.getElementById("packet_id") == null ? null :
+                document.getElementById("packet_id").value}
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
+
+    function onSuccess(r) {
+        var parentNode = $('#menuTree').tree('getParent', node.target)
+        for(var key in r.files) {
+            var file = r.files[key];
+            if (curNode.type == 'create' || (curNode.type == 'packet' && parentNode.type == 'to_divide')) {
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                    document.getElementById("purchasing_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            } else {
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
+                    document.getElementById("purchasing_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+            }
+        }
+    }
+
+    function onError(x, e) {
+        alert("onLoadAttachFiles");
+    }
+}
+
+function removeAttachFile(file_id) {
+    var url = '/common/removeFile';
+    var data = {file_id:file_id.id,purchasing_id:document.getElementById("purchasing_id").value};
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
+
+    function onSuccess(r) {
+        if(r.result == "success") {
+            file_id.parentNode.removeChild(file_id);
+        }
+    }
+
+    function onError(x, e) {
+        alert("removeAttachFile");
+    }
+}
+
+// 初始化长传插件
+initializeUploader();

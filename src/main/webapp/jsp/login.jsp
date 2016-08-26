@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Context-Type" content="text/html; charset=UTF-8" />
-    <jsp:include page="easyui_header.jsp"/>
+    <jsp:include page="includes.jsp"/>
     <title>登录</title>
     <style>
         body{
