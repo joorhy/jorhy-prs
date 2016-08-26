@@ -28,15 +28,7 @@ public class LoginController extends Controller {
         String strUserRole = UserModel.dao.getUserRole(strUsername);
         if (strUserRole != null) {
             getSession().setAttribute("loginUser", strUsername);
-            if (strUserRole.equals(RoleBean.APPLICANT)) {
-                redirect("/applicant");
-            } else if (strUserRole.equals(RoleBean.PURCHASE)) {
-                redirect("/purchase");
-            } else if (strUserRole.equals(RoleBean.PAYMENT)) {
-                redirect("/payment");
-            } else {
-                redirect("/approval");
-            }
+            redirect("/prs");
         }
        //renderJson();
     }

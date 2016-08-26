@@ -13,18 +13,18 @@
 </head>
 <body>
 <div>
-    <jsp:include page="../common/packet_base.jsp"/>
+    <jsp:include page="common/packet_base.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/packet_project.jsp"/>
+    <jsp:include page="common/packet_project.jsp"/>
 </div>
 <div>
-    <jsp:include page="../common/view_files.jsp"/>
+    <jsp:include page="common/view_files.jsp"/>
 </div>
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="repacket()">重新分包</a></td>
+           onclick="rePackage()">重新分包</a></td>
     </td>
 </div>
 </body>

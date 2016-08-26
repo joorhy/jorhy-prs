@@ -17,6 +17,8 @@
         <script type="text/javascript" src="../../js/common/attach_file.js"></script>
     </head>
 <body>
+<div class="easyui-panel" title="附件" style="width:100%;height:225px;"
+     data-options="fit:false,border:true,onLoad:onLoadAttachFile()">
 <div id="container">
     <a id='pickFiles' href="javascript:void(0)" class="easyui-linkbutton"
        data-options="iconCls:'icon-add',plain:true">添加附件</a>
@@ -24,6 +26,7 @@
 <div id="fileList"></div>
 <br/>
 <pre id="console"></pre>
+</div>
 </body>
 </html>
 

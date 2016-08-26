@@ -13,7 +13,7 @@
 </head>
 <body>
 <div>
-    <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadCreatePacket()">
+    <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadPackage()">
         <table>
             <input id="packet_id" type="hidden" value=""/></td>
             <td align="left">
@@ -90,15 +90,15 @@
 <div style="padding:0px 0px 0px 0px">
     <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
          data-options="fit:false,border:true,onLoad:onLoadAttachCreate()">
-        <jsp:include page="../common/attach_file.jsp"/>
+        <jsp:include page="common/attach_file.jsp"/>
     </div>
 </div><br/>
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="savePacket()">保存</a></td>
+           onclick="savePackage()">保存</a></td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="cancelPacket()">取消</a></td>
+           onclick="cancelPackage()">取消</a></td>
     </td>
 </div>
 </body>

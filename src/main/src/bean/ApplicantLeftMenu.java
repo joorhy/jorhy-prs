@@ -55,24 +55,28 @@ public class ApplicantLeftMenu {
         newPrj.put("id", "new_prj");
         newPrj.put("text", "新建采购过程");
         newPrj.put("iconCls", "icon-cut");
+        newPrj.put("type", ApplicantLeftMenu.CREATE);
         newPrj.put("children", newPrjChildren);
 
         JSONObject committedPrj = new JSONObject();
         committedPrj.put("id", "committed_prj");
         committedPrj.put("text", "已提交采购过程");
         committedPrj.put("iconCls", "icon-cut");
+        committedPrj.put("type", ApplicantLeftMenu.SUBMITTED);
         committedPrj.put("children", committedPrjChildren);
 
         JSONObject executedPrj = new JSONObject();
         executedPrj.put("id", "executed_prj");
         executedPrj.put("text", "已执行采购过程");
         executedPrj.put("iconCls", "icon-cut");
+        executedPrj.put("type", ApplicantLeftMenu.EXECUTED);
         executedPrj.put("children", executedPrjChildren);
 
         JSONObject implementedPrj = new JSONObject();
         implementedPrj.put("id", "implemented_prj");
         implementedPrj.put("text", "已完成采购过程");
         implementedPrj.put("iconCls", "icon-cut");
+        implementedPrj.put("type", ApplicantLeftMenu.IMPLEMENTED);
         implementedPrj.put("children", implementedPrjChildren);
 
         JSONArray lstChildren = new JSONArray();
@@ -85,6 +89,7 @@ public class ApplicantLeftMenu {
         rootNode.put("id", "root");
         rootNode.put("text", "采购信息管理中心");
         rootNode.put("iconCls", "icon-cut");
+        rootNode.put("type", RoleBean.APPLICANT);
         rootNode.put("children", lstChildren);
 
         JSONArray lstRoot = new JSONArray();

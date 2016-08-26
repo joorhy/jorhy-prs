@@ -85,7 +85,6 @@ public class ApprovalLeftMenu {
             childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            childrenNode.put("role", strUserRole);
             String strNodeType = getNodeType(strUserRole,
                     ActivityModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchasingID()));
             childrenNode.put("type", strNodeType);
@@ -125,6 +124,7 @@ public class ApprovalLeftMenu {
         rootNode.put("id", "root");
         rootNode.put("text", "项目审批管理中心");
         rootNode.put("iconCls", "icon-cut");
+        rootNode.put("type", strUserRole);
         rootNode.put("children", lstChildren);
 
         JSONArray lstRoot = new JSONArray();

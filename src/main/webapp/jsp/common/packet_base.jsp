@@ -11,7 +11,7 @@
 </head>
 <body>
 <div>
-    <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadCreatePacket()">
+    <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadPackage()">
         <table>
             <input id="packet_id" type="hidden" value=""/></td>
             <td align="left">

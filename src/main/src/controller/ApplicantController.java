@@ -15,19 +15,6 @@ import java.io.File;
  * Created by JooLiu on 2016/7/28.
  */
 public class ApplicantController extends Controller {
-    // 页面初始化
-    public void index() {
-        renderJsp("/jsp/applicant/applicant.jsp");
-    }
-
-    public void uploader() {
-        renderJsp("/jsp/applicant/attach.jsp");
-    }
-
-    public void applicantTree() {
-        renderText(ApplicantLeftMenu.getTree().toString());
-    }
-
     // 保存按钮
     public void save() {
         String strBaseData = getPara("base");

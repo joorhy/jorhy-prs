@@ -117,6 +117,7 @@ public class PurchaseLeftMenu {
         rootNode.put("id", "root");
         rootNode.put("text", "采购执行中心");
         rootNode.put("iconCls", "icon-cut");
+        rootNode.put("type", RoleBean.PURCHASE);
         rootNode.put("children", lstChildren);
 
         JSONArray lstRoot = new JSONArray();

@@ -74,6 +74,7 @@ public class PaymentLeftMenu {
         rootNode.put("id", "root");
         rootNode.put("text", "资金支付中心");
         rootNode.put("iconCls", "icon-cut");
+        rootNode.put("type", RoleBean.PAYMENT);
         rootNode.put("children", lstChildren);
 
         JSONArray lstRoot = new JSONArray();

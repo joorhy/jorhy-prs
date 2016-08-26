@@ -13,18 +13,18 @@
 </head>
 <body>
 <div>
-    <jsp:include page="../common/purchase_base.jsp"/>
+    <jsp:include page="common/purchase_base.jsp"/>
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="../common/project.jsp"/>
+    <jsp:include page="view_purchase_products.jsp"/>
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="../common/view_files.jsp"/>
+    <jsp:include page="common/view_files.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/opinion.jsp"/>
+    <jsp:include page="common/opinion.jsp"/>
 </div>
 <div>
     <td align="left">
@@ -38,9 +38,9 @@
 <div align="right">
     <td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:120"
-           onclick="agreePurchasing()">同意</a></td>
+           onclick="agreePurchase()">同意</a></td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="disagreePurchasing()">不同意</a></td>
+           onclick="disagreePurchase()">不同意</a></td>
     </td>
 </div>
 </body><br/>

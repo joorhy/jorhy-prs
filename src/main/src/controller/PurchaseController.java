@@ -15,15 +15,6 @@ import java.util.Map;
  * Created by JooLiu on 2016/8/23.
  */
 public class PurchaseController extends Controller {
-    // 页面初始化
-    public void index() {
-        renderJsp("/jsp/purchase/purchase.jsp");
-    }
-
-    public void purchaseTree() {
-        renderText(PurchaseLeftMenu.getTree().toString());
-    }
-
     public void toDivideItems() {
         String strPurchasingID = getPara("purchasing_id");
         PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);

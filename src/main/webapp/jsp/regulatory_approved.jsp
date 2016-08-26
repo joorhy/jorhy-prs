@@ -13,26 +13,26 @@
 </head>
 <body>
 <div>
-    <jsp:include page="../common/purchase_base.jsp"/>
+    <jsp:include page="common/purchase_base.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/project.jsp"/>
+    <jsp:include page="view_purchase_products.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/view_files.jsp"/>
+    <jsp:include page="common/view_files.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/opinion.jsp"/>
+    <jsp:include page="common/opinion.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../common/complaints.jsp"/>
+    <jsp:include page="common/complaints.jsp"/>
 </div><br>
 <div align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="complaintsPurchasing()">投诉处理</a></td>
+           onclick="complaintsPurchase()">投诉处理</a></td>
 </div><br/>
 
-<div id="dlgComplaints" class="easyui-dialog" style="width:400px"
+<div id="dlgComplaintPurchase" class="easyui-dialog" style="width:400px"
      closed="true" buttons="#dlg_complaints_buttons">
     <div style="margin:0;padding:5px 5px">
         <div style="margin-bottom:10px">
@@ -51,7 +51,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"
        onclick="submitComplaintsOpinion()" style="width:90px">确定</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-       onclick="javascript:$('#dlgComplaints').dialog('close')" style="width:90px">取消</a>
+       onclick="javascript:$('#dlgComplaintPurchase').dialog('close')" style="width:90px">取消</a>
 </div>
 </body>
 </html>
