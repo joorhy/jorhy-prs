@@ -1,8 +1,7 @@
 package controller;
 
-import bean.PacketBean;
-import bean.PurchaseLeftMenu;
-import bean.PurchasingBean;
+import bean.PackageBean;
+import bean.PurchaseBean;
 import com.jfinal.core.Controller;
 import model.PacketModel;
 import model.PurchasingModel;
@@ -17,10 +16,10 @@ import java.util.Map;
 public class PurchaseController extends Controller {
     public void toDivideItems() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONToDivideItems());
-            setAttr("total", purchasingBean.getJSONToDivideItems().size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONToDivideItems());
+            setAttr("total", purchaseBean.getJSONToDivideItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -33,15 +32,15 @@ public class PurchaseController extends Controller {
         String strProducts = getPara("products");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PacketBean packetBean = PacketModel.dao.getPacket(objBaseData.getString("packet_id"));
-        if (packetBean == null) {
-            packetBean = new PacketBean();
+        PackageBean packageBean = PacketModel.dao.getPackage(objBaseData.getString("packet_id"));
+        if (packageBean == null) {
+            packageBean = new PackageBean();
         }
 
         JSONObject objProducts = new JSONObject(strProducts);
-        packetBean.parseBaseData(objBaseData);
-        packetBean.parseProductData(objProducts);
-        PacketModel.dao.savePacket(packetBean);
+        packageBean.parseBaseData(objBaseData);
+        packageBean.parseProductData(objProducts);
+        PacketModel.dao.savePackage(packageBean);
 
         setAttr("result", "success");
         renderJson();
@@ -57,7 +56,7 @@ public class PurchaseController extends Controller {
 
     public void repacket() {
         String strPacketID = getPara("packet_id");
-        PacketModel.dao.removePacket(strPacketID);
+        PacketModel.dao.removePackage(strPacketID);
 
         setAttr("result", "success");
         renderJson();

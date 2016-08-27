@@ -18,10 +18,10 @@ import java.util.Map;
 public class CommonController extends Controller {
     public void getBaseData() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
             setAttr("result", "success");
-            setAttr("base", purchasingBean.getJSONBaseData());
+            setAttr("base", purchaseBean.getJSONBaseData());
         } else {
             setAttr("result", "failed");
         }
@@ -30,10 +30,10 @@ public class CommonController extends Controller {
 
     public void getPacketBase() {
         String strPacketID = getPara("packet_id");
-        PacketBean packetBean = PacketModel.dao.getPacket(strPacketID);
-        if (packetBean != null) {
+        PackageBean packageBean = PacketModel.dao.getPackage(strPacketID);
+        if (packageBean != null) {
             setAttr("result", "success");
-            setAttr("base", packetBean.getJSONBaseData());
+            setAttr("base", packageBean.getJSONBaseData());
         } else {
             setAttr("result", "failed");
         }
@@ -42,10 +42,10 @@ public class CommonController extends Controller {
 
     public void getPacketList() {
         String strPacketID = getPara("packet_id");
-        PacketBean packetBean = PacketModel.dao.getPacket(strPacketID);
-        if (packetBean != null) {
-            setAttr("rows", packetBean.getJSONPacketItems());
-            setAttr("total", packetBean.getJSONPacketItems().size());
+        PackageBean packageBean = PacketModel.dao.getPackage(strPacketID);
+        if (packageBean != null) {
+            setAttr("rows", packageBean.getJSONPacketItems());
+            setAttr("total", packageBean.getJSONPacketItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -55,10 +55,10 @@ public class CommonController extends Controller {
 
     public void commodityList() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductItems(ProductTypeBean.COMMODITY));
-            setAttr("total", purchasingBean.getJSONProductItems(ProductTypeBean.COMMODITY).size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.COMMODITY));
+            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.COMMODITY).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -68,10 +68,10 @@ public class CommonController extends Controller {
 
     public void serviceList() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductItems(ProductTypeBean.SERVICE));
-            setAttr("total", purchasingBean.getJSONProductItems(ProductTypeBean.SERVICE).size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.SERVICE));
+            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.SERVICE).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -81,10 +81,10 @@ public class CommonController extends Controller {
 
     public void engineeringList() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONProductItems(ProductTypeBean.ENGINEERING));
-            setAttr("total", purchasingBean.getJSONProductItems(ProductTypeBean.ENGINEERING).size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.ENGINEERING));
+            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.ENGINEERING).size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -94,10 +94,10 @@ public class CommonController extends Controller {
 
     public void opinionList() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONOpinionItems());
-            setAttr("total", purchasingBean.getJSONOpinionItems().size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONOpinionItems());
+            setAttr("total", purchaseBean.getJSONOpinionItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -107,10 +107,10 @@ public class CommonController extends Controller {
 
     public void complaintsList() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
-            setAttr("rows", purchasingBean.getJSONComplaintsItems());
-            setAttr("total", purchasingBean.getJSONComplaintsItems().size());
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
+            setAttr("rows", purchaseBean.getJSONComplaintsItems());
+            setAttr("total", purchaseBean.getJSONComplaintsItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);
@@ -120,10 +120,10 @@ public class CommonController extends Controller {
 
     public void downloadFile() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
             String strFileID = getPara("file_id");
-            AttachFileBean item = purchasingBean.getAttachFileItem(strFileID);
+            AttachFileBean item = purchaseBean.getAttachFileItem(strFileID);
             if (item != null) {
                 renderFile(new File(item.strFilePath));
             }
@@ -136,9 +136,9 @@ public class CommonController extends Controller {
         String strPurchasingID = getPara("purchasing_id");
         String strPacketID = getPara("packet_id");
         if (strPacketID.isEmpty()) {
-            PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-            if (purchasingBean != null) {
-                ArrayList<Map<String, String>> lst = purchasingBean.getJSONAttachFiles();
+            PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+            if (purchaseBean != null) {
+                ArrayList<Map<String, String>> lst = purchaseBean.getJSONAttachFiles();
                 setAttr("files", lst);
             }
 
@@ -150,17 +150,17 @@ public class CommonController extends Controller {
 
     public void removeFile() {
         String strPurchasingID = getPara("purchasing_id");
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
-        if (purchasingBean != null) {
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        if (purchaseBean != null) {
             String strFileID = getPara("file_id");
-            AttachFileBean item = purchasingBean.getAttachFileItem(strFileID);
+            AttachFileBean item = purchaseBean.getAttachFileItem(strFileID);
             if (item != null) {
                 File file = new File(item.strFilePath);
                 if (file != null) {
                     file.delete();
                 }
             }
-            purchasingBean.delAttachFile(strFileID);
+            purchaseBean.delAttachFile(strFileID);
         }
         setAttr("result", "success");
         renderJson();

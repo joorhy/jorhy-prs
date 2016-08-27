@@ -18,31 +18,21 @@ public class PaymentLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree() {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray unpaidChildren = new JSONArray();
         JSONArray paidChildren = new JSONArray();
         for (int i=0; i<lstPurchasing.size(); i++) {
-            PurchasingBean purchasingBean = lstPurchasing.get(i);
+            PurchaseBean purchaseBean = lstPurchasing.get(i);
             JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("id", purchaseBean.getPurchaseID());
+            childrenNode.put("text", purchaseBean.getPurCode());
             childrenNode.put("iconCls", "icon-cut");
 
-            JSONArray packetChildren = new JSONArray();
-            for (int j = 0; j< PacketModel.dao.getPacketList().size(); j++) {
-                JSONObject packetNode = new JSONObject();
-                PacketBean item = PacketModel.dao.getPacketList().get(j);
-                if (item.strPurchasingID.equals(purchasingBean.getPurchasingID())) {
-                    packetNode.put("id", item.strPackID);
-                    packetNode.put("text", "第" + String.valueOf(packetChildren.length() + 1) + "包");
-                    packetNode.put("iconCls", "icon-cut");
-                    packetNode.put("type", "packet");
-                    packetChildren.put(packetNode);
-                }
-            }
+            JSONArray packetChildren =
+                    new JSONArray(PacketModel.dao.getPackageList(purchaseBean.getPurchaseID()));
             childrenNode.put("children", packetChildren);
-            switch (ActivityModel.dao.getActivityStatus(purchasingBean.getPurchasingID())) {
+            switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case ActivityBean.SUBCONTRACTED:
                     childrenNode.put("type", PaymentLeftMenu.TO_PAY);
                     unpaidChildren.put(childrenNode);

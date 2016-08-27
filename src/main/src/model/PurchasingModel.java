@@ -14,8 +14,8 @@ public class PurchasingModel extends Model<PurchasingModel> {
     public static final PurchasingModel dao = new PurchasingModel();
 
     private Map<String,ArrayList<AttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<AttachFileBean>>();
-    private ArrayList<PurchasingBean> lstPurchasingData = new ArrayList<PurchasingBean>();
-    public String savePurchasing(PurchasingBean data) {
+    private ArrayList<PurchaseBean> lstPurchasingData = new ArrayList<PurchaseBean>();
+    public String savePurchasing(PurchaseBean data) {
         /*PurchasingModel model = PurchasingModel.dao.findFirst("select * from cg_xm_jbxx where CG_XM_JBXXcol_CGHBH=" +
                 data.getPurCode());
         if (info == null) {
@@ -26,26 +26,26 @@ public class PurchasingModel extends Model<PurchasingModel> {
         }*/
 
         for (int i=0; i<lstPurchasingData.size(); i++) {
-            if (lstPurchasingData.get(i).getPurchasingID().equals(data.getPurchasingID())){
+            if (lstPurchasingData.get(i).getPurchaseID().equals(data.getPurchaseID())){
                 lstPurchasingData.remove(i);
                 break;
             }
         }
-        ArrayList<AttachFileBean> lstFile = mapAttachFile.get(data.getPurchasingID());
+        ArrayList<AttachFileBean> lstFile = mapAttachFile.get(data.getPurchaseID());
         if (lstFile != null){
             for (int i=0; i<lstFile.size(); i++) {
                 data.addAttachFile(lstFile.get(i));
             }
             lstFile.clear();
         }
-        ActivityModel.dao.addPurchasing(data.getPurchasingID());
+        ActivityModel.dao.addPurchasing(data.getPurchaseID());
         lstPurchasingData.add(data);
 
         return ErrorCode.SUCCESS;
     }
 
     public String submitPurchasing(String strPurchasingID) {
-        PurchasingBean data = getPurchasing(strPurchasingID);
+        PurchaseBean data = getPurchasing(strPurchasingID);
         if (data != null) {
             ActivityModel.dao.nextActivity(strPurchasingID);
         }
@@ -53,7 +53,7 @@ public class PurchasingModel extends Model<PurchasingModel> {
     }
 
     public String cancelPurchasing(String strPurchasingID) {
-        PurchasingBean data = getPurchasing(strPurchasingID);
+        PurchaseBean data = getPurchasing(strPurchasingID);
         if (data != null) {
             ArrayList<AttachFileBean> attachFileBeen = data.getAttachFileList();
             for (int i = 0; i< attachFileBeen.size(); i++) {
@@ -66,7 +66,7 @@ public class PurchasingModel extends Model<PurchasingModel> {
     }
 
     public String agreePurchasing(String strPurchasingID, OpinionBean opinionBean) {
-        PurchasingBean data = getPurchasing(strPurchasingID);
+        PurchaseBean data = getPurchasing(strPurchasingID);
         if (data != null) {
             ActivityModel.dao.nextActivity(strPurchasingID);
             data.addOpinion(opinionBean);
@@ -75,7 +75,7 @@ public class PurchasingModel extends Model<PurchasingModel> {
     }
 
     public String disagreePurchasing(String strPurchasingID, OpinionBean opinionBean) {
-        PurchasingBean data = getPurchasing(strPurchasingID);
+        PurchaseBean data = getPurchasing(strPurchasingID);
         if (data != null) {
             ActivityModel.dao.prevActivity(strPurchasingID);
             data.addOpinion(opinionBean);
@@ -83,13 +83,13 @@ public class PurchasingModel extends Model<PurchasingModel> {
         return ErrorCode.SUCCESS;
     }
 
-    public ArrayList<PurchasingBean> getPurchasingList() {
+    public ArrayList<PurchaseBean> getPurchasingList() {
         return lstPurchasingData;
     }
 
-    public PurchasingBean getPurchasing(String strPurchasingID) {
+    public PurchaseBean getPurchasing(String strPurchasingID) {
         for (int i = 0; i< lstPurchasingData.size(); i++) {
-            if (lstPurchasingData.get(i).getPurchasingID().equals(strPurchasingID)) {
+            if (lstPurchasingData.get(i).getPurchaseID().equals(strPurchasingID)) {
                 return lstPurchasingData.get(i);
             }
         }

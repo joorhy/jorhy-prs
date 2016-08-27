@@ -134,9 +134,16 @@ function onLeftMenuLeftClick(node) {
     baseData = null;
     rootNode = $('#menuTree').tree('getRoot');
     curNode = node;
+    parentNode = $('#menuTree').tree('getParent', node.target);
     if (rootNode.type == 'applicant') {
-        url = '/common/getBaseData';
-        data = {purchasing_id:node.id};
+        if (node.type == 'create' || node.type == 'submitted' || node.type == 'executed' ||
+            node.type == 'implemented') {
+            url = '/common/getBaseData';
+            data = {purchasing_id:node.id};
+        } else {
+            url = '/common/getPacketBase';
+            data = {packet_id:node.id};
+        }
     } else if (rootNode.type == 'purchase') {
         if (node.type == 'to_divide' || node.type == 'divided' || node.type == 'finished' ||
             node.type == 'interrupt' || node.type == 'failed') {
@@ -197,7 +204,11 @@ function onLeftMenuLeftClick(node) {
             $('#contentDiv').panel('refresh','../jsp/pages/new_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle',node.text);
-            $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
+            if (node.type == 'packet') {
+                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
+            } else {
+                $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
+            }
         }
     }
 
@@ -751,7 +762,7 @@ function onLoadAttachFiles() {
     });
 
     function onSuccess(r) {
-        var parentNode = $('#menuTree').tree('getParent', node.target)
+        var parentNode = $('#menuTree').tree('getParent', curNode.target)
         for(var key in r.files) {
             var file = r.files[key];
             if (curNode.type == 'create' || (curNode.type == 'packet' && parentNode.type == 'to_divide')) {

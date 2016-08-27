@@ -1,6 +1,7 @@
 package bean;
 
 import model.ActivityModel;
+import model.PacketModel;
 import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -19,18 +20,19 @@ public class ApplicantLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree() {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray newPrjChildren = new JSONArray();
         JSONArray committedPrjChildren = new JSONArray();
         JSONArray executedPrjChildren = new JSONArray();
         JSONArray implementedPrjChildren = new JSONArray();
         for (int i = 0; i< lstPurchasing.size(); i++) {
+            PurchaseBean purchaseBean = lstPurchasing.get(i);
             JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("id", purchaseBean.getPurchaseID());
+            childrenNode.put("text", purchaseBean.getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            switch (ActivityModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchasingID())) {
+            switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case ActivityBean.INITIALIZE:
                     childrenNode.put("type", ApplicantLeftMenu.CREATE);
                     newPrjChildren.put(childrenNode);
@@ -44,10 +46,14 @@ public class ApplicantLeftMenu {
                     childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
                     break;
-                case ActivityBean.SUBCONTRACTED:
+                case ActivityBean.SUBCONTRACTED: {
+                    JSONArray packetChildren =
+                            new JSONArray(PacketModel.dao.getPackageList(purchaseBean.getPurchaseID()));
                     childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
+                    childrenNode.put("children", packetChildren);
                     executedPrjChildren.put(childrenNode);
                     break;
+                }
             }
         }
 

@@ -1,10 +1,9 @@
 package controller;
 
-import bean.ApplicantLeftMenu;
 import bean.AttachFileBean;
 import bean.ProductTypeBean;
 import com.jfinal.core.Controller;
-import bean.PurchasingBean;
+import bean.PurchaseBean;
 import com.jfinal.upload.UploadFile;
 import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -23,22 +22,22 @@ public class ApplicantController extends Controller {
         String strEngineering = getPara("engineering");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchasingBean purchasingBean = PurchasingModel.dao.getPurchasing(objBaseData.getString("purchasing_id"));
-        if (purchasingBean == null) {
-            purchasingBean = new PurchasingBean();
+        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(objBaseData.getString("purchasing_id"));
+        if (purchaseBean == null) {
+            purchaseBean = new PurchaseBean();
         }
-        purchasingBean.parseBaseData(objBaseData);
+        purchaseBean.parseBaseData(objBaseData);
 
         JSONObject objCommodity = new JSONObject(strCommodity);
-        purchasingBean.parseProductData(objCommodity, ProductTypeBean.COMMODITY);
+        purchaseBean.parseProductData(objCommodity, ProductTypeBean.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        purchasingBean.parseProductData(objService, ProductTypeBean.SERVICE);
+        purchaseBean.parseProductData(objService, ProductTypeBean.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
-        purchasingBean.parseProductData(objEngineering, ProductTypeBean.ENGINEERING);
+        purchaseBean.parseProductData(objEngineering, ProductTypeBean.ENGINEERING);
 
-        PurchasingModel.dao.savePurchasing(purchasingBean);
+        PurchasingModel.dao.savePurchasing(purchaseBean);
 
         setAttr("result", "success");
         renderJson();

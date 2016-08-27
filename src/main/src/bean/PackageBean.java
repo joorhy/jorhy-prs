@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by JooLiu on 2016/8/23.
  */
-public class PacketBean {
+public class PackageBean {
     public String strPackID;                        // 包ID
     public String strPackName;                      // 包名
     public String strPackCode;                      // 采购文号

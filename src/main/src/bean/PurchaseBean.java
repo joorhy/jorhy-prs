@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Joo on 2016/7/30.
  */
-public class PurchasingBean {
+public class PurchaseBean {
     /** 基础信息 */
     private String strPurchasingID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
@@ -32,7 +32,7 @@ public class PurchasingBean {
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
 
     /** 定义 Model 接口 */
-    public String getPurchasingID() {
+    public String getPurchaseID() {
         return strPurchasingID;
     }
 

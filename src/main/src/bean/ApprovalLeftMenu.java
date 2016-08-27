@@ -75,18 +75,18 @@ public class ApprovalLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree(String strUserRole) {
-        ArrayList<PurchasingBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
 
         JSONArray toApprovePrjChildren = new JSONArray();
         JSONArray approvedPrjChildren = new JSONArray();
         JSONArray rejectedPrjChildren = new JSONArray();
         for (int i = 0; i< lstPurchasing.size(); i++) {
             JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchasingID());
+            childrenNode.put("id", lstPurchasing.get(i).getPurchaseID());
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             String strNodeType = getNodeType(strUserRole,
-                    ActivityModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchasingID()));
+                    ActivityModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));
             childrenNode.put("type", strNodeType);
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
