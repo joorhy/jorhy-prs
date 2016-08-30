@@ -17,6 +17,7 @@
 <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.full.min.js"></script>
 <script type="text/javascript" src="../js/plupload-2.1.9/js/plupload.dev.js"></script>
 <script type="text/javascript" src="../js/plupload-2.1.9/js/i18n/zh_CN.js"></script>
-<script type="text/javascript" src="../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript"
+         src="../js/plupload-2.1.9/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 
 <script type="text/javascript" src="../js/prs.js"></script>

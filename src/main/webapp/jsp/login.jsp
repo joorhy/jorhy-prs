@@ -33,15 +33,15 @@
         <table>
             <tr align="left">
                 <td>用户名：</td>
-                <td><input name="uName" class="easyui-textbox" data-options="iconCls:'icon-man'"/>${nameMsg}</td>
+                <td><input name="uName" class="easyui-textbox" data-options="iconCls:'icon-man'"/></td>
             </tr>
             <tr align="left">
                 <td>密码：</td>
-                <td><input type="password"  name="uPass" class="easyui-textbox" data-options="iconCls:'icon-lock'"/>${passMsg}</td>
+                <td><input type="password"  name="uPass" class="easyui-textbox" data-options="iconCls:'icon-lock'"/></td>
             </tr>
             <tr align="left">
                 <td>验证码：</td>
-                <td><input name="randomCode" class="easyui-textbox" />${codeMsg}</td>
+                <td><input name="randomCode" class="easyui-textbox" /></td>
                 <td><img src="img" alt="点击刷新" style="padding-center: 7px;" id="randomCode" onclick="refreshCode();" /></td>
             </tr>
             <tr>
@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    ${errorMsg}
+
                 </td>
             </tr>
         </table>

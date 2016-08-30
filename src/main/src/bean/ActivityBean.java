@@ -12,7 +12,8 @@ public class ActivityBean {
     public static final int FIN_BUREAU_APPROVE          = 4;          // 财政局审批
     public static final int SUBCONTRACTING              = 5;          // 未分包
     public static final int SUBCONTRACTED               = 6;          // 已分包
-    public static final int PAID                        = 7;          // 已支付
+    public static final int ACCEPTED                      = 7;          // 已验收
+    public static final int PAID                        = 8;          // 已支付
     public static final int ACC_APPROVE_FAILED          = 101;        // 单位会计审批失败
     public static final int DIR_APPROVE_FAILED          = 102;        // 分管股室局长审批失败
     public static final int FINANCIAL_APPROVE_FAILED    = 103;        // 财政监管股室股审批失败

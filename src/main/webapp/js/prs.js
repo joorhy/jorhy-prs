@@ -205,7 +205,7 @@ function onLeftMenuLeftClick(node) {
         } else {
             $('#contentDiv').panel('setTitle',node.text);
             if (node.type == 'packet') {
-                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/acceptance.jsp');
             } else {
                 $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
             }
@@ -748,6 +748,9 @@ function viePurchaseComplaints() {
 }
 
 function onLoadAttachFiles() {
+    // 初始化长传插件
+    initializeUploader();
+
     var url = '/common/getAttachFiles';
     var data = {purchasing_id:document.getElementById("purchasing_id").value,
                 packet_id:document.getElementById("packet_id") == null ? null :
@@ -810,5 +813,6 @@ function removeAttachFile(file_id) {
     }
 }
 
-// 初始化长传插件
-initializeUploader();
+function submitForPay() {
+
+}
