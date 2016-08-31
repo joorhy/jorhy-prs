@@ -12,14 +12,14 @@
     <title>已分包</title>
 </head>
 <body>
-<div>
-    <jsp:include page="../element/package_base.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="../element/packaged_products.jsp"/>
-</div>
-<div>
-    <jsp:include page="../element/view_files.jsp"/>
-</div><br/>
+    <div>
+        <jsp:include page="../element/package_base.jsp"/>
+    </div><br/>
+    <div>
+        <jsp:include page="../element/packaged_products.jsp"/>
+    </div>
+    <div>
+        <jsp:include page="../element/view_package_files.jsp"/>
+    </div><br/>
 </body>
 </html>

@@ -12,6 +12,7 @@
 <body>
 <div class="easyui-panel" title="附件" style="width:100%;height:225px;"
      data-options="fit:false,border:true,onLoad:onLoadAttachFiles()">
+     <input id="page_type" hidden="true" value="purchase"/>
      <div id="fileList"></div>
 </div>
 </body>

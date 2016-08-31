@@ -1,8 +1,8 @@
 package bean;
 
 import model.ActivityModel;
-import model.PacketModel;
-import model.PurchasingModel;
+import model.PackageModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -20,14 +20,14 @@ public class ApplicantLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList();
 
         JSONArray newPrjChildren = new JSONArray();
         JSONArray committedPrjChildren = new JSONArray();
         JSONArray executedPrjChildren = new JSONArray();
         JSONArray implementedPrjChildren = new JSONArray();
-        for (int i = 0; i< lstPurchasing.size(); i++) {
-            PurchaseBean purchaseBean = lstPurchasing.get(i);
+        for (int i = 0; i< lstPurchase.size(); i++) {
+            PurchaseBean purchaseBean = lstPurchase.get(i);
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", purchaseBean.getPurchaseID());
             childrenNode.put("text", purchaseBean.getPurCode());
@@ -48,7 +48,7 @@ public class ApplicantLeftMenu {
                     break;
                 case ActivityBean.SUBCONTRACTED: {
                     JSONArray packetChildren =
-                            new JSONArray(PacketModel.dao.getPackageList(purchaseBean.getPurchaseID()));
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
                     childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
                     childrenNode.put("children", packetChildren);
                     executedPrjChildren.put(childrenNode);

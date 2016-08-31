@@ -1,6 +1,5 @@
 package bean;
 
-import model.PurchasingModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -13,7 +12,7 @@ import java.util.Map;
  */
 public class PurchaseBean {
     /** 基础信息 */
-    private String strPurchasingID;                                                     // 采购函ID
+    private String strPurchaseID;                                                     // 采购函ID
     private String strPurCode;                                                          // 采购编号
     private String strFundsSrc;                                                         // 资金来源
     private String strContacts;                                                         // 联系人
@@ -25,7 +24,7 @@ public class PurchaseBean {
     private String strEngineeringPrePrice;                                              // 工程类预算总金额
     private ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
     /** 采购函附件 */
-    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();  // 附件
+    private ArrayList<PurchaseAttachFileBean> lstAttachFile = new ArrayList<PurchaseAttachFileBean>();  // 附件
     /** 审批流状态及内容 */
     private int nComplaintsStatus;                                                      // 投诉处理状态
     private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
@@ -33,7 +32,7 @@ public class PurchaseBean {
 
     /** 定义 Model 接口 */
     public String getPurchaseID() {
-        return strPurchasingID;
+        return strPurchaseID;
     }
 
     public String getPurCode() {
@@ -80,7 +79,7 @@ public class PurchaseBean {
         return lstProduct;
     }
 
-    public ArrayList<AttachFileBean> getAttachFileList() {
+    public ArrayList<PurchaseAttachFileBean> getAttachFileList() {
         return lstAttachFile;
     }
 
@@ -95,7 +94,7 @@ public class PurchaseBean {
     /** 定义 Controller 接口 */
     public String parseBaseData(JSONObject obj) {
         lstProduct.clear();
-        strPurchasingID = obj.getString("purchasing_id");
+        strPurchaseID = obj.getString("purchase_id");
         strPurCode = obj.getString("pur_code");
         strFundsSrc = obj.getString("funds_src");
         strContacts = obj.getString("contacts");
@@ -128,7 +127,7 @@ public class PurchaseBean {
         return ErrorCode.SUCCESS;
     }
 
-    public void addAttachFile(AttachFileBean item) {
+    public void addAttachFile(PurchaseAttachFileBean item) {
         lstAttachFile.add(item);
     }
 
@@ -141,7 +140,7 @@ public class PurchaseBean {
         }
     }
 
-    public AttachFileBean getAttachFileItem(String strFileID) {
+    public PurchaseAttachFileBean getAttachFileItem(String strFileID) {
         for (int i=0; i<lstAttachFile.size(); i++) {
             if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
                 return lstAttachFile.get(i);
@@ -161,7 +160,7 @@ public class PurchaseBean {
     /** 定义 JSON 接口 */
     public Map<String, String> getJSONBaseData() {
         Map<String, String> obj = new HashMap<String, String>();
-        obj.put("purchasing_id", strPurchasingID);
+        obj.put("purchase_id", strPurchaseID);
         obj.put("pur_code", strPurCode);
         obj.put("funds_src", strFundsSrc);
         obj.put("contacts", strContacts);
@@ -197,7 +196,7 @@ public class PurchaseBean {
     public ArrayList<Map<String, String>> getJSONAttachFiles() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstAttachFile.size(); i++) {
-            AttachFileBean item = lstAttachFile.get(i);
+            PurchaseAttachFileBean item = lstAttachFile.get(i);
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", item.strFileID);
             m.put("name", item.strFileName);

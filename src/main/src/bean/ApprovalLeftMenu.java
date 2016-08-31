@@ -1,7 +1,7 @@
 package bean;
 
 import model.ActivityModel;
-import model.PurchasingModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -75,7 +75,7 @@ public class ApprovalLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree(String strUserRole) {
-        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList();
 
         JSONArray toApprovePrjChildren = new JSONArray();
         JSONArray approvedPrjChildren = new JSONArray();

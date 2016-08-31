@@ -16,7 +16,7 @@
                 fitColumns:true,
                 url:'/purchase/toDivideItems',
                 method:'post',
-                queryParams:{purchasing_id:document.getElementById('purchasing_id').value},
+                queryParams:{purchase_id:document.getElementById('purchase_id').value},
                 view:groupview,
                 groupField:'product_type',
                 groupFormatter:function(value,rows){

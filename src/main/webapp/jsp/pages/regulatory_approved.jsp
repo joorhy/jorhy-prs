@@ -19,13 +19,13 @@
     <jsp:include page="../element/view_purchase_products.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="../element/view_files.jsp"/>
+    <jsp:include page="../element/view_purchase_files.jsp"/>
 </div><br/>
 <div>
     <jsp:include page="../element/purchase_opinion.jsp"/>
 </div><br/>
 <div>
-    <jsp:include page="common/purchase_complaints.jsp"/>
+    <jsp:include page="../element/purchase_complaints.jsp"/>
 </div><br>
 <div align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"

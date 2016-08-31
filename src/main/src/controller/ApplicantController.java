@@ -1,11 +1,13 @@
 package controller;
 
-import bean.AttachFileBean;
+import bean.PackageAttachFileBean;
+import bean.PurchaseAttachFileBean;
 import bean.ProductTypeBean;
 import com.jfinal.core.Controller;
 import bean.PurchaseBean;
 import com.jfinal.upload.UploadFile;
-import model.PurchasingModel;
+import model.PackageModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.io.File;
@@ -22,7 +24,7 @@ public class ApplicantController extends Controller {
         String strEngineering = getPara("engineering");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(objBaseData.getString("purchasing_id"));
+        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(objBaseData.getString("purchase_id"));
         if (purchaseBean == null) {
             purchaseBean = new PurchaseBean();
         }
@@ -37,7 +39,7 @@ public class ApplicantController extends Controller {
         JSONObject objEngineering = new JSONObject(strEngineering);
         purchaseBean.parseProductData(objEngineering, ProductTypeBean.ENGINEERING);
 
-        PurchasingModel.dao.savePurchasing(purchaseBean);
+        PurchaseModel.dao.savePurchase(purchaseBean);
 
         setAttr("result", "success");
         renderJson();
@@ -45,33 +47,53 @@ public class ApplicantController extends Controller {
 
     // 提交审核按钮
     public void submit() {
-        String strPurchasingID = getPara("purchasing_id");
-        PurchasingModel.dao.submitPurchasing(strPurchasingID);
+        String strPurchasingID = getPara("purchase_id");
+        PurchaseModel.dao.submitPurchase(strPurchasingID);
         setAttr("result", "success");
         renderJson();
     }
 
     // 撤销按钮
     public void cancel() {
-        String strPurchasingID = getPara("purchasing_id");
-        PurchasingModel.dao.cancelPurchasing(strPurchasingID);
+        String strPurchasingID = getPara("purchase_id");
+        PurchaseModel.dao.cancelPurchase(strPurchasingID);
         setAttr("result", "success");
         renderJson();
     }
 
     public void uploadFile() {
-        AttachFileBean item = new AttachFileBean();
-        item.strPurchasingID = getPara("purchasing_id");
-        item.strFileID = getPara("file_id");
+        String strPurchaseID = getPara("purchase_id");
+        String strPackageID = getPara("package_id");
+        if (strPurchaseID != null) {
+            PurchaseAttachFileBean item = new PurchaseAttachFileBean();
+            item.strPurchaseID = strPurchaseID;
+            item.strFileID = getPara("file_id");
 
-        UploadFile uploadFile = getFile();
-        item.strFileName = uploadFile.getOriginalFileName();
+            UploadFile uploadFile = getFile();
+            item.strFileName = uploadFile.getOriginalFileName();
 
-        File file = uploadFile.getFile();
-        item.strFileSize = String.valueOf(file.length());
-        item.strFilePath = file.getPath();
+            File file = uploadFile.getFile();
+            item.strFileSize = String.valueOf(file.length());
+            item.strFilePath = file.getPath();
 
-        PurchasingModel.dao.addAttachFile(item.strPurchasingID, item);
+            PurchaseModel.dao.addAttachFile(strPurchaseID, item);
+        }
+
+        if (strPackageID != null) {
+            PackageAttachFileBean item = new PackageAttachFileBean();
+            item.strPackageID = strPackageID;
+            item.strFileID = getPara("file_id");
+
+            UploadFile uploadFile = getFile();
+            item.strFileName = uploadFile.getOriginalFileName();
+
+            File file = uploadFile.getFile();
+            item.strFileSize = String.valueOf(file.length());
+            item.strFilePath = file.getPath();
+
+            PackageModel.dao.addAttachFile(strPackageID, item);
+        }
+
         setAttr("result", "success");
         renderJson();
     }

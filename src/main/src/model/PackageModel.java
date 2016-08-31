@@ -1,8 +1,6 @@
 package model;
 
-import bean.PackageBean;
-import bean.ProductBean;
-import bean.PurchaseBean;
+import bean.*;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.ArrayList;
@@ -12,9 +10,10 @@ import java.util.Map;
 /**
  * Created by JooLiu on 2016/8/25.
  */
-public class PacketModel extends Model<PacketModel> {
-    public static final PacketModel dao = new PacketModel();
-	
+public class PackageModel extends Model<PackageModel> {
+    public static final PackageModel dao = new PackageModel();
+
+    private Map<String,ArrayList<PackageAttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<PackageAttachFileBean>>();
 	/** 分包 */
     private ArrayList<PackageBean> lstPacket = new ArrayList<PackageBean>();      // 已分包项目
 
@@ -27,7 +26,7 @@ public class PacketModel extends Model<PacketModel> {
             }
         }
 
-        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(packageBean.strPurchasingID);
+        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(packageBean.strPurchaseID);
         if (purchaseBean != null) {
             for (int i = 0; i< packageBean.lstProduct.size(); i++) {
                 ProductBean prjItem = packageBean.lstProduct.get(i);
@@ -47,7 +46,7 @@ public class PacketModel extends Model<PacketModel> {
             PackageBean packageBean = lstPacket.get(i);
             if (packageBean.strPackID.equals(strPacketID)) {
                 ProductBean prjItem = packageBean.lstProduct.get(i);
-                PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(packageBean.strPurchasingID);
+                PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(packageBean.strPurchaseID);
                 for (int j = 0; j < purchaseBean.getProductList().size(); j++) {
                     if (purchaseBean.getProductList().get(j).strProductID.equals(prjItem.strProductID)) {
                         purchaseBean.getProductList().get(j).nPackedCount = 0;
@@ -75,7 +74,7 @@ public class PacketModel extends Model<PacketModel> {
         for (int j = 0; j< lstPacket.size(); j++) {
             Map<String, String> node= new HashMap<String, String>();
             PackageBean item = lstPacket.get(j);
-            if (item.strPurchasingID.equals(strPurchaseID)) {
+            if (item.strPurchaseID.equals(strPurchaseID)) {
                 node.put("id", item.strPackID);
                 node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
                 node.put("iconCls", "icon-cut");
@@ -84,5 +83,14 @@ public class PacketModel extends Model<PacketModel> {
             }
         }
         return lst;
+    }
+
+    public void addAttachFile(String strPackageID, PackageAttachFileBean item) {
+        ArrayList<PackageAttachFileBean> lst = mapAttachFile.get(strPackageID);
+        if (lst == null) {
+            lst = new ArrayList<PackageAttachFileBean>();
+            mapAttachFile.put(strPackageID, lst);
+        }
+        lst.add(item);
     }
 }

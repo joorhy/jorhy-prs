@@ -1,8 +1,8 @@
 package bean;
 
 import model.ActivityModel;
-import model.PacketModel;
-import model.PurchasingModel;
+import model.PackageModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -18,7 +18,7 @@ public class PaymentLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList();
 
         JSONArray unpaidChildren = new JSONArray();
         JSONArray paidChildren = new JSONArray();
@@ -30,7 +30,7 @@ public class PaymentLeftMenu {
             childrenNode.put("iconCls", "icon-cut");
 
             JSONArray packetChildren =
-                    new JSONArray(PacketModel.dao.getPackageList(purchaseBean.getPurchaseID()));
+                    new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
             childrenNode.put("children", packetChildren);
             switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case ActivityBean.SUBCONTRACTED:

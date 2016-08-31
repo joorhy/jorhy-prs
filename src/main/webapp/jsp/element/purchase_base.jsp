@@ -12,7 +12,7 @@
 <body>
     <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadPurchase()">
         <table>
-            <input id="purchasing_id" type="hidden" value=""/></td>
+            <input id="purchase_id" type="hidden" value=""/></td>
             <td align="left">
             <td style="width:15%">采购函编号</td>
             <td style="width:35%;"><input id="pur_code" class="easyui-textbox"/></td>

@@ -13,7 +13,7 @@
         <div id="header" style="min-height:100px;width:100%;border:1px green solid;">
             <jsp:include page="header.jsp"/>
         </div>
-        <input id="purchasing_id" type="hidden" value=""/></td>
+        <input id="purchase_id" type="hidden" value=""/>
         <div id="main_layout" class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/prs/getLeftMenu',method:'get',

@@ -12,6 +12,7 @@
     <title></title>
 </head>
 <body>
+    <div id="page_type" value="purchase" hidden="true"></div>
     <div>
         <jsp:include page="../element/purchase_base.jsp"/>
     </div><br/>
@@ -19,7 +20,7 @@
         <jsp:include page="../element/new_purchase_products.jsp"/>
     </div><br/>
     <div>
-       <jsp:include page="../element/attach_file.jsp"/>
+       <jsp:include page="../element/attach_purchase_file.jsp"/>
     </div>
     <div>
         <div align="right">

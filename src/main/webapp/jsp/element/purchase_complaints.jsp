@@ -12,7 +12,8 @@
 <body>
 <table id="dgComplaintsLst" class="easyui-datagrid" title="投诉处理意见" style="width:100%;height:225px"
        data-options="rownumbers:true,singleSelect:true,url:'/common/complaintsList',method:'post',
-                     queryParams:{purchasing_id:document.getElementById('purchasing_id').value},toolbar:tbComplaints">
+                     queryParams:{purchase_id:document.getElementById('purchase_id').value},
+                     toolbar:tbComplaints">
     <thead>
         <tr>
             <th data-options="field:'comp_deal_date',width:80">处理日期</th>

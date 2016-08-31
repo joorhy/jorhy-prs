@@ -21,7 +21,7 @@
 </div>
 <br/><br/>
 <div>
-    <jsp:include page="../element/view_files.jsp"/>
+    <jsp:include page="../element/view_purchase_files.jsp"/>
 </div><br/>
 <div>
     <td align="left">

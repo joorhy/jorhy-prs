@@ -32,15 +32,27 @@ function initializeUploader() {
 
     function onFilesAdded(up, files) {
         plupload.each(files, function(file) {
-            uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
-                "&purchasing_id=" + document.getElementById("purchasing_id").value;
-            document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
-                document.getElementById("purchasing_id").value + '> ' + file.name +
-                '(' + plupload.formatSize(file.size) + ')</a> <b></b>&nbsp;' +
-                '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                'data-options="iconCls:\'icon-remove\',plain:true" ' +
-                'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            if (page_type == "purchase") {
+                uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
+                    "&purchase_id=" + document.getElementById("purchase_id").value;
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/common/downloadFile?file_id=' + file.id + '&purchase_id=' +
+                    document.getElementById("purchase_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            } else {
+                uploader.settings.url = "/applicant/uploadFile?file_id=" + file.id +
+                    "&package_id=" + document.getElementById("packet_id").value;
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/common/downloadFile?file_id=' + file.id + '&packet_id=' +
+                    document.getElementById("packet_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            }
         });
         uploader.start();
     }
@@ -113,6 +125,7 @@ function showNewPackagePage() {
 
 function onLeftMenuRightClick(e,node) {
     baseData = null;
+    curNode = node;
     e.preventDefault();
     if (node.type == 'create') {
         $(this).tree('select', node.target);
@@ -121,7 +134,7 @@ function onLeftMenuRightClick(e,node) {
             top: e.clientY
         });
     } else if (node.type == 'to_divide') {
-        document.getElementById('purchasing_id').value = node.id;
+        document.getElementById('purchase_id').value = node.id;
         $(this).tree('select', node.target);
         $('#menuPacket').menu('show', {
             left: e.clientX,
@@ -139,7 +152,7 @@ function onLeftMenuLeftClick(node) {
         if (node.type == 'create' || node.type == 'submitted' || node.type == 'executed' ||
             node.type == 'implemented') {
             url = '/common/getBaseData';
-            data = {purchasing_id:node.id};
+            data = {purchase_id:node.id};
         } else {
             url = '/common/getPacketBase';
             data = {packet_id:node.id};
@@ -147,25 +160,25 @@ function onLeftMenuLeftClick(node) {
     } else if (rootNode.type == 'purchase') {
         if (node.type == 'to_divide' || node.type == 'divided' || node.type == 'finished' ||
             node.type == 'interrupt' || node.type == 'failed') {
-            document.getElementById('purchasing_id').value = node.id;
+            document.getElementById('purchase_id').value = node.id;
             url = '/common/getBaseData';
-            data = {purchasing_id:node.id};
+            data = {purchase_id:node.id};
         } else {
             url = '/common/getPacketBase';
             data = {packet_id:node.id};
         }
     } else if (rootNode.type == 'payment') {
         if (node.type == 'to_pay' || node.type == 'paid') {
-            document.getElementById('purchasing_id').value = node.id;
+            document.getElementById('purchase_id').value = node.id;
             url = '/common/getBaseData';
-            data = {purchasing_id:node.id};
+            data = {purchase_id:node.id};
         } else {
             url = '/common/getPacketBase';
             data = {packet_id:node.id};
         }
     } else {
         url = '/common/getBaseData';
-        data = {purchasing_id:node.id};
+        data = {purchase_id:node.id};
     }
 
     $.ajax({
@@ -271,7 +284,7 @@ function onLeftMenuLeftClick(node) {
 
 function onLoadPurchase() {
     if (baseData != null) {
-        document.getElementById("purchasing_id").value = baseData['purchasing_id'];
+        document.getElementById("purchase_id").value = baseData['purchase_id'];
         $('#pur_code').textbox('setText', baseData['pur_code']);
         $('#funds_src').textbox('setText', baseData['funds_src']);
         $('#contacts').textbox('setText', baseData['contacts']);
@@ -299,7 +312,7 @@ function onLoadPurchase() {
             $('#engineering_total_price').textbox('disable');
         }
     } else {
-        document.getElementById("purchasing_id").value = Math.uuid(36, 62);
+        document.getElementById("purchase_id").value = Math.uuid(36, 62);
     }
 }
 
@@ -441,7 +454,7 @@ function agreePurchase() {
     }
 
     var url = '/common/approve';
-    var data = {purchasing_id:document.getElementById("purchasing_id").value,
+    var data = {purchase_id:document.getElementById("purchase_id").value,
                 content:$('#opinion').textbox('getText'),
                 opinion:'agree'}
     $.messager.confirm('操作提示', approve_content, function(r){
@@ -461,7 +474,7 @@ function agreePurchase() {
         if(r.result == "success") {
             $('#menuTree').tree('reload', $('#approved_prj').target);
             var cur_node = {};
-            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.id = document.getElementById("purchase_id").value;
             cur_node.type = "approved";
             //showContent(cur_node);
         } else {
@@ -475,7 +488,7 @@ function agreePurchase() {
 
 function disagreePurchase() {
     var url = '/common/approve';
-    var data = {purchasing_id:document.getElementById("purchasing_id").value,
+    var data = {purchase_id:document.getElementById("purchase_id").value,
                 content:$('#opinion').textbox('getText'),
                 opinion:'disagree'}
     $.messager.confirm('操作提示','确认退回上一级?',function(r){
@@ -515,7 +528,7 @@ function savePackage() {
     $.messager.confirm('操作提示','确认保存此分包?',function(r){
         if (r){
             var baseData = {};
-            baseData['purchasing_id'] = document.getElementById("purchasing_id").value;
+            baseData['purchase_id'] = document.getElementById("purchase_id").value;
             baseData['packet_id'] = document.getElementById("packet_id").value;
             baseData['pack_code'] = $('#pack_code').textbox('getText');
             baseData['pur_address'] = $('#pur_address').textbox('getText');
@@ -548,7 +561,7 @@ function savePackage() {
         if(r.result == "success") {
             $('#menuTree').tree('reload', $('#to_divide').target);
             var cur_node = {};
-            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.id = document.getElementById("purchase_id").value;
             cur_node.type = "to_divide";
         } else {
         }
@@ -569,7 +582,7 @@ function cancelPackage() {
 
 function submitPackages() {
     var url = '/purchase/submit';
-    var data = {purchasing_id:document.getElementById("purchasing_id").value};
+    var data = {purchase_id:document.getElementById("purchase_id").value};
     $.messager.confirm('操作提示','确认提交分包?',function(r){
         if (r){
             $.ajax({
@@ -587,7 +600,7 @@ function submitPackages() {
         if(r.result == "success") {
             $('#menuTree').tree('reload', $('#to_divide').target);
             var cur_node = {};
-            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.id = document.getElementById("purchase_id").value;
             cur_node.type = "to_divide";
         } else {
         }
@@ -618,7 +631,7 @@ function rePackage() {
         if(r.result == "success") {
             $('#menuTree').tree('reload', $('#to_divide').target);
             var cur_node = {};
-            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.id = document.getElementById("purchase_id").value;
             cur_node.type = "to_divide";
         } else {
         }
@@ -650,7 +663,7 @@ function savePurchase() {
 
     function getData() {
         var baseData = {};
-        baseData['purchasing_id'] = document.getElementById("purchasing_id").value;
+        baseData['purchase_id'] = document.getElementById("purchase_id").value;
         baseData['pur_code'] = $('#pur_code').textbox('getText');
         baseData['funds_src'] = $('#funds_src').textbox('getText');
         baseData['contacts'] = $('#contacts').textbox('getText');
@@ -670,7 +683,7 @@ function savePurchase() {
         if(r.result == "success") {
             $('#menuTree').tree('reload', $('#new_prj').target);
             var cur_node = {};
-            cur_node.id = document.getElementById("purchasing_id").value;
+            cur_node.id = document.getElementById("purchase_id").value;
             cur_node.type = "create";
         } else {
         }
@@ -685,7 +698,7 @@ function submitPurchase() {
     $.messager.confirm('操作提示','确认提交审核?',function(r){
         if (r){
             var url = '/applicant/submit';
-            var data = {purchasing_id:document.getElementById("purchasing_id").value};
+            var data = {purchase_id:document.getElementById("purchase_id").value};
             $.ajax({
                 type: 'post',
                 url: url,
@@ -714,7 +727,7 @@ function cancelPurchase() {
     $.messager.confirm('操作提示','确认撤销此项目?',function(r){
         if (r){
             var url = '/applicant/cancel';
-            var data = {purchasing_id:document.getElementById("purchasing_id").value};
+            var data = {purchase_id:document.getElementById("purchase_id").value};
             $.ajax({
                 type: 'post',
                 url: url,
@@ -749,12 +762,16 @@ function viePurchaseComplaints() {
 
 function onLoadAttachFiles() {
     // 初始化长传插件
+    page_type = parent.document.getElementById('page_type').value;
     initializeUploader();
 
     var url = '/common/getAttachFiles';
-    var data = {purchasing_id:document.getElementById("purchasing_id").value,
-                packet_id:document.getElementById("packet_id") == null ? null :
-                document.getElementById("packet_id").value}
+    var data = null;
+    if (page_type == "purchase") {
+        data = {purchase_id: document.getElementById("purchase_id").value};
+    } else {
+        data = {package_id: document.getElementById("packet_id").value};
+    }
     $.ajax({
         type: 'post',
         url: url,
@@ -769,18 +786,35 @@ function onLoadAttachFiles() {
         for(var key in r.files) {
             var file = r.files[key];
             if (curNode.type == 'create' || (curNode.type == 'packet' && parentNode.type == 'to_divide')) {
-                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                    '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
-                    document.getElementById("purchasing_id").value + '> ' + file.name +
-                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
-                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                    'data-options="iconCls:\'icon-remove\',plain:false" ' +
-                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+                if (page_type == "purchase") {
+                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                        '<a href=/common/downloadFile?file_id=' + file.id + '&purchase_id=' +
+                        document.getElementById("purchase_id").value + '> ' + file.name +
+                        '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                        '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                        'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                        'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+                } else {
+                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                        '<a href=/common/downloadFile?file_id=' + file.id + '&package_id=' +
+                        document.getElementById("packet_id").value + '> ' + file.name +
+                        '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                        '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                        'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                        'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+                }
             } else {
-                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                    '<a href=/common/downloadFile?file_id=' + file.id + '&purchasing_id=' +
-                    document.getElementById("purchasing_id").value + '> ' + file.name +
-                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+                if (page_type == "purchase") {
+                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                        '<a href=/common/downloadFile?file_id=' + file.id + '&purchase_id=' +
+                        document.getElementById("purchase_id").value + '> ' + file.name +
+                        '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+                } else {
+                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                        '<a href=/common/downloadFile?file_id=' + file.id + '&package_id=' +
+                        document.getElementById("packet_id").value + '> ' + file.name +
+                        '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+                }
             }
         }
     }
@@ -792,7 +826,13 @@ function onLoadAttachFiles() {
 
 function removeAttachFile(file_id) {
     var url = '/common/removeFile';
-    var data = {file_id:file_id.id,purchasing_id:document.getElementById("purchasing_id").value};
+    var data = null;
+    if (page_type == "purchase") {
+        data = {file_id: file_id.id, purchase_id: document.getElementById("purchase_id").value};
+    } else {
+        data = {file_id: file_id.id, package_id: document.getElementById("packet_id").value};
+    }
+
     $.ajax({
         type: 'post',
         url: url,

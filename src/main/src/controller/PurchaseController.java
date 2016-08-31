@@ -3,8 +3,8 @@ package controller;
 import bean.PackageBean;
 import bean.PurchaseBean;
 import com.jfinal.core.Controller;
-import model.PacketModel;
-import model.PurchasingModel;
+import model.PackageModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class PurchaseController extends Controller {
     public void toDivideItems() {
-        String strPurchasingID = getPara("purchasing_id");
-        PurchaseBean purchaseBean = PurchasingModel.dao.getPurchasing(strPurchasingID);
+        String strPurchaseID = getPara("purchase_id");
+        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
         if (purchaseBean != null) {
             setAttr("rows", purchaseBean.getJSONToDivideItems());
             setAttr("total", purchaseBean.getJSONToDivideItems().size());
@@ -32,7 +32,7 @@ public class PurchaseController extends Controller {
         String strProducts = getPara("products");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PackageBean packageBean = PacketModel.dao.getPackage(objBaseData.getString("packet_id"));
+        PackageBean packageBean = PackageModel.dao.getPackage(objBaseData.getString("packet_id"));
         if (packageBean == null) {
             packageBean = new PackageBean();
         }
@@ -40,15 +40,15 @@ public class PurchaseController extends Controller {
         JSONObject objProducts = new JSONObject(strProducts);
         packageBean.parseBaseData(objBaseData);
         packageBean.parseProductData(objProducts);
-        PacketModel.dao.savePackage(packageBean);
+        PackageModel.dao.savePackage(packageBean);
 
         setAttr("result", "success");
         renderJson();
     }
 
     public void submit() {
-        String strPurchasingID = getPara("purchasing_id");
-        PurchasingModel.dao.submitPurchasing(strPurchasingID);
+        String strPurchaseID = getPara("purchase_id");
+        PurchaseModel.dao.submitPurchase(strPurchaseID);
 
         setAttr("result", "success");
         renderJson();
@@ -56,7 +56,7 @@ public class PurchaseController extends Controller {
 
     public void repacket() {
         String strPacketID = getPara("packet_id");
-        PacketModel.dao.removePackage(strPacketID);
+        PackageModel.dao.removePackage(strPacketID);
 
         setAttr("result", "success");
         renderJson();

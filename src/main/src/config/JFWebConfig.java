@@ -43,7 +43,7 @@ public class JFWebConfig extends JFinalConfig {
         /**
          * 配置映射表到模型
          */
-        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", PurchasingModel.class);
+        //arp.addMapping("cg_xm_jbxx", "CG_XM_JBXXcol_ID", PurchaseModel.class);
     }
     public void configInterceptor(Interceptors me) {
 

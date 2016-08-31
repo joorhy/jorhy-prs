@@ -1,8 +1,8 @@
 package bean;
 
 import model.ActivityModel;
-import model.PacketModel;
-import model.PurchasingModel;
+import model.PackageModel;
+import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
@@ -21,18 +21,18 @@ public class PurchaseLeftMenu {
 
     /** 定义静态函数 */
     static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchasing = PurchasingModel.dao.getPurchasingList();
+        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList();
 
         JSONArray subcontractingChildren = new JSONArray();
         JSONArray subcontractedChildren = new JSONArray();
         JSONArray completedChildren = new JSONArray();
         JSONArray complaintsChildren = new JSONArray();
         JSONArray failedChildren = new JSONArray();
-        for (int i=0; i<lstPurchasing.size(); i++) {
-            PurchaseBean purchaseBean = lstPurchasing.get(i);
+        for (int i=0; i<lstPurchase.size(); i++) {
+            PurchaseBean purchaseBean = lstPurchase.get(i);
             JSONObject childrenNode = new JSONObject();
-            childrenNode.put("id", lstPurchasing.get(i).getPurchaseID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("id", lstPurchase.get(i).getPurchaseID());
+            childrenNode.put("text", lstPurchase.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             switch (purchaseBean.getComplaintsStatus()) {
                 case 1:// 投诉
@@ -45,7 +45,7 @@ public class PurchaseLeftMenu {
                     break;
                 default: {
                     JSONArray packetChildren =
-                            new JSONArray(PacketModel.dao.getPackageList(purchaseBean.getPurchaseID()));
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
                     childrenNode.put("children", packetChildren);
                     switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                         case ActivityBean.SUBCONTRACTING:

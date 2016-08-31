@@ -12,17 +12,17 @@
     <title>已提交采购过程</title>
 </head>
 <body>
-<div>
-    <jsp:include page="../element/purchase_base.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="../element/view_purchase_products.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="../element/view_files.jsp"/>
-</div><br/>
-<div>
-    <jsp:include page="../element/purchase_opinion.jsp"/>
-</div>
+    <div>
+        <jsp:include page="../element/purchase_base.jsp"/>
+    </div><br/>
+    <div>
+        <jsp:include page="../element/view_purchase_products.jsp"/>
+    </div><br/>
+    <div>
+        <jsp:include page="../element/view_purchase_files.jsp"/>
+    </div><br/>
+    <div>
+        <jsp:include page="../element/purchase_opinion.jsp"/>
+    </div>
 </body>
 </html>

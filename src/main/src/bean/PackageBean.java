@@ -21,13 +21,13 @@ public class PackageBean {
     public String strPublicity;                     // 采购需求公告
     public String strSupplier;                      // 中标供应商
     public String strAmount;                        // 中标金额
-    public String strPurchasingID;                    // 采购函ID
+    public String strPurchaseID;                    // 采购函ID
 
     public ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
     /**
      * 合同附件
      */
-    private ArrayList<AttachFileBean> lstAttachFile = new ArrayList<AttachFileBean>();  // 附件
+    private ArrayList<PackageAttachFileBean> lstAttachFile = new ArrayList<PackageAttachFileBean>();  // 附件
 
     /**
      * 定义 Controller 接口
@@ -43,7 +43,7 @@ public class PackageBean {
         strPublicity = obj.getString("pur_publicity");
         strSupplier = obj.getString("pur_supplier");
         strAmount = obj.getString("pur_amount");
-        strPurchasingID = obj.getString("purchasing_id");
+        strPurchaseID = obj.getString("purchase_id");
 
         return ErrorCode.SUCCESS;
     }
@@ -67,6 +67,28 @@ public class PackageBean {
         return ErrorCode.SUCCESS;
     }
 
+    public void addAttachFile(PackageAttachFileBean item) {
+        lstAttachFile.add(item);
+    }
+
+    public void delAttachFile(String strFileID) {
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
+                lstAttachFile.remove(i);
+                break;
+            }
+        }
+    }
+
+    public PackageAttachFileBean getAttachFileItem(String strFileID) {
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
+                return lstAttachFile.get(i);
+            }
+        }
+        return null;
+    }
+
     /**
      * 定义 JSON 接口
      */
@@ -81,7 +103,7 @@ public class PackageBean {
         obj.put("pur_publicity", strPublicity);
         obj.put("pur_supplier", strSupplier);
         obj.put("pur_amount", strAmount);
-        obj.put("purchasing_id", strPurchasingID);
+        obj.put("purchase_id", strPurchaseID);
 
         return obj;
     }
@@ -102,5 +124,18 @@ public class PackageBean {
             productArray.add(obj);
         }
         return productArray;
+    }
+
+    public ArrayList<Map<String, String>> getJSONAttachFiles() {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstAttachFile.size(); i++) {
+            PackageAttachFileBean item = lstAttachFile.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("id", item.strFileID);
+            m.put("name", item.strFileName);
+            m.put("size", item.strFileSize);
+            lst.add(m);
+        }
+        return lst;
     }
 }
