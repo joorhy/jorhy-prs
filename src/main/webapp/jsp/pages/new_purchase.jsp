@@ -12,7 +12,6 @@
     <title></title>
 </head>
 <body>
-    <div id="page_type" value="purchase" hidden="true"></div>
     <div>
         <jsp:include page="../element/purchase_base.jsp"/>
     </div><br/>

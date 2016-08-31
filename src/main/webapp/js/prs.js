@@ -762,7 +762,7 @@ function viePurchaseComplaints() {
 
 function onLoadAttachFiles() {
     // 初始化长传插件
-    page_type = parent.document.getElementById('page_type').value;
+    page_type = document.getElementById('page_type').value;
     initializeUploader();
 
     var url = '/common/getAttachFiles';

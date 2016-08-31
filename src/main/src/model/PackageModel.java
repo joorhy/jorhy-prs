@@ -19,7 +19,7 @@ public class PackageModel extends Model<PackageModel> {
 
     public void savePackage(PackageBean packageBean) {
         for (int i=0; i<lstPacket.size(); i++) {
-            if (lstPacket.get(i).strPackID.equals(packageBean.strPackID)) {
+            if (lstPacket.get(i).getPackageID().equals(packageBean.getPackageID())) {
                 packageBean = lstPacket.get(i);
                 lstPacket.remove(packageBean);
                 break;
@@ -37,6 +37,14 @@ public class PackageModel extends Model<PackageModel> {
                     }
                 }
             }
+            ArrayList<PackageAttachFileBean> lstFile = mapAttachFile.get(packageBean.getPackageID());
+            if (lstFile != null){
+                for (int i=0; i<lstFile.size(); i++) {
+                    packageBean.addAttachFile(lstFile.get(i));
+                }
+                lstFile.clear();
+            }
+
             lstPacket.add(packageBean);
         }
     }
@@ -44,7 +52,7 @@ public class PackageModel extends Model<PackageModel> {
     public void removePackage(String strPacketID) {
         for (int i=0; i<lstPacket.size(); i++) {
             PackageBean packageBean = lstPacket.get(i);
-            if (packageBean.strPackID.equals(strPacketID)) {
+            if (packageBean.getPackageID().equals(strPacketID)) {
                 ProductBean prjItem = packageBean.lstProduct.get(i);
                 PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(packageBean.strPurchaseID);
                 for (int j = 0; j < purchaseBean.getProductList().size(); j++) {
@@ -62,7 +70,7 @@ public class PackageModel extends Model<PackageModel> {
     public PackageBean getPackage(String strPacketID) {
         for (int i=0; i<lstPacket.size(); i++) {
             PackageBean packageBean = lstPacket.get(i);
-            if (packageBean.strPackID.equals(strPacketID)) {
+            if (packageBean.getPackageID().equals(strPacketID)) {
                 return packageBean;
             }
         }
@@ -75,7 +83,7 @@ public class PackageModel extends Model<PackageModel> {
             Map<String, String> node= new HashMap<String, String>();
             PackageBean item = lstPacket.get(j);
             if (item.strPurchaseID.equals(strPurchaseID)) {
-                node.put("id", item.strPackID);
+                node.put("id", item.getPackageID());
                 node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
                 node.put("iconCls", "icon-cut");
                 node.put("type", "packet");

@@ -134,7 +134,7 @@ public class CommonController extends Controller {
 
     public void getAttachFiles() {
         String strPurchaseID = getPara("purchase_id");
-        String strPacketID = getPara("packet_id");
+        String strPacketID = getPara("package_id");
         if (strPurchaseID != null) {
             PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
             if (purchaseBean != null) {

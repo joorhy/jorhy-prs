@@ -19,7 +19,7 @@
     <jsp:include page="../element/packaged_products.jsp"/>
 </div>
 <div>
-    <jsp:include page="../element/view_purchase_files.jsp"/>
+    <jsp:include page="../element/view_package_files.jsp"/>
 </div>
 <div align="right">
     <td align="right">

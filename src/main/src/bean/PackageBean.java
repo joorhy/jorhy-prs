@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by JooLiu on 2016/8/23.
  */
 public class PackageBean {
-    public String strPackID;                        // 包ID
+    private String strPackID;                        // 包ID
     public String strPackName;                      // 包名
     public String strPackCode;                      // 采购文号
     public String strPurAddress;                    // 采购地点
@@ -29,6 +29,10 @@ public class PackageBean {
      */
     private ArrayList<PackageAttachFileBean> lstAttachFile = new ArrayList<PackageAttachFileBean>();  // 附件
 
+    /** 定义 Model 接口 */
+    public String getPackageID() {
+        return strPackID;
+    }
     /**
      * 定义 Controller 接口
      */
