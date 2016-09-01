@@ -44,7 +44,7 @@ public class PackageModel extends Model<PackageModel> {
                 }
                 lstFile.clear();
             }
-
+            PackageActivityModel.dao.addPackage(packageBean.getPackageID());
             lstPacket.add(packageBean);
         }
     }

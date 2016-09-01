@@ -853,6 +853,25 @@ function removeAttachFile(file_id) {
     }
 }
 
-function submitForPay() {
+function submitPackage() {
+    $.messager.confirm('操作提示','是否确认需要提交单位会计审核?',function(r){
+        if (r){
+            var url = '/package/submit';
+            var data = {package_id:document.getElementById("packet_id").value};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
 
+    function onSuccess(r) {
+    }
+
+    function onError(x, e) {
+    }
 }

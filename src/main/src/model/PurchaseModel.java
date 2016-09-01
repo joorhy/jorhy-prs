@@ -15,7 +15,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
 
     private Map<String,ArrayList<PurchaseAttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<PurchaseAttachFileBean>>();
     private ArrayList<PurchaseBean> lstPurchaseData = new ArrayList<PurchaseBean>();
-    public String savePurchase(PurchaseBean data) {
+    public String savePurchase(PurchaseBean purchaseBean) {
         /*PurchaseModel model = PurchaseModel.dao.findFirst("select * from cg_xm_jbxx where CG_XM_JBXXcol_CGHBH=" +
                 data.getPurCode());
         if (info == null) {
@@ -26,20 +26,20 @@ public class PurchaseModel extends Model<PurchaseModel> {
         }*/
 
         for (int i=0; i<lstPurchaseData.size(); i++) {
-            if (lstPurchaseData.get(i).getPurchaseID().equals(data.getPurchaseID())){
+            if (lstPurchaseData.get(i).getPurchaseID().equals(purchaseBean.getPurchaseID())){
                 lstPurchaseData.remove(i);
                 break;
             }
         }
-        ArrayList<PurchaseAttachFileBean> lstFile = mapAttachFile.get(data.getPurchaseID());
+        ArrayList<PurchaseAttachFileBean> lstFile = mapAttachFile.get(purchaseBean.getPurchaseID());
         if (lstFile != null){
             for (int i=0; i<lstFile.size(); i++) {
-                data.addAttachFile(lstFile.get(i));
+                purchaseBean.addAttachFile(lstFile.get(i));
             }
             lstFile.clear();
         }
-        ActivityModel.dao.addPurchase(data.getPurchaseID());
-        lstPurchaseData.add(data);
+        PurchaseActivityModel.dao.addPurchase(purchaseBean.getPurchaseID());
+        lstPurchaseData.add(purchaseBean);
 
         return ErrorCode.SUCCESS;
     }
@@ -47,7 +47,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
     public String submitPurchase(String strPurchaseID) {
         PurchaseBean data = getPurchase(strPurchaseID);
         if (data != null) {
-            ActivityModel.dao.nextActivity(strPurchaseID);
+            PurchaseActivityModel.dao.nextActivity(strPurchaseID);
         }
         return ErrorCode.SUCCESS;
     }
@@ -59,7 +59,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
             for (int i = 0; i< attachFileBeen.size(); i++) {
                 mapAttachFile.remove(attachFileBeen.get(i));
             }
-            ActivityModel.dao.removePurchase(strPurchaseID);
+            PurchaseActivityModel.dao.removePurchase(strPurchaseID);
             lstPurchaseData.remove(data);
         }
         return ErrorCode.SUCCESS;
@@ -68,7 +68,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
     public String agreePurchase(String strPurchaseID, OpinionBean opinionBean) {
         PurchaseBean data = getPurchase(strPurchaseID);
         if (data != null) {
-            ActivityModel.dao.nextActivity(strPurchaseID);
+            PurchaseActivityModel.dao.nextActivity(strPurchaseID);
             data.addOpinion(opinionBean);
         }
         return ErrorCode.SUCCESS;
@@ -77,7 +77,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
     public String disagreePurchase(String strPurchaseID, OpinionBean opinionBean) {
         PurchaseBean data = getPurchase(strPurchaseID);
         if (data != null) {
-            ActivityModel.dao.prevActivity(strPurchaseID);
+            PurchaseActivityModel.dao.prevActivity(strPurchaseID);
             data.addOpinion(opinionBean);
         }
         return ErrorCode.SUCCESS;

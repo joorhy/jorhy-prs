@@ -1,6 +1,6 @@
 package bean;
 
-import model.ActivityModel;
+import model.PurchaseActivityModel;
 import model.PackageModel;
 import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
@@ -32,12 +32,12 @@ public class PaymentLeftMenu {
             JSONArray packetChildren =
                     new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
             childrenNode.put("children", packetChildren);
-            switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
-                case ActivityBean.SUBCONTRACTED:
+            switch (PurchaseActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
+                case PurchaseActivityBean.SUBCONTRACTED:
                     childrenNode.put("type", PaymentLeftMenu.TO_PAY);
                     unpaidChildren.put(childrenNode);
                     break;
-                case ActivityBean.PAID:
+                case PurchaseActivityBean.PAID:
                     childrenNode.put("type", PaymentLeftMenu.PAID);
                     paidChildren.put(childrenNode);
                     break;

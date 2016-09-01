@@ -1,6 +1,6 @@
 package bean;
 
-import model.ActivityModel;
+import model.PurchaseActivityModel;
 import model.PackageModel;
 import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
@@ -32,21 +32,21 @@ public class ApplicantLeftMenu {
             childrenNode.put("id", purchaseBean.getPurchaseID());
             childrenNode.put("text", purchaseBean.getPurCode());
             childrenNode.put("iconCls", "icon-cut");
-            switch (ActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
-                case ActivityBean.INITIALIZE:
+            switch (PurchaseActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
+                case PurchaseActivityBean.INITIALIZE:
                     childrenNode.put("type", ApplicantLeftMenu.CREATE);
                     newPrjChildren.put(childrenNode);
                     break;
-                case ActivityBean.ACC_APPROVE:
-                case ActivityBean.ACC_APPROVE_FAILED:
-                case ActivityBean.DIR_APPROVE:
-                case ActivityBean.FINANCIAL_APPROVE:
-                case ActivityBean.FIN_BUREAU_APPROVE:
-                case ActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.ACC_APPROVE:
+                case PurchaseActivityBean.ACC_APPROVE_FAILED:
+                case PurchaseActivityBean.DIR_APPROVE:
+                case PurchaseActivityBean.FINANCIAL_APPROVE:
+                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
+                case PurchaseActivityBean.SUBCONTRACTING:
                     childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
                     break;
-                case ActivityBean.SUBCONTRACTED: {
+                case PurchaseActivityBean.SUBCONTRACTED: {
                     JSONArray packetChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
                     childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
