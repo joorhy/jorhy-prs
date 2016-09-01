@@ -5,6 +5,13 @@
   Time: 11:42
   To change this template use File | Settings | File Templates.
 --%>
+<!--link rel="stylesheet" href="../js/jquery-easyui-1.3.2/demo/demo.css" type="text/css">
+<link rel="stylesheet" href="../js/jquery-easyui-1.3.2/themes/icon.css" type="text/css">
+<link rel="stylesheet" href="../js/jquery-easyui-1.3.2/themes/default/easyui.css" type="text/css">
+<script type="text/javascript" src="../js/jquery-easyui-1.3.2/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.2/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui-1.3.2/datagrid-gropview.js"></script-->
 
 <link rel="stylesheet" href="../js/jquery-easyui-1.4.5/demo/demo.css" type="text/css">
 <link rel="stylesheet" href="../js/jquery-easyui-1.4.5/themes/icon.css" type="text/css">
