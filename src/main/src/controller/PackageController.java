@@ -44,8 +44,8 @@ public class PackageController extends Controller {
 
     // 取消
     public void cancel() {
-        String strPacketID = getPara("package_id");
-        PackageModel.dao.removePackage(strPacketID);
+        String strPackageID = getPara("package_id");
+        PackageModel.dao.removePackage(strPackageID);
 
         setAttr("result", "success");
         renderJson();
@@ -135,10 +135,10 @@ public class PackageController extends Controller {
 
     // 附件列表
     public void attach_files() {
-        String strPacketID = getPara("package_id");
-        if (strPacketID != null)
+        String strPackageID = getPara("package_id");
+        if (strPackageID != null)
         {
-            PackageBean packageBean = PackageModel.dao.getPackage(strPacketID);
+            PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
             if (packageBean != null) {
                 ArrayList<Map<String, String>> lst = packageBean.getJSONAttachFiles();
                 setAttr("files", lst);
@@ -149,8 +149,8 @@ public class PackageController extends Controller {
 
     // 基础信息
     public void base_info() {
-        String strPacketID = getPara("package_id");
-        PackageBean packageBean = PackageModel.dao.getPackage(strPacketID);
+        String strPackageID = getPara("package_id");
+        PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
         if (packageBean != null) {
             setAttr("result", "success");
             setAttr("base", packageBean.getJSONBaseData());
@@ -162,11 +162,11 @@ public class PackageController extends Controller {
 
     // 分包列表
     public void package_list() {
-        String strPacketID = getPara("package_id");
-        PackageBean packageBean = PackageModel.dao.getPackage(strPacketID);
+        String strPackageID = getPara("package_id");
+        PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
         if (packageBean != null) {
-            setAttr("rows", packageBean.getJSONPacketItems());
-            setAttr("total", packageBean.getJSONPacketItems().size());
+            setAttr("rows", packageBean.getJSONPackageItems());
+            setAttr("total", packageBean.getJSONPackageItems().size());
         } else {
             setAttr("rows", new ArrayList<Map<String, String>>());
             setAttr("total", 0);

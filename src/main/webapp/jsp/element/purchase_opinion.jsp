@@ -11,7 +11,7 @@
 </head>
 <body>
     <table id="dgOpinionLst" class="easyui-datagrid" title="已经审批单位意见" style="width:100%;height:225px"
-           data-options="rownumbers:true,singleSelect:true,url:'/common/opinionList',method:'post',
+           data-options="rownumbers:true,singleSelect:true,url:'/purchase/opinion_list',method:'post',
                          queryParams:{purchase_id:document.getElementById('purchase_id').value},
                          toolbar:tbOpinion">
         <thead>

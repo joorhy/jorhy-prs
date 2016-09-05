@@ -11,7 +11,7 @@
 </head>
 <body>
 <table id="dgCommodity" class="easyui-datagrid" title="商品类" style="width:100%;height:225px"
-       data-options="rownumbers:true,singleSelect:true,url:'/common/commodityList',method:'post',
+       data-options="rownumbers:true,singleSelect:true,url:'/purchase/commodity_list',method:'post',
                    queryParams:{purchase_id:document.getElementById('purchase_id').value},
                    toolbar:tbCommodity">
     <thead>
@@ -28,7 +28,7 @@
     </thead>
 </table>
 <table id="dgService" class="easyui-datagrid" title="服务类" style="width:100%;height:225px"
-       data-options="rownumbers:true,singleSelect:true,url:'/common/serviceList',method:'post',
+       data-options="rownumbers:true,singleSelect:true,url:'/purchase/service_list',method:'post',
                    queryParams:{purchase_id:document.getElementById('purchase_id').value},
                    toolbar:tbService">
     <thead>
@@ -45,7 +45,7 @@
     </thead>
 </table>
 <table id="dgEngineering" class="easyui-datagrid" title="工程类" style="width:100%;height:225px"
-       data-options="rownumbers:true,singleSelect:true,url:'/common/engineeringList',method:'post',
+       data-options="rownumbers:true,singleSelect:true,url:'/purchase/engineering_list',method:'post',
                    queryParams:{purchase_id:document.getElementById('purchase_id').value},
                    toolbar:tbEngineering">
     <thead>

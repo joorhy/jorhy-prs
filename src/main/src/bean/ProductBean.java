@@ -12,5 +12,5 @@ public class ProductBean {
     public String   strPrjSpec;               // 规格型号
     public double   fPrjPrePrice;             // 预算总价
     public String   strPrjParam;              // 技术参数及参数
-    public int      nPackedCount;             // 已分包数量
+    public int      nPackagedCount;             // 已分包数量
 }

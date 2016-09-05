@@ -11,7 +11,7 @@
 </head>
 <body>
 <table id="dgComplaintsLst" class="easyui-datagrid" title="投诉处理意见" style="width:100%;height:225px"
-       data-options="rownumbers:true,singleSelect:true,url:'/common/complaintsList',method:'post',
+       data-options="rownumbers:true,singleSelect:true,url:'/purchase/complaints_list',method:'post',
                      queryParams:{purchase_id:document.getElementById('purchase_id').value},
                      toolbar:tbComplaints">
     <thead>

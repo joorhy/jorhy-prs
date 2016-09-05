@@ -29,9 +29,9 @@ public class PaymentLeftMenu {
             childrenNode.put("text", purchaseBean.getPurCode());
             childrenNode.put("iconCls", "icon-cut");
 
-            JSONArray packetChildren =
+            JSONArray packageChildren =
                     new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
-            childrenNode.put("children", packetChildren);
+            childrenNode.put("children", packageChildren);
             switch (PurchaseActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case PurchaseActivityBean.SUBCONTRACTED:
                     childrenNode.put("type", PaymentLeftMenu.TO_PAY);

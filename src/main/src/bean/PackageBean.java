@@ -118,7 +118,7 @@ public class PackageBean {
         return obj;
     }
 
-    public ArrayList<Map<String, String>> getJSONPacketItems() {
+    public ArrayList<Map<String, String>> getJSONPackageItems() {
         ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);

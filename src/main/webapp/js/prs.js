@@ -142,7 +142,7 @@ function onLeftMenuRightClick(e,node) {
     } else if (node.type == 'to_divide') {
         document.getElementById('purchase_id').value = node.id;
         $(this).tree('select', node.target);
-        $('#menuPacket').menu('show', {
+        $('#menuPackage').menu('show', {
             left: e.clientX,
             top: e.clientY
         });
@@ -223,7 +223,7 @@ function onLeftMenuLeftClick(node) {
             $('#contentDiv').panel('refresh','../jsp/pages/new_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle',node.text);
-            if (node.type == 'packet') {
+            if (node.type == 'package') {
                 $('#contentDiv').panel('refresh', '../jsp/pages/acceptance.jsp');
             } else {
                 $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
@@ -581,7 +581,7 @@ function savePackage() {
 function cancelPackage() {
     $.messager.confirm('操作提示','确认取消此分包?',function(r) {
         if (r) {
-            showNewPacketPage();
+            showNewPackagePage();
         }
     });
 }
@@ -793,7 +793,7 @@ function onLoadAttachFiles() {
         var parentNode = $('#menuTree').tree('getParent', curNode.target)
         for(var key in r.files) {
             var file = r.files[key];
-            if (curNode.type == 'create' || (curNode.type == 'packet' && parentNode.type == 'to_divide')) {
+            if (curNode.type == 'create' || (curNode.type == 'package' && parentNode.type == 'to_divide')) {
                 if (page_type == "purchase") {
                     document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
                         '<a href=/purchase/download_file?file_id=' + file.id + '&purchase_id=' +
