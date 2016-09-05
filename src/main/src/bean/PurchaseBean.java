@@ -27,7 +27,7 @@ public class PurchaseBean {
     private ArrayList<PurchaseAttachFileBean> lstAttachFile = new ArrayList<PurchaseAttachFileBean>();  // 附件
     /** 审批流状态及内容 */
     private int nComplaintsStatus;                                                      // 投诉处理状态
-    private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
+    private ArrayList<PurchaseOpinionBean> lstOpinion = new ArrayList<PurchaseOpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
 
     /** 定义 Model 接口 */
@@ -83,7 +83,7 @@ public class PurchaseBean {
         return lstAttachFile;
     }
 
-    public ArrayList<OpinionBean> getOpinionList() {
+    public ArrayList<PurchaseOpinionBean> getOpinionList() {
         return lstOpinion;
     }
 
@@ -149,8 +149,8 @@ public class PurchaseBean {
         return null;
     }
 
-    public void addOpinion(OpinionBean opinionBean) {
-        lstOpinion.add(opinionBean);
+    public void addOpinion(PurchaseOpinionBean purchaseOpinionBean) {
+        lstOpinion.add(purchaseOpinionBean);
     }
 
     public void addComplaints(ComplaintsBean complaintsBean) {
@@ -209,7 +209,7 @@ public class PurchaseBean {
     public ArrayList<Map<String, String>> getJSONOpinionItems() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstOpinion.size(); i++) {
-            OpinionBean item = lstOpinion.get(i);
+            PurchaseOpinionBean item = lstOpinion.get(i);
             Map<String, String> m = new HashMap<String, String>();
             m.put("op_department", item.strApproveDepartment);
             m.put("op_approve_person", item.strApprovePerson);

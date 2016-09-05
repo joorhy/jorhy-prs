@@ -14,7 +14,7 @@
             <jsp:include page="header.jsp"/>
         </div>
         <input id="purchase_id" type="hidden" value=""/>
-        <input id="packet_id" type="hidden" value=""/>
+        <input id="package_id" type="hidden" value=""/>
         <div id="main_layout" class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/prs/getLeftMenu',method:'get',

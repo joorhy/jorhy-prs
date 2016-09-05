@@ -45,40 +45,40 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public String submitPurchase(String strPurchaseID) {
-        PurchaseBean data = getPurchase(strPurchaseID);
-        if (data != null) {
+        PurchaseBean purchaseBean = getPurchase(strPurchaseID);
+        if (purchaseBean != null) {
             PurchaseActivityModel.dao.nextActivity(strPurchaseID);
         }
         return ErrorCode.SUCCESS;
     }
 
     public String cancelPurchase(String strPurchaseID) {
-        PurchaseBean data = getPurchase(strPurchaseID);
-        if (data != null) {
-            ArrayList<PurchaseAttachFileBean> attachFileBeen = data.getAttachFileList();
+        PurchaseBean purchaseBean = getPurchase(strPurchaseID);
+        if (purchaseBean != null) {
+            ArrayList<PurchaseAttachFileBean> attachFileBeen = purchaseBean.getAttachFileList();
             for (int i = 0; i< attachFileBeen.size(); i++) {
                 mapAttachFile.remove(attachFileBeen.get(i));
             }
             PurchaseActivityModel.dao.removePurchase(strPurchaseID);
-            lstPurchaseData.remove(data);
+            lstPurchaseData.remove(purchaseBean);
         }
         return ErrorCode.SUCCESS;
     }
 
-    public String agreePurchase(String strPurchaseID, OpinionBean opinionBean) {
-        PurchaseBean data = getPurchase(strPurchaseID);
-        if (data != null) {
+    public String agreePurchase(String strPurchaseID, PurchaseOpinionBean purchaseOpinionBean) {
+        PurchaseBean purchaseBean = getPurchase(strPurchaseID);
+        if (purchaseBean != null) {
             PurchaseActivityModel.dao.nextActivity(strPurchaseID);
-            data.addOpinion(opinionBean);
+            purchaseBean.addOpinion(purchaseOpinionBean);
         }
         return ErrorCode.SUCCESS;
     }
 
-    public String disagreePurchase(String strPurchaseID, OpinionBean opinionBean) {
-        PurchaseBean data = getPurchase(strPurchaseID);
-        if (data != null) {
+    public String disagreePurchase(String strPurchaseID, PurchaseOpinionBean purchaseOpinionBean) {
+        PurchaseBean purchaseBean = getPurchase(strPurchaseID);
+        if (purchaseBean != null) {
             PurchaseActivityModel.dao.prevActivity(strPurchaseID);
-            data.addOpinion(opinionBean);
+            purchaseBean.addOpinion(purchaseOpinionBean);
         }
         return ErrorCode.SUCCESS;
     }

@@ -20,8 +20,6 @@ public class JFWebConfig extends JFinalConfig {
          * 前台路由转发设置
          */
         me.add("/", LoginController.class);
-        me.add("/common", CommonController.class);
-        me.add("/applicant", ApplicantController.class);
         me.add("/prs", PrsController.class);
         me.add("/purchase", PurchaseController.class);
         me.add("/package", PackageController.class);

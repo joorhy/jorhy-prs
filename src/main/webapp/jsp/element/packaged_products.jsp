@@ -16,7 +16,7 @@
                 fitColumns:true,
                 url:'/common/getPacketList',
                 method:'post',
-                queryParams:{packet_id:document.getElementById('packet_id').value},
+                queryParams:{package_id:document.getElementById('package_id').value},
                 view:groupview,
                 groupField:'product_type',
                 groupFormatter:function(value,rows){

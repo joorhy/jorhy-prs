@@ -67,6 +67,24 @@ public class PackageModel extends Model<PackageModel> {
         }
     }
 
+    public String agreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
+        PackageBean packageBean = getPackage(strPackageID);
+        if (packageBean != null) {
+            PackageActivityModel.dao.nextActivity(strPackageID);
+            packageBean.addOpinion(packageOpinionBean);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
+    public String disagreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
+        PackageBean packageBean = getPackage(strPackageID);
+        if (packageBean != null) {
+            PackageActivityModel.dao.prevActivity(strPackageID);
+            packageBean.addOpinion(packageOpinionBean);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
     public PackageBean getPackage(String strPacketID) {
         for (int i=0; i<lstPacket.size(); i++) {
             PackageBean packageBean = lstPacket.get(i);
