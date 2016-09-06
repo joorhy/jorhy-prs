@@ -121,7 +121,7 @@ public class PurchaseBean {
             prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
             prjItem.strPrjParam = item.getString("prj_param");
             prjItem.strPrjType = strProductType;
-            prjItem.nPackedCount = 0;
+            prjItem.nPackagedCount = 0;
             lstProduct.add(prjItem);
         }
         return ErrorCode.SUCCESS;
@@ -236,7 +236,7 @@ public class PurchaseBean {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);
-            if (item.nPackedCount < item.nPrjCount) {
+            if (item.nPackagedCount < item.nPrjCount) {
                 Map<String, String> obj = new HashMap<String, String>();
                 obj.put("project_id", item.strProductID);
                 obj.put("product_type", item.strPrjType);
