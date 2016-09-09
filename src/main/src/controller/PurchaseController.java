@@ -3,6 +3,7 @@ package controller;
 import bean.*;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
+import model.FundsNatureModel;
 import model.PurchaseModel;
 import model.UserModel;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -121,7 +122,7 @@ public class PurchaseController extends Controller {
             item.strFileName = uploadFile.getOriginalFileName();
 
             File file = uploadFile.getFile();
-            item.strFileSize = String.valueOf(file.length());
+            item.fileSize = (int)file.length();
             item.strFilePath = file.getPath();
 
             PurchaseModel.dao.addAttachFile(strPurchaseID, item);
@@ -190,6 +191,11 @@ public class PurchaseController extends Controller {
             setAttr("result", "failed");
         }
         renderJson();
+    }
+
+    public void funds_nature() {
+        String strFunds_nature = FundsNatureModel.dao.getFundsNatureList().toString();
+        renderText(strFunds_nature);
     }
 
     // 商品类列表

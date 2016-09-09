@@ -16,30 +16,37 @@ public class PurchaseModel extends Model<PurchaseModel> {
     private Map<String,ArrayList<PurchaseAttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<PurchaseAttachFileBean>>();
     private ArrayList<PurchaseBean> lstPurchaseData = new ArrayList<PurchaseBean>();
     public String savePurchase(PurchaseBean purchaseBean) {
-        /*PurchaseModel model = PurchaseModel.dao.findFirst("select * from cg_xm_jbxx where CG_XM_JBXXcol_CGHBH=" +
-                data.getPurCode());
-        if (info == null) {
-            String strID = java.util.UUID.randomUUID().toString();
-            dao.set("CG_XM_JBXXcol_ID", strID).set("CG_XM_JBXXcol_CGHBH", data.getPurCode())
-                    .set("CG_XM_JBXXcol_ZJLY", data.getFundsSrc()).set("CG_XM_JBXXcol_ZJLYWJ",
-                    data.getFundsNature()).save();
-        }*/
-
-        for (int i=0; i<lstPurchaseData.size(); i++) {
-            if (lstPurchaseData.get(i).getPurchaseID().equals(purchaseBean.getPurchaseID())){
-                lstPurchaseData.remove(i);
-                break;
-            }
+        String url = "select id from purchase p where p.purchase_uuid=\""
+                + purchaseBean.getPurchaseID() + "\"";
+        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
+        if (purchaseModel != null) {
+            // 删除原有内容
+            int nPurchaseID = purchaseModel.get("id");
+            PurchaseFileAttachModel.dao.removePurchaseAttachFiles(nPurchaseID);
+            ProductModel.dao.removePurchaseAttachFiles(nPurchaseID);
+            dao.deleteById(purchaseModel);
         }
+
+        dao.set("purchase_uuid", purchaseBean.getPurchaseID()).set("code", purchaseBean.getPurCode())
+                .set("funds_src", purchaseBean.getFundsSrc()).set("contacts", purchaseBean.getContacts())
+                .set("phone_num", purchaseBean.getPhoneNum()).set("activity_id", 1)
+                .set("funds_nature_id",purchaseBean.getFundsNature()).save();
+
+        int nPurchaseID = dao.get("id");
         ArrayList<PurchaseAttachFileBean> lstFile = mapAttachFile.get(purchaseBean.getPurchaseID());
         if (lstFile != null){
             for (int i=0; i<lstFile.size(); i++) {
-                purchaseBean.addAttachFile(lstFile.get(i));
+                PurchaseFileAttachModel.dao.addAttachFile(nPurchaseID, lstFile.get(i));
             }
             lstFile.clear();
         }
-        PurchaseActivityModel.dao.addPurchase(purchaseBean.getPurchaseID());
-        lstPurchaseData.add(purchaseBean);
+
+        ArrayList<ProductBean> lstProduct = purchaseBean.getProductList();
+        if (lstProduct != null){
+            for (int i=0; i<lstProduct.size(); i++) {
+                ProductModel.dao.addProduct(nPurchaseID, lstProduct.get(i));
+            }
+        }
 
         return ErrorCode.SUCCESS;
     }

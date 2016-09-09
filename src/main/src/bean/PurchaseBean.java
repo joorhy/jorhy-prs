@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class PurchaseBean {
     /** 基础信息 */
-    private String strPurchaseID;                                                     // 采购函ID
+    private String strPurchaseID;                                                      // 采购函ID
     private String strPurCode;                                                          // 采购编号
     private String strFundsSrc;                                                         // 资金来源
     private String strContacts;                                                         // 联系人
@@ -200,7 +200,7 @@ public class PurchaseBean {
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", item.strFileID);
             m.put("name", item.strFileName);
-            m.put("size", item.strFileSize);
+            m.put("size", String.valueOf(item.fileSize));
             lst.add(m);
         }
         return lst;

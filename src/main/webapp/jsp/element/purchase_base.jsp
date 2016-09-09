@@ -30,11 +30,11 @@
             <td align="left">
             <td style="width:15%;">资金性质</td>
             <td style="width:35%;">
-                <select id="funds_nature" class="easyui-combobox" style="width:50%;"">
-                    <option value="ncys" selected>年初预算</option>
-                    <option value="zxzj">专项资金</option>
-                    <option value="zczj">自筹资金</option>
-                    <option value="jzzj">捐赠资金</option>
+                <select id="funds_nature" class="easyui-combobox" style="width:50%;"
+                        data-options="
+                    valueField: 'id',
+                    textField: 'text',
+                    url: '/purchase/funds_nature'">
                 </select>
             </td>
             </td>
