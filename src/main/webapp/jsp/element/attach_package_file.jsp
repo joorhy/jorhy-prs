@@ -16,7 +16,7 @@
     <input id="page_type" hidden="true" value="package"/>
     <div id="container">
         <a id='pickFiles' href="javascript:void(0)" class="easyui-linkbutton"
-           data-options="iconCls:'icon-add',plain:true">添加合同</a>
+           data-options="iconCls:'icon-add',plain:true">添加评标结果报告</a>
     </div>
     <div id="fileList"></div>
     <br/>

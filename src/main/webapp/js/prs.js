@@ -123,6 +123,11 @@ function showNewPackagePage() {
     $('#contentDiv').panel('refresh', '../jsp/pages/new_package.jsp');
 }
 
+function showNewPaymentPage() {
+    $('#contentDiv').panel('setTitle', '申请支付');
+    $('#contentDiv').panel('refresh', '../jsp/pages/new_payment.jsp');
+}
+
 function onLeftMenuRightClick(e,node) {
     baseData = null;
     curNode = node;
@@ -137,6 +142,12 @@ function onLeftMenuRightClick(e,node) {
         document.getElementById('purchase_id').value = node.id;
         $(this).tree('select', node.target);
         $('#menuPacket').menu('show', {
+            left: e.clientX,
+            top: e.clientY
+        });
+    } else if (node.type == 'packet') {
+        $(this).tree('select', node.target);
+        $('#menuPayment').menu('show', {
             left: e.clientX,
             top: e.clientY
         });
@@ -353,6 +364,14 @@ function addPurchaseProductItem(type){
     $('#prj_pre_price').textbox('clear');
     product_dlg_name = 'new';
     getProductByType(type);
+}
+
+function addPaymentApplicantItem() {
+    $('#dlgPaymentApplicant').dialog('open').dialog('center').dialog('setTitle','新增支付');
+}
+
+function savePaymentApplicantItem() {
+    $('#dlgPaymentApplicant').dialog('close');
 }
 
 function editPurchaseProductItem(type){

@@ -14,10 +14,24 @@
         <table>
             <input id="purchase_id" type="hidden" value=""/></td>
             <td align="left">
+            <td style="width:15%">采购项目名称</td>
+            <td style="width:35%"><input id="pur_name" class="easyui-textbox"/></td>
             <td style="width:15%">采购函编号</td>
             <td style="width:35%;"><input id="pur_code" class="easyui-textbox"/></td>
+            </td>
+            <tr/>
+            <td align="left">
             <td style="width:15%;">资金来源</td>
             <td style="width:35%;"><input id="funds_src" class="easyui-textbox"/></td>
+            <td style="width:15%;">资金性质</td>
+            <td style="width:35%;">
+                <select id="funds_nature" class="easyui-combobox" style="width:50%;"">
+                <option value="ncys" selected>年初预算</option>
+                <option value="zxzj">专项资金</option>
+                <option value="zczj">自筹资金</option>
+                <option value="jzzj">捐赠资金</option>
+                </select>
+            </td>
             </td>
             <tr/>
             <td align="left">
@@ -25,18 +39,6 @@
             <td style="width:35%;"><input id="contacts" class="easyui-textbox"/></td>
             <td style="width:15%;">联系电话</td>
             <td style="width:35%;"><input id="phone_num" class="easyui-textbox"/></td>
-            </td>
-            <tr/>
-            <td align="left">
-            <td style="width:15%;">资金性质</td>
-            <td style="width:35%;">
-                <select id="funds_nature" class="easyui-combobox" style="width:50%;"">
-                    <option value="ncys" selected>年初预算</option>
-                    <option value="zxzj">专项资金</option>
-                    <option value="zczj">自筹资金</option>
-                    <option value="jzzj">捐赠资金</option>
-                </select>
-            </td>
             </td>
         </table>
     </div>

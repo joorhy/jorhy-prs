@@ -15,7 +15,14 @@
         <table>
             <input id="packet_id" type="hidden" value=""/>
             <td align="left">
-            <td style="width:15%">采购文号</td>
+            <td style="width:15%">采购项目名称</td>
+            <td style="width:35%"><input id="pur_name" class="easyui-textbox"/></td>
+            <td style="width:15%">采购函编号</td>
+            <td style="width:35%;"><input id="pur_code" class="easyui-textbox"/></td>
+            </td>
+            <tr/>
+            <td align="left">
+            <td style="width:15%">项目编号</td>
             <td style="width:35%;"><input id="pack_code" class="easyui-textbox"/></td>
             <td style="width:15%;">采购地点</td>
             <td style="width:35%;"><input id="pur_address" class="easyui-textbox" /></td>
@@ -42,7 +49,7 @@
                     <option value="zxcg">自行采购</option>
                 </select>
             </td>
-            <td style="width:15%;">采购需求公告</td>
+            <td style="width:15%;">是否网上公告</td>
             <td style="width:35%;">
                 <input id="pur_publicity" class="easyui-switchbutton" style="width: 50%;"
                        data-options="onText:'是',offText:'否'">

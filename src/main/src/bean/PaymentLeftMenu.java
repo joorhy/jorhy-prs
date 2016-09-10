@@ -30,7 +30,7 @@ public class PaymentLeftMenu {
             childrenNode.put("iconCls", "icon-cut");
 
             JSONArray packetChildren =
-                    new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
+                    new JSONArray(PackageModel.dao.getToPayPackageList(purchaseBean.getPurchaseID()));
             childrenNode.put("children", packetChildren);
             switch (PurchaseActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case PurchaseActivityBean.SUBCONTRACTED:

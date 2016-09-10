@@ -27,6 +27,9 @@
                     <div onclick="showNewPackagePage()" data-options="iconCls:'icon-add'">新建包</div>
                     <div onclick="submitPackages()" data-options="iconCls:'icon-save'">提交分包</div>
                 </div>
+                <div id="menuPayment" align="left" class="easyui-menu" style="width:120px;">
+                    <div onclick="showNewPaymentPage()" data-options="iconCls:'icon-add'">申请支付</div>
+                </div>
             </div>
             <div id="contentDiv" class="easyui-panel" region="center" title="简介"
                  style="padding:5px;width:100%;">

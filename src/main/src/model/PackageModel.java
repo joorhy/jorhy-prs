@@ -67,6 +67,14 @@ public class PackageModel extends Model<PackageModel> {
         }
     }
 
+    public String submitPackage(String strPackageID) {
+        PackageBean data = getPackage(strPackageID);
+        if (data != null) {
+            PackageActivityModel.dao.nextActivity(strPackageID);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
     public PackageBean getPackage(String strPacketID) {
         for (int i=0; i<lstPacket.size(); i++) {
             PackageBean packageBean = lstPacket.get(i);
@@ -88,6 +96,24 @@ public class PackageModel extends Model<PackageModel> {
                 node.put("iconCls", "icon-cut");
                 node.put("type", "packet");
                 lst.add(node);
+            }
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getToPayPackageList(String strPurchaseID) {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int j = 0; j< lstPacket.size(); j++) {
+            Map<String, String> node= new HashMap<String, String>();
+            PackageBean item = lstPacket.get(j);
+            if (item.strPurchaseID.equals(strPurchaseID)) {
+                if (PackageActivityModel.dao.getActivityStatus(item.getPackageID()) == PackageActivityBean.TO_APPLY_PAY) {
+                    node.put("id", item.getPackageID());
+                    node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
+                    node.put("iconCls", "icon-cut");
+                    node.put("type", "packet");
+                    lst.add(node);
+                }
             }
         }
         return lst;
