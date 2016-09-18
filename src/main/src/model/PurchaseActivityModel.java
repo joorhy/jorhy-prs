@@ -35,7 +35,7 @@ public class PurchaseActivityModel extends Model<PackageModel> {
         if (purchaseActivityBean != null) {
             return purchaseActivityBean.getActivityStatus();
         }
-        return 100;
+        return PurchaseActivityBean.INITIALIZE;
     }
 
     public void nextActivity(String strPurchaseID) {

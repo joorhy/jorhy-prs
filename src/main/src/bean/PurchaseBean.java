@@ -31,24 +31,48 @@ public class PurchaseBean {
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
 
     /** 定义 Model 接口 */
+    public void setPurchaseID(String strPurchaseID) {
+        this.strPurchaseID = strPurchaseID;
+    }
+
     public String getPurchaseID() {
         return strPurchaseID;
+    }
+
+    public void setPurCode(String strPurCode) {
+        this.strPurCode = strPurCode;
     }
 
     public String getPurCode() {
         return strPurCode;
     }
 
+    public void setFundsSrc(String strFundsSrc) {
+        this.strFundsSrc = strFundsSrc;
+    }
+
     public String getFundsSrc() {
         return strFundsSrc;
+    }
+
+    public void setContacts(String strContacts) {
+        this.strContacts = strContacts;
     }
 
     public String getContacts() {
         return strContacts;
     }
 
+    public void setPhoneNum(String strPhoneNum) {
+        this.strPhoneNum = strPhoneNum;
+    }
+
     public String getPhoneNum() {
         return strPhoneNum;
+    }
+
+    public void setFundsNature(String strFundsNature) {
+        this.strFundsNature = strFundsNature;
     }
 
     public String getFundsNature() {

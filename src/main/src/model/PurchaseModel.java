@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,7 +92,24 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public ArrayList<PurchaseBean> getPurchaseList() {
-        return lstPurchaseData;
+        ArrayList<PurchaseBean> lstPurchaseBean = new ArrayList<PurchaseBean>();
+        String sql = "select p.purchase_uuid, p.code, p.name, p.funds_src, p.funds_nature_id, p.contacts, " +
+                "p.phone_num, a.status from purchase p left join activity a on p.activity_id=a.id";
+        List<PurchaseModel> purchaseList = dao.find(sql);
+        for (int i=0; i<purchaseList.size(); i++) {
+            PurchaseModel item = purchaseList.get(i);
+            PurchaseBean purchaseBean = new PurchaseBean();
+            purchaseBean.setPurchaseID(item.getStr("purchase_uuid"));
+            purchaseBean.setPurCode(item.getStr("code"));
+            purchaseBean.setFundsSrc(item.getStr("funds_src"));
+            purchaseBean.setFundsNature(String.valueOf(item.getInt("funds_nature_id")));
+            purchaseBean.setContacts(item.getStr("contacts"));
+            purchaseBean.setPhoneNum(item.getStr("phone_num"));
+            //purchaseBean.setS
+            lstPurchaseBean.add(purchaseBean);
+        }
+
+        return lstPurchaseBean;
     }
 
     public PurchaseBean getPurchase(String strPurchaseID) {
