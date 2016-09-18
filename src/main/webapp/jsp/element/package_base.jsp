@@ -13,7 +13,7 @@
 <div>
     <div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadPackage()">
         <table>
-            <input id="packet_id" type="hidden" value=""/>
+            <input id="package_id" type="hidden" value=""/>
             <td align="left">
             <td style="width:15%">采购项目名称</td>
             <td style="width:35%"><input id="pur_name" class="easyui-textbox"/></td>

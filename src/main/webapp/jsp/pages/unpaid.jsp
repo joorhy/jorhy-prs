@@ -24,7 +24,7 @@
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="repacket()">资金支付</a></td>
+           onclick="repackage()">资金支付</a></td>
     </td>
 </div>
 </body>

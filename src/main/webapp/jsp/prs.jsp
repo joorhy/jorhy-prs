@@ -14,7 +14,7 @@
             <jsp:include page="header.jsp"/>
         </div>
         <input id="purchase_id" type="hidden" value=""/>
-        <input id="packet_id" type="hidden" value=""/>
+        <input id="package_id" type="hidden" value=""/>
         <div id="main_layout" class="easyui-layout" style="width:1200px;height:100%;">
             <div region="west" split="true" title="导航" style="width:250px;">
                 <ul id="menuTree" class="easyui-tree" data-options="url:'/prs/getLeftMenu',method:'get',
@@ -23,7 +23,7 @@
                 <div id="menuPurchase" align="left" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPurchasePage()" data-options="iconCls:'icon-add'">新建</div>
                 </div>
-                <div id="menuPacket" align="left" class="easyui-menu" style="width:120px;">
+                <div id="menuPackage" align="left" class="easyui-menu" style="width:120px;">
                     <div onclick="showNewPackagePage()" data-options="iconCls:'icon-add'">新建包</div>
                     <div onclick="submitPackages()" data-options="iconCls:'icon-save'">提交分包</div>
                 </div>

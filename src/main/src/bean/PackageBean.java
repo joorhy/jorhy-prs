@@ -28,6 +28,8 @@ public class PackageBean {
      * 合同附件
      */
     private ArrayList<PackageAttachFileBean> lstAttachFile = new ArrayList<PackageAttachFileBean>();  // 附件
+    /** 审批流状态及内容 */
+    private ArrayList<PackageOpinionBean> lstOpinion = new ArrayList<PackageOpinionBean>();           // 审批意见
 
     /** 定义 Model 接口 */
     public String getPackageID() {
@@ -38,7 +40,7 @@ public class PackageBean {
      */
     public String parseBaseData(JSONObject obj) {
         lstProduct.clear();
-        strPackID = obj.getString("packet_id");
+        strPackID = obj.getString("package_id");
         strPackCode = obj.getString("pack_code");
         strPurAddress = obj.getString("pur_address");
         strExpertCount = obj.getString("expert_count");
@@ -93,12 +95,16 @@ public class PackageBean {
         return null;
     }
 
+    public void addOpinion(PackageOpinionBean packageOpinionBean) {
+        lstOpinion.add(packageOpinionBean);
+    }
+
     /**
      * 定义 JSON 接口
      */
     public Map<String, String> getJSONBaseData() {
         Map<String, String> obj = new HashMap<String, String>();
-        obj.put("packet_id", strPackID);
+        obj.put("package_id", strPackID);
         obj.put("pack_code", strPackCode);
         obj.put("pur_address", strPurAddress);
         obj.put("expert_count", strExpertCount);
@@ -112,7 +118,7 @@ public class PackageBean {
         return obj;
     }
 
-    public ArrayList<Map<String, String>> getJSONPacketItems() {
+    public ArrayList<Map<String, String>> getJSONPackageItems() {
         ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);

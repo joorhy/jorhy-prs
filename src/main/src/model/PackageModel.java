@@ -67,6 +67,28 @@ public class PackageModel extends Model<PackageModel> {
         }
     }
 
+    public String agreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
+        PackageBean packageBean = getPackage(strPackageID);
+        if (packageBean != null) {
+            PackageActivityModel.dao.nextActivity(strPackageID);
+            packageBean.addOpinion(packageOpinionBean);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
+    public String disagreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
+        PackageBean packageBean = getPackage(strPackageID);
+        if (packageBean != null) {
+            PackageActivityModel.dao.prevActivity(strPackageID);
+            packageBean.addOpinion(packageOpinionBean);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
+    public PackageBean getPackage(String strPackageID) {
+        for (int i=0; i<lstPackage.size(); i++) {
+            PackageBean packageBean = lstPackage.get(i);
+            if (packageBean.getPackageID().equals(strPackageID)) {
     public String submitPackage(String strPackageID) {
         PackageBean data = getPackage(strPackageID);
         if (data != null) {
@@ -87,14 +109,14 @@ public class PackageModel extends Model<PackageModel> {
 
     public ArrayList<Map<String, String>> getPackageList(String strPurchaseID) {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int j = 0; j< lstPacket.size(); j++) {
+        for (int j = 0; j< lstPackage.size(); j++) {
             Map<String, String> node= new HashMap<String, String>();
-            PackageBean item = lstPacket.get(j);
+            PackageBean item = lstPackage.get(j);
             if (item.strPurchaseID.equals(strPurchaseID)) {
                 node.put("id", item.getPackageID());
                 node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
                 node.put("iconCls", "icon-cut");
-                node.put("type", "packet");
+                node.put("type", "package");
                 lst.add(node);
             }
         }

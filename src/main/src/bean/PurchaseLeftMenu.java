@@ -44,9 +44,9 @@ public class PurchaseLeftMenu {
                     failedChildren.put(childrenNode);
                     break;
                 default: {
-                    JSONArray packetChildren =
+                    JSONArray packageChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
-                    childrenNode.put("children", packetChildren);
+                    childrenNode.put("children", packageChildren);
                     switch (PurchaseActivityModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                         case PurchaseActivityBean.SUBCONTRACTING:
                             childrenNode.put("type", PurchaseLeftMenu.TO_DIVIDE);

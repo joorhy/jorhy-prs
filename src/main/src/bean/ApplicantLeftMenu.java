@@ -47,10 +47,10 @@ public class ApplicantLeftMenu {
                     committedPrjChildren.put(childrenNode);
                     break;
                 case PurchaseActivityBean.SUBCONTRACTED: {
-                    JSONArray packetChildren =
+                    JSONArray packageChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
                     childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
-                    childrenNode.put("children", packetChildren);
+                    childrenNode.put("children", packageChildren);
                     executedPrjChildren.put(childrenNode);
                     break;
                 }

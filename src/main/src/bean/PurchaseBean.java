@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class PurchaseBean {
     /** 基础信息 */
-    private String strPurchaseID;                                                     // 采购函ID
+    private String strPurchaseID;                                                      // 采购函ID
     private String strPurCode;                                                          // 采购编号
     private String strFundsSrc;                                                         // 资金来源
     private String strContacts;                                                         // 联系人
@@ -27,28 +27,52 @@ public class PurchaseBean {
     private ArrayList<PurchaseAttachFileBean> lstAttachFile = new ArrayList<PurchaseAttachFileBean>();  // 附件
     /** 审批流状态及内容 */
     private int nComplaintsStatus;                                                      // 投诉处理状态
-    private ArrayList<OpinionBean> lstOpinion = new ArrayList<OpinionBean>();           // 审批意见
+    private ArrayList<PurchaseOpinionBean> lstOpinion = new ArrayList<PurchaseOpinionBean>();           // 审批意见
     private ArrayList<ComplaintsBean> lstComplaints = new ArrayList<ComplaintsBean>();  // 投诉处理
 
     /** 定义 Model 接口 */
+    public void setPurchaseID(String strPurchaseID) {
+        this.strPurchaseID = strPurchaseID;
+    }
+
     public String getPurchaseID() {
         return strPurchaseID;
+    }
+
+    public void setPurCode(String strPurCode) {
+        this.strPurCode = strPurCode;
     }
 
     public String getPurCode() {
         return strPurCode;
     }
 
+    public void setFundsSrc(String strFundsSrc) {
+        this.strFundsSrc = strFundsSrc;
+    }
+
     public String getFundsSrc() {
         return strFundsSrc;
+    }
+
+    public void setContacts(String strContacts) {
+        this.strContacts = strContacts;
     }
 
     public String getContacts() {
         return strContacts;
     }
 
+    public void setPhoneNum(String strPhoneNum) {
+        this.strPhoneNum = strPhoneNum;
+    }
+
     public String getPhoneNum() {
         return strPhoneNum;
+    }
+
+    public void setFundsNature(String strFundsNature) {
+        this.strFundsNature = strFundsNature;
     }
 
     public String getFundsNature() {
@@ -83,7 +107,7 @@ public class PurchaseBean {
         return lstAttachFile;
     }
 
-    public ArrayList<OpinionBean> getOpinionList() {
+    public ArrayList<PurchaseOpinionBean> getOpinionList() {
         return lstOpinion;
     }
 
@@ -121,7 +145,7 @@ public class PurchaseBean {
             prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
             prjItem.strPrjParam = item.getString("prj_param");
             prjItem.strPrjType = strProductType;
-            prjItem.nPackedCount = 0;
+            prjItem.nPackagedCount = 0;
             lstProduct.add(prjItem);
         }
         return ErrorCode.SUCCESS;
@@ -149,8 +173,8 @@ public class PurchaseBean {
         return null;
     }
 
-    public void addOpinion(OpinionBean opinionBean) {
-        lstOpinion.add(opinionBean);
+    public void addOpinion(PurchaseOpinionBean purchaseOpinionBean) {
+        lstOpinion.add(purchaseOpinionBean);
     }
 
     public void addComplaints(ComplaintsBean complaintsBean) {
@@ -200,7 +224,7 @@ public class PurchaseBean {
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", item.strFileID);
             m.put("name", item.strFileName);
-            m.put("size", item.strFileSize);
+            m.put("size", String.valueOf(item.fileSize));
             lst.add(m);
         }
         return lst;
@@ -209,7 +233,7 @@ public class PurchaseBean {
     public ArrayList<Map<String, String>> getJSONOpinionItems() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstOpinion.size(); i++) {
-            OpinionBean item = lstOpinion.get(i);
+            PurchaseOpinionBean item = lstOpinion.get(i);
             Map<String, String> m = new HashMap<String, String>();
             m.put("op_department", item.strApproveDepartment);
             m.put("op_approve_person", item.strApprovePerson);
@@ -236,7 +260,7 @@ public class PurchaseBean {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i = 0; i < lstProduct.size(); i++) {
             ProductBean item = lstProduct.get(i);
-            if (item.nPackedCount < item.nPrjCount) {
+            if (item.nPackagedCount < item.nPrjCount) {
                 Map<String, String> obj = new HashMap<String, String>();
                 obj.put("project_id", item.strProductID);
                 obj.put("product_type", item.strPrjType);

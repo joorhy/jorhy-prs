@@ -14,9 +14,9 @@
 <table id="tbToDivide" class="easyui-datagrid" title="已分包项目" style="width:100%;height:500px"
        data-options="
                 fitColumns:true,
-                url:'/common/getPacketList',
+                url:'/package/package_list',
                 method:'post',
-                queryParams:{packet_id:document.getElementById('packet_id').value},
+                queryParams:{package_id:document.getElementById('package_id').value},
                 view:groupview,
                 groupField:'product_type',
                 groupFormatter:function(value,rows){

@@ -8,4 +8,5 @@ public class UserBean {
     public String strPassword;                  // 密码
     public String strRealName;                  // 真实姓名
     public String strDepartment;                // 所在单位
+    public String strPost;                       // 职位
 }
