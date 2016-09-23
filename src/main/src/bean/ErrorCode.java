@@ -6,4 +6,5 @@ package bean;
 public class ErrorCode {
     /** 定义错误码 */
     public static final String SUCCESS                  = "success";
+    public static final String EXIST                    = "exist";
 }

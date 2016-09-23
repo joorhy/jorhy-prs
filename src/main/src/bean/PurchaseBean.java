@@ -115,41 +115,6 @@ public class PurchaseBean {
         return lstComplaints;
     }
 
-    /** 定义 Controller 接口 */
-    public String parseBaseData(JSONObject obj) {
-        lstProduct.clear();
-        strPurchaseID = obj.getString("purchase_id");
-        strPurCode = obj.getString("pur_code");
-        strFundsSrc = obj.getString("funds_src");
-        strContacts = obj.getString("contacts");
-        strPhoneNum = obj.getString("phone_num");
-        strFundsNature = obj.getString("funds_nature");
-        strCommodityPrePrice = obj.getString("commodity_pre_price");
-        strServicePrePrice = obj.getString("service_pre_price");
-        strEngineeringPrePrice = obj.getString("engineering_pre_price");
-
-        return ErrorCode.SUCCESS;
-    }
-
-    public String parseProductData(JSONObject obj, String strProductType) {
-        int nTotal = obj.getInt("total");
-        JSONArray arr = obj.getJSONArray("rows");
-        for (int i=0; i<nTotal; i++) {
-            JSONObject item = (JSONObject)arr.get(i);
-            ProductBean prjItem = new ProductBean();
-            prjItem.strProductID = item.getString("project_id");
-            prjItem.strPrjName = item.getString("prj_name");
-            prjItem.nPrjCount = item.getInt("prj_count");
-            prjItem.fPrjPrice = item.getDouble("prj_price");
-            prjItem.strPrjSpec = item.getString("prj_spec");
-            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
-            prjItem.strPrjParam = item.getString("prj_param");
-            prjItem.strPrjType = strProductType;
-            prjItem.nPackagedCount = 0;
-            lstProduct.add(prjItem);
-        }
-        return ErrorCode.SUCCESS;
-    }
 
     public void addAttachFile(PurchaseAttachFileBean item) {
         lstAttachFile.add(item);
@@ -171,14 +136,6 @@ public class PurchaseBean {
             }
         }
         return null;
-    }
-
-    public void addOpinion(PurchaseOpinionBean purchaseOpinionBean) {
-        lstOpinion.add(purchaseOpinionBean);
-    }
-
-    public void addComplaints(ComplaintsBean complaintsBean) {
-        lstComplaints.add(complaintsBean);
     }
 
     /** 定义 JSON 接口 */
@@ -235,8 +192,8 @@ public class PurchaseBean {
         for (int i=0; i<lstOpinion.size(); i++) {
             PurchaseOpinionBean item = lstOpinion.get(i);
             Map<String, String> m = new HashMap<String, String>();
-            m.put("op_department", item.strApproveDepartment);
-            m.put("op_approve_person", item.strApprovePerson);
+            //m.put("op_department", item.strApproveDepartment);
+            //m.put("op_approve_person", item.strApprovePerson);
             m.put("op_approve_date", item.strApproveDate);
             m.put("op_content", item.strOpinion);
             lst.add(m);

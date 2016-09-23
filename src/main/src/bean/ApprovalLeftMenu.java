@@ -1,6 +1,5 @@
 package bean;
 
-import model.PurchaseActivityModel;
 import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -29,9 +28,6 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.SUBCONTRACTING:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
-                case PurchaseActivityBean.DIR_APPROVE_FAILED:
-                    strNodeType = ApprovalLeftMenu.REJECTED;
-                    break;
             }
         } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
             switch (nStatus) {
@@ -43,9 +39,6 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.SUBCONTRACTING:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
-                case PurchaseActivityBean.FINANCIAL_APPROVE_FAILED:
-                    strNodeType = ApprovalLeftMenu.REJECTED;
-                    break;
             }
         } else if (strUserRole.equals(RoleBean.REGULATORY)) {
             switch (nStatus) {
@@ -55,9 +48,6 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
                 case PurchaseActivityBean.SUBCONTRACTING:
                     strNodeType = ApprovalLeftMenu.APPROVED;
-                    break;
-                case PurchaseActivityBean.FIN_BUREAU_APPROVE_FAILED:
-                    strNodeType = ApprovalLeftMenu.REJECTED;
                     break;
             }
         } else if (strUserRole.equals(RoleBean.BUREAU)) {
@@ -86,7 +76,7 @@ public class ApprovalLeftMenu {
             childrenNode.put("text", lstPurchasing.get(i).getPurCode());
             childrenNode.put("iconCls", "icon-cut");
             String strNodeType = getNodeType(strUserRole,
-                    PurchaseActivityModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));
+                    PurchaseModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));
             childrenNode.put("type", strNodeType);
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);

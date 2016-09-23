@@ -1,7 +1,7 @@
 package bean;
 
 /**
- * Created by JooLiu on 2016/8/25.
+ * Created by JooLiu on 2016/9/23.
  */
 public class PurchaseActivityBean {
     /** 定义采购工作流状态 */
@@ -17,23 +17,4 @@ public class PurchaseActivityBean {
     public static final int DIR_APPROVE_FAILED          = 102;        // 分管股室局长审批失败
     public static final int FINANCIAL_APPROVE_FAILED    = 103;        // 财政监管股室股审批失败
     public static final int FIN_BUREAU_APPROVE_FAILED   = 104;        // 财政局审批失败
-
-    /** 定义成员变量 */
-    private int nActivityStatus;
-
-    public int getActivityStatus() {
-        return nActivityStatus;
-    }
-
-    public void setActivityStatus(int nStatus) {
-        nActivityStatus = nStatus;
-    }
-
-    public void setNextStatus() {
-        nActivityStatus += 1;
-    }
-
-    public void setPrevStatus() {
-        nActivityStatus += 100;
-    }
 }

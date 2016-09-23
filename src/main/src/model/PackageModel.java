@@ -2,9 +2,12 @@ package model;
 
 import bean.*;
 import com.jfinal.plugin.activerecord.Model;
+import org.activiti.engine.impl.util.json.JSONArray;
+import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,107 +16,132 @@ import java.util.Map;
 public class PackageModel extends Model<PackageModel> {
     public static final PackageModel dao = new PackageModel();
 
-    private Map<String,ArrayList<PackageAttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<PackageAttachFileBean>>();
-	/** 分包 */
-    private ArrayList<PackageBean> lstPacket = new ArrayList<PackageBean>();      // 已分包项目
+    public void savePackage(JSONObject obj) {
+        String strPackID = obj.getString("package_uuid");
+        String strPackCode = obj.getString("package_code");
+        String strPurAddress = obj.getString("package_address");
+        String strExpertCount = obj.getString("expert_count");
+        String strPurDate = obj.getString("pur_date");
+        String strPurMethod = obj.getString("pur_method");
+        String strPublicity = obj.getString("publicity");
+        String strSupplier = obj.getString("vendor");
+        String strAmount = obj.getString("amount");
+        String strPurchaseID = obj.getString("purchase_id");
 
-    public void savePackage(PackageBean packageBean) {
-        for (int i=0; i<lstPacket.size(); i++) {
-            if (lstPacket.get(i).getPackageID().equals(packageBean.getPackageID())) {
-                packageBean = lstPacket.get(i);
-                lstPacket.remove(packageBean);
-                break;
-            }
+        String url = "select id from package p where p.package_uuid=" + strPackID;
+        int nPackageId = 0;
+                PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageId = packageModel.get("id");
+            packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
+                    .set("package_address", strPurAddress).set("expert_count", strExpertCount)
+                    .set("pur_date", strPurDate).set("pur_method", strPurMethod)
+                    .set("publicity", strPublicity).set("vendor", strSupplier)
+                    .set("amount", strAmount).set("package_activity_id", 1).update();
+        } else {
+            PackageModel.dao.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
+                    .set("package_address", strPurAddress).set("expert_count", strExpertCount)
+                    .set("pur_date", strPurDate).set("pur_method", strPurMethod)
+                    .set("publicity", strPublicity).set("vendor", strSupplier)
+                    .set("amount", strAmount).set("package_activity_id", 1).save();
+            nPackageId = PackageModel.dao.get("id");
         }
-
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(packageBean.strPurchaseID);
-        if (purchaseBean != null) {
-            for (int i = 0; i< packageBean.lstProduct.size(); i++) {
-                ProductBean prjItem = packageBean.lstProduct.get(i);
-                for (int j = 0; j < purchaseBean.getProductList().size(); j++) {
-                    if (purchaseBean.getProductList().get(j).strProductID.equals(prjItem.strProductID)) {
-                        purchaseBean.getProductList().get(j).nPackedCount = prjItem.nPrjCount;
-                        break;
-                    }
-                }
-            }
-            ArrayList<PackageAttachFileBean> lstFile = mapAttachFile.get(packageBean.getPackageID());
-            if (lstFile != null){
-                for (int i=0; i<lstFile.size(); i++) {
-                    packageBean.addAttachFile(lstFile.get(i));
-                }
-                lstFile.clear();
-            }
-            PackageActivityModel.dao.addPackage(packageBean.getPackageID());
-            lstPacket.add(packageBean);
-        }
+        ProductModel.dao.updatePackagedCount(strPurchaseID, 0);
     }
 
     public void removePackage(String strPacketID) {
-        for (int i=0; i<lstPacket.size(); i++) {
-            PackageBean packageBean = lstPacket.get(i);
-            if (packageBean.getPackageID().equals(strPacketID)) {
-                ProductBean prjItem = packageBean.lstProduct.get(i);
-                PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(packageBean.strPurchaseID);
-                for (int j = 0; j < purchaseBean.getProductList().size(); j++) {
-                    if (purchaseBean.getProductList().get(j).strProductID.equals(prjItem.strProductID)) {
-                        purchaseBean.getProductList().get(j).nPackedCount = 0;
-                        break;
-                    }
-                }
-                lstPacket.remove(packageBean);
-                break;
-            }
+        String url = "select p.id,pur.purchase_uuid from package p left join purchase pur on " +
+                "p.purchase_id=pur.id where p.package_uuid=" + strPacketID;
+        int nPackageId = 0;
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageId = packageModel.get("id");
+            String strPurchaseID = packageModel.get("purchase_uuid");
+            PackageFileAttachModel.dao.removePackageAttachFiles(nPackageId);
+            ProductModel.dao.updatePackagedCount(strPurchaseID, 0);
         }
     }
 
+    public String submitPackage(String strPackageID) {
+        String url = "select id, package_activity_id from package p where p.package_uuid=" + strPackageID;
+
+        int nPackageID = 0;
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageID = packageModel.get("id");
+            int nPackageActivityID =  packageModel.get("package_activity_id");
+            packageModel.set("package_activity_id", nPackageActivityID + 1);
+        }
+        return ErrorCode.SUCCESS;
+    }
+
+    public String cancelPackage(String strPackageID) {
+        return ErrorCode.SUCCESS;
+    }
+
     public String agreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
-        PackageBean packageBean = getPackage(strPackageID);
-        if (packageBean != null) {
-            PackageActivityModel.dao.nextActivity(strPackageID);
-            packageBean.addOpinion(packageOpinionBean);
+        String url = "select id, package_activity_id from package p where p.package_uuid=" + strPackageID;
+
+        int nPackageID = 0;
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageID = packageModel.get("id");
+            int nPackageActivityID =  packageModel.get("package_activity_id");
+            if (PackageRecordModel.dao.addApproveRecord(nPackageID, nPackageActivityID + 1, packageOpinionBean)
+                    == ErrorCode.SUCCESS) {
+                packageModel.set("package_activity_id", nPackageActivityID + 1);
+            }
         }
         return ErrorCode.SUCCESS;
     }
 
     public String disagreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
-        PackageBean packageBean = getPackage(strPackageID);
-        if (packageBean != null) {
-            PackageActivityModel.dao.prevActivity(strPackageID);
-            packageBean.addOpinion(packageOpinionBean);
-        }
-        return ErrorCode.SUCCESS;
-    }
+        String url = "select id from package p where package_uuid=" + strPackageID;
 
-    public PackageBean getPackage(String strPackageID) {
-        for (int i=0; i<lstPackage.size(); i++) {
-            PackageBean packageBean = lstPackage.get(i);
-            if (packageBean.getPackageID().equals(strPackageID)) {
-    public String submitPackage(String strPackageID) {
-        PackageBean data = getPackage(strPackageID);
-        if (data != null) {
-            PackageActivityModel.dao.nextActivity(strPackageID);
+        int nPurchaseID = 0;
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPurchaseID = packageModel.get("id");
+            packageModel.set("paclage_activity_id", 1);
         }
         return ErrorCode.SUCCESS;
     }
 
     public PackageBean getPackage(String strPacketID) {
-        for (int i=0; i<lstPacket.size(); i++) {
-            PackageBean packageBean = lstPacket.get(i);
-            if (packageBean.getPackageID().equals(strPacketID)) {
-                return packageBean;
-            }
+        String sql = "select p.code, p.name, p.funds_src, p.funds_nature_id, p.contacts, " +
+                "p.phone_num, a.status from purchase p left join activity a on p.activity_id=a.id " +
+                "where p.package_uuid=" + strPacketID;
+        PackageModel packageModel = PackageModel.dao.findFirst(sql);
+        PackageBean purchaseBean = null;
+        if (packageModel != null) {
+            purchaseBean = new PackageBean();
         }
-        return null;
+
+        return purchaseBean;
     }
 
     public ArrayList<Map<String, String>> getPackageList(String strPurchaseID) {
+        String sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                "on p.purchase_id=pur.id";
+
+        return getPackageList(strPurchaseID, sql);
+    }
+
+    public ArrayList<Map<String, String>> getToPayPackageList(String strPurchaseID) {
+        String sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                "on p.purchase_id=pur.id left join package_activity a on p.package_activity_id=a.id";
+
+        return getPackageList(strPurchaseID, sql);
+    }
+
+    private ArrayList<Map<String, String>> getPackageList(String strPurchaseID, String sql) {
+        List<PackageModel> packageList = PackageModel.dao.find(sql);
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int j = 0; j< lstPackage.size(); j++) {
+        for (int i=0; i<packageList.size(); i++) {
             Map<String, String> node= new HashMap<String, String>();
-            PackageBean item = lstPackage.get(j);
-            if (item.strPurchaseID.equals(strPurchaseID)) {
-                node.put("id", item.getPackageID());
+            PackageModel item = packageList.get(i);
+            if (item.get("purchase_uuid").equals(strPurchaseID)) {
+                node.put("id", item.get("package_uuid").toString());
                 node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
                 node.put("iconCls", "icon-cut");
                 node.put("type", "package");
@@ -123,30 +151,48 @@ public class PackageModel extends Model<PackageModel> {
         return lst;
     }
 
-    public ArrayList<Map<String, String>> getToPayPackageList(String strPurchaseID) {
-        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int j = 0; j< lstPacket.size(); j++) {
-            Map<String, String> node= new HashMap<String, String>();
-            PackageBean item = lstPacket.get(j);
-            if (item.strPurchaseID.equals(strPurchaseID)) {
-                if (PackageActivityModel.dao.getActivityStatus(item.getPackageID()) == PackageActivityBean.TO_APPLY_PAY) {
-                    node.put("id", item.getPackageID());
-                    node.put("text", "第" + String.valueOf(lst.size() + 1) + "包");
-                    node.put("iconCls", "icon-cut");
-                    node.put("type", "packet");
-                    lst.add(node);
-                }
-            }
+    public String addProducts(String strPackageID, JSONObject obj) {
+        String url = "select id from package p where p.package_uuid=" + strPackageID;
+
+        int nPackageID = 0;
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageID = packageModel.get("id");
+        } else {
+            dao.set("purchase_uuid", strPackageID).save();
+            nPackageID = dao.get("id");
         }
-        return lst;
+
+        int nTotal = obj.getInt("total");
+        JSONArray arr = obj.getJSONArray("rows");
+        for (int i=0; i<nTotal; i++) {
+            JSONObject item = (JSONObject)arr.get(i);
+            ProductBean prjItem = new ProductBean();
+            prjItem.strPrjName = item.getString("prj_name");
+            prjItem.nPrjCount = item.getInt("prj_count");
+            prjItem.fPrjPrice = item.getDouble("prj_price");
+            prjItem.strProductID = item.getString("project_id");
+            prjItem.strPrjSpec = item.getString("prj_spec");
+            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
+            prjItem.strPrjParam = item.getString("prj_param");
+            prjItem.strPrjType = item.getString("prj_type");
+            prjItem.nPackagedCount = 0;
+            PackageProductModel.dao.addProduct(nPackageID, prjItem);
+        }
+        return ErrorCode.SUCCESS;
     }
 
     public void addAttachFile(String strPackageID, PackageAttachFileBean item) {
-        ArrayList<PackageAttachFileBean> lst = mapAttachFile.get(strPackageID);
-        if (lst == null) {
-            lst = new ArrayList<PackageAttachFileBean>();
-            mapAttachFile.put(strPackageID, lst);
+        String url = "select id from package p where p.package_uuid=" + strPackageID ;
+
+        int nPackageID = 0;
+        PackageModel packageModel= PackageModel.dao.findFirst(url);
+        if (packageModel != null) {
+            nPackageID = packageModel.get("id");
+        } else {
+            dao.set("package_uuid", strPackageID).save();
+            nPackageID = dao.get("id");
         }
-        lst.add(item);
+        PackageFileAttachModel.dao.addAttachFile(nPackageID, item);
     }
 }

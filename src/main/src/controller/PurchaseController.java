@@ -39,22 +39,17 @@ public class PurchaseController extends Controller {
         String strEngineering = getPara("engineering");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(objBaseData.getString("purchase_id"));
-        if (purchaseBean == null) {
-            purchaseBean = new PurchaseBean();
-        }
-        purchaseBean.parseBaseData(objBaseData);
+        PurchaseModel.dao.savePurchase(objBaseData);
 
+        String strPurchaseID = objBaseData.getString("purchase_id");
         JSONObject objCommodity = new JSONObject(strCommodity);
-        purchaseBean.parseProductData(objCommodity, ProductTypeBean.COMMODITY);
+        PurchaseModel.dao.addProducts(strPurchaseID, objCommodity, ProductTypeBean.COMMODITY);
 
         JSONObject objService = new JSONObject(strService);
-        purchaseBean.parseProductData(objService, ProductTypeBean.SERVICE);
+        PurchaseModel.dao.addProducts(strPurchaseID, objService, ProductTypeBean.SERVICE);
 
         JSONObject objEngineering = new JSONObject(strEngineering);
-        purchaseBean.parseProductData(objEngineering, ProductTypeBean.ENGINEERING);
-
-        PurchaseModel.dao.savePurchase(purchaseBean);
+        PurchaseModel.dao.addProducts(strPurchaseID, objEngineering, ProductTypeBean.ENGINEERING);
 
         setAttr("result", "success");
         renderJson();

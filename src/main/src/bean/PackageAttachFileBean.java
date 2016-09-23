@@ -8,5 +8,5 @@ public class PackageAttachFileBean {
     public String strFileID;            // 文件ID
     public String strFileName;          // 文件名
     public String strFilePath;          // 文件路径
-    public String strFileSize;          // 文件大小
+    public int fileSize;                // 文件大小
 }

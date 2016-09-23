@@ -22,4 +22,6 @@ public class PurchaseFileAttachModel extends Model<PurchaseFileAttachModel> {
         List<PurchaseFileAttachModel> m = dao.find(url);
         dao.deleteById(m);
     }
+
+
 }

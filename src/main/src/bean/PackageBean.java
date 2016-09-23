@@ -22,6 +22,7 @@ public class PackageBean {
     public String strSupplier;                      // 中标供应商
     public String strAmount;                        // 中标金额
     public String strPurchaseID;                    // 采购函ID
+    public int packageCount;
 
     public ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
     /**
@@ -34,69 +35,6 @@ public class PackageBean {
     /** 定义 Model 接口 */
     public String getPackageID() {
         return strPackID;
-    }
-    /**
-     * 定义 Controller 接口
-     */
-    public String parseBaseData(JSONObject obj) {
-        lstProduct.clear();
-        strPackID = obj.getString("package_id");
-        strPackCode = obj.getString("pack_code");
-        strPurAddress = obj.getString("pur_address");
-        strExpertCount = obj.getString("expert_count");
-        strPurDate = obj.getString("pur_date");
-        strPurMethod = obj.getString("pur_method");
-        strPublicity = obj.getString("pur_publicity");
-        strSupplier = obj.getString("pur_supplier");
-        strAmount = obj.getString("pur_amount");
-        strPurchaseID = obj.getString("purchase_id");
-
-        return ErrorCode.SUCCESS;
-    }
-
-    public String parseProductData(JSONObject obj) {
-        int nTotal = obj.getInt("total");
-        JSONArray arr = obj.getJSONArray("rows");
-        for (int i = 0; i < nTotal; i++) {
-            JSONObject item = (JSONObject) arr.get(i);
-            ProductBean prjItem = new ProductBean();
-            prjItem.strProductID = item.getString("project_id");
-            prjItem.strPrjType = item.getString("product_type");
-            prjItem.strPrjName = item.getString("prj_name");
-            prjItem.nPrjCount = item.getInt("prj_count");
-            prjItem.fPrjPrice = item.getDouble("prj_price");
-            prjItem.strPrjSpec = item.getString("prj_spec");
-            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
-            prjItem.strPrjParam = item.getString("prj_param");
-            lstProduct.add(prjItem);
-        }
-        return ErrorCode.SUCCESS;
-    }
-
-    public void addAttachFile(PackageAttachFileBean item) {
-        lstAttachFile.add(item);
-    }
-
-    public void delAttachFile(String strFileID) {
-        for (int i=0; i<lstAttachFile.size(); i++) {
-            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
-                lstAttachFile.remove(i);
-                break;
-            }
-        }
-    }
-
-    public PackageAttachFileBean getAttachFileItem(String strFileID) {
-        for (int i=0; i<lstAttachFile.size(); i++) {
-            if (lstAttachFile.get(i).strFileID.equals(strFileID)) {
-                return lstAttachFile.get(i);
-            }
-        }
-        return null;
-    }
-
-    public void addOpinion(PackageOpinionBean packageOpinionBean) {
-        lstOpinion.add(packageOpinionBean);
     }
 
     /**
@@ -143,7 +81,7 @@ public class PackageBean {
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", item.strFileID);
             m.put("name", item.strFileName);
-            m.put("size", item.strFileSize);
+            m.put("size", String.valueOf(item.fileSize));
             lst.add(m);
         }
         return lst;

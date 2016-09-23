@@ -6,10 +6,10 @@ import com.jfinal.plugin.activerecord.Model;
 import java.util.List;
 
 /**
- * Created by JooLiu on 2016/9/9.
+ * Created by JooLiu on 2016/9/23.
  */
-public class ProductModel extends Model<ProductModel> {
-    public static final ProductModel dao = new ProductModel();
+public class PackageProductModel extends Model<PackageProductModel> {
+    public static final PackageProductModel dao = new PackageProductModel();
 
     public void addProduct(int nPurchaseID, ProductBean productBean) {
         dao.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
@@ -21,7 +21,7 @@ public class ProductModel extends Model<ProductModel> {
 
     public void removePurchaseProducts(int nPurchaseID) {
         String url = "select p.id from product p where p.purchase_id=" + nPurchaseID;
-        List<ProductModel> m = dao.find(url);
+        List<PackageProductModel> m = dao.find(url);
         dao.deleteById(m);
     }
 

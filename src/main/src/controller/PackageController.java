@@ -3,9 +3,7 @@ package controller;
 import bean.*;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
-import model.PackageModel;
-import model.PurchaseModel;
-import model.UserModel;
+import model.*;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.io.File;
@@ -32,21 +30,16 @@ public class PackageController extends Controller {
         String strProducts = getPara("products");
 
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PackageBean packageBean = PackageModel.dao.getPackage(objBaseData.getString("package_id"));
-        if (packageBean == null) {
-            packageBean = new PackageBean();
-        }
-
         JSONObject objProducts = new JSONObject(strProducts);
-        packageBean.parseBaseData(objBaseData);
-        packageBean.parseProductData(objProducts);
-        PackageModel.dao.savePackage(packageBean);
+        String strPackageID = objBaseData.getString("package_uuid");
+        PackageModel.dao.addProducts(strPackageID, objProducts);
+        PackageModel.dao.savePackage(objBaseData);
 
         setAttr("result", "success");
         renderJson();
     }
 
-    public void submit() {
+    public void submitPackage() {
 
     }
 
@@ -96,7 +89,7 @@ public class PackageController extends Controller {
             item.strFileName = uploadFile.getOriginalFileName();
 
             File file = uploadFile.getFile();
-            item.strFileSize = String.valueOf(file.length());
+            item.fileSize = (int)file.length();
             item.strFilePath = file.getPath();
 
             PackageModel.dao.addAttachFile(strPackageID, item);
@@ -111,7 +104,7 @@ public class PackageController extends Controller {
         PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
         if (packageBean != null) {
             String strFileID = getPara("file_id");
-            PackageAttachFileBean item = packageBean.getAttachFileItem(strFileID);
+            PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
             if (item != null) {
                 renderFile(new File(item.strFilePath));
             }
@@ -127,14 +120,14 @@ public class PackageController extends Controller {
             PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
             if (packageBean != null) {
                 String strFileID = getPara("file_id");
-                PackageAttachFileBean item = packageBean.getAttachFileItem(strFileID);
+                PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
                 if (item != null) {
                     File file = new File(item.strFilePath);
                     if (file != null) {
                         file.delete();
                     }
                 }
-                packageBean.delAttachFile(strFileID);
+                PackageFileAttachModel.dao.removeAttachFile(strFileID);
             }
         }
         setAttr("result", "success");
