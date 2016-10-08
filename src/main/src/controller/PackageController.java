@@ -31,7 +31,7 @@ public class PackageController extends Controller {
 
         JSONObject objBaseData = new JSONObject(strBaseData);
         JSONObject objProducts = new JSONObject(strProducts);
-        String strPackageID = objBaseData.getString("package_uuid");
+        String strPackageID = objBaseData.getString("package_id");
         PackageModel.dao.addProducts(strPackageID, objProducts);
         PackageModel.dao.savePackage(objBaseData);
 

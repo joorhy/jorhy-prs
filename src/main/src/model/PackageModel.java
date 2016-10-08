@@ -17,7 +17,7 @@ public class PackageModel extends Model<PackageModel> {
     public static final PackageModel dao = new PackageModel();
 
     public void savePackage(JSONObject obj) {
-        String strPackID = obj.getString("package_uuid");
+        String strPackageID = obj.getString("package_uuid");
         String strPackCode = obj.getString("package_code");
         String strPurAddress = obj.getString("package_address");
         String strExpertCount = obj.getString("expert_count");
@@ -28,7 +28,7 @@ public class PackageModel extends Model<PackageModel> {
         String strAmount = obj.getString("amount");
         String strPurchaseID = obj.getString("purchase_id");
 
-        String url = "select id from package p where p.package_uuid=" + strPackID;
+        String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
         int nPackageId = 0;
                 PackageModel packageModel = PackageModel.dao.findFirst(url);
         if (packageModel != null) {
@@ -52,7 +52,7 @@ public class PackageModel extends Model<PackageModel> {
 
     public void removePackage(String strPacketID) {
         String url = "select p.id,pur.purchase_uuid from package p left join purchase pur on " +
-                "p.purchase_id=pur.id where p.package_uuid=" + strPacketID;
+                "p.purchase_id=pur.id where p.package_uuid='" + strPacketID + "'";
         int nPackageId = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
         if (packageModel != null) {
@@ -64,7 +64,8 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public String submitPackage(String strPackageID) {
-        String url = "select id, package_activity_id from package p where p.package_uuid=" + strPackageID;
+        String url = "select id, package_activity_id from package p where p.package_uuid='"
+                + strPackageID + "'";
 
         int nPackageID = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
@@ -81,7 +82,8 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public String agreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
-        String url = "select id, package_activity_id from package p where p.package_uuid=" + strPackageID;
+        String url = "select id, package_activity_id from package p where p.package_uuid='"
+                + strPackageID + "'";
 
         int nPackageID = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
@@ -97,7 +99,7 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public String disagreePackage(String strPackageID, PackageOpinionBean packageOpinionBean) {
-        String url = "select id from package p where package_uuid=" + strPackageID;
+        String url = "select id from package p where package_uuid='" + strPackageID + "'";
 
         int nPurchaseID = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
@@ -152,7 +154,7 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public String addProducts(String strPackageID, JSONObject obj) {
-        String url = "select id from package p where p.package_uuid=" + strPackageID;
+        String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
 
         int nPackageID = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
@@ -184,7 +186,7 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public void addAttachFile(String strPackageID, PackageAttachFileBean item) {
-        String url = "select id from package p where p.package_uuid=" + strPackageID ;
+        String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
 
         int nPackageID = 0;
         PackageModel packageModel= PackageModel.dao.findFirst(url);
