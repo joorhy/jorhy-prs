@@ -154,26 +154,6 @@ public class PurchaseBean {
         return obj;
     }
 
-    public ArrayList<Map<String, String>> getJSONProductItems(String strProductType) {
-        ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
-        for (int i = 0; i < lstProduct.size(); i++) {
-            ProductBean item = lstProduct.get(i);
-            if (item.strPrjType.equals(strProductType)) {
-                Map<String, String> obj = new HashMap<String, String>();
-                obj.put("project_id", item.strProductID);
-                obj.put("product_type", item.strPrjType);
-                obj.put("prj_name", item.strPrjName);
-                obj.put("prj_count", String.valueOf(item.nPrjCount));
-                obj.put("prj_price", String.valueOf(item.fPrjPrice));
-                obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
-                obj.put("prj_param", item.strPrjParam);
-                obj.put("prj_spec", item.strPrjSpec);
-                productArray.add(obj);
-            }
-        }
-        return productArray;
-    }
-
     public ArrayList<Map<String, String>> getJSONAttachFiles() {
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
         for (int i=0; i<lstAttachFile.size(); i++) {
@@ -209,27 +189,6 @@ public class PurchaseBean {
             m.put("comp_deal_date", item.strDealwithDate);
             m.put("comp_content", item.strDealwithOpinion);
             lst.add(m);
-        }
-        return lst;
-    }
-
-    public ArrayList<Map<String, String>> getJSONToDivideItems() {
-        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int i = 0; i < lstProduct.size(); i++) {
-            ProductBean item = lstProduct.get(i);
-            if (item.nPackagedCount < item.nPrjCount) {
-                Map<String, String> obj = new HashMap<String, String>();
-                obj.put("project_id", item.strProductID);
-                obj.put("product_type", item.strPrjType);
-                obj.put("prj_name", item.strPrjName);
-                obj.put("prj_count", String.valueOf(item.nPrjCount));
-                obj.put("prj_price", String.valueOf(item.fPrjPrice));
-                obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
-                obj.put("prj_param", item.strPrjParam);
-                obj.put("prj_spec", item.strPrjSpec);
-                obj.put("prj_select", "selected");
-                lst.add(obj);
-            }
         }
         return lst;
     }

@@ -12,20 +12,23 @@ public class ApproveRecordModel extends Model<ApproveRecordModel> {
 
     public String addApproveRecord(int purchaseID, int purchaseActivityID, PurchaseOpinionBean purchaseOpinionBean) {
         String sql = "select id from approve_record r where r.user_id=" + purchaseOpinionBean.userID +
-                     "and r.purchase_id=" + purchaseID;
-        ApproveRecordModel approveRecordModel = ApproveRecordModel.dao.findFirst(sql);
+                     " and r.purchase_id=" + purchaseID;
+        ApproveRecordModel approveRecordModel = dao.findFirst(sql);
         if (approveRecordModel != null) {
             return ErrorCode.EXIST;
+        } else {
+            approveRecordModel = new ApproveRecordModel();
+            approveRecordModel.set("user_id", purchaseOpinionBean.userID).set("purchase_id", purchaseID)
+                    .set("purchase_activity_id", purchaseActivityID).set("opinion", purchaseOpinionBean.strOpinion)
+                    .set("approve_date", purchaseOpinionBean.strApproveDate).save();
         }
-        ApproveRecordModel.dao.set("user_id", purchaseOpinionBean.userID).set("purchase_id", purchaseID)
-                .set("purchase_activity_id", purchaseActivityID).set("opinion", purchaseOpinionBean.strOpinion)
-                .set("approve_date", purchaseOpinionBean.strApproveDate).save();
 
         return ErrorCode.SUCCESS;
     }
 
     public String addRejectRecord(int purchaseID, int purchaseActivityID, PurchaseOpinionBean purchaseOpinionBean) {
-        ApproveRecordModel.dao.set("user_id", purchaseOpinionBean.userID).set("purchase_id", purchaseID)
+        ApproveRecordModel approveRecordModel = new ApproveRecordModel();
+        approveRecordModel.set("user_id", purchaseOpinionBean.userID).set("purchase_id", purchaseID)
                 .set("purchase_activity_id", purchaseActivityID).set("opinion", purchaseOpinionBean.strOpinion)
                 .set("approve_date", purchaseOpinionBean.strApproveDate).save();
 

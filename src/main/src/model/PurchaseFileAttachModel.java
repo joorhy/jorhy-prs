@@ -12,9 +12,10 @@ public class PurchaseFileAttachModel extends Model<PurchaseFileAttachModel> {
     public static final PurchaseFileAttachModel dao = new PurchaseFileAttachModel();
 
     public void addAttachFile(int nPurchaseID, PurchaseAttachFileBean purchaseAttachFileBean) {
-        dao.set("uuid", purchaseAttachFileBean.strFileID).set("name", purchaseAttachFileBean.strFileName)
-                .set("path", purchaseAttachFileBean.strFilePath).set("size", purchaseAttachFileBean.fileSize)
-                .set("purchase_id", nPurchaseID).save();
+        PurchaseFileAttachModel purchaseFileAttachModel = new PurchaseFileAttachModel();
+        purchaseFileAttachModel.set("uuid", purchaseAttachFileBean.strFileID)
+                .set("name", purchaseAttachFileBean.strFileName).set("path", purchaseAttachFileBean.strFilePath)
+                .set("size", purchaseAttachFileBean.fileSize).set("purchase_id", nPurchaseID).save();
     }
 
     public void removePurchaseAttachFiles(int nPurchaseID) {

@@ -39,12 +39,13 @@ public class PackageModel extends Model<PackageModel> {
                     .set("publicity", strPublicity).set("vendor", strSupplier)
                     .set("amount", strAmount).set("package_activity_id", 1).update();
         } else {
-            PackageModel.dao.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
+            packageModel = new PackageModel();
+            packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
                     .set("package_address", strPurAddress).set("expert_count", strExpertCount)
                     .set("pur_date", strPurDate).set("pur_method", strPurMethod)
                     .set("publicity", strPublicity).set("vendor", strSupplier)
                     .set("amount", strAmount).set("package_activity_id", 1).save();
-            nPackageId = PackageModel.dao.get("id");
+            nPackageId = packageModel.get("id");
         }
         ProductModel.dao.updatePackagedCount(strPurchaseID, 0);
     }
@@ -108,9 +109,8 @@ public class PackageModel extends Model<PackageModel> {
     }
 
     public PackageBean getPackage(String strPacketID) {
-        String sql = "select p.code, p.name, p.funds_src, p.funds_nature_id, p.contacts, " +
-                "p.phone_num, a.status from purchase p left join activity a on p.activity_id=a.id " +
-                "where p.package_uuid=" + strPacketID;
+        String sql = "select p.*, a.status from package p left join package_activity a on " +
+                "p.package_activity_id=a.id where p.package_uuid='" + strPacketID + "'";
         PackageModel packageModel = PackageModel.dao.findFirst(sql);
         PackageBean purchaseBean = null;
         if (packageModel != null) {
@@ -159,8 +159,9 @@ public class PackageModel extends Model<PackageModel> {
         if (packageModel != null) {
             nPackageID = packageModel.get("id");
         } else {
-            dao.set("purchase_uuid", strPackageID).save();
-            nPackageID = dao.get("id");
+            packageModel = new PackageModel();
+            packageModel.set("purchase_uuid", strPackageID).save();
+            nPackageID = packageModel.get("id");
         }
 
         int nTotal = obj.getInt("total");
@@ -190,8 +191,9 @@ public class PackageModel extends Model<PackageModel> {
         if (packageModel != null) {
             nPackageID = packageModel.get("id");
         } else {
-            dao.set("package_uuid", strPackageID).save();
-            nPackageID = dao.get("id");
+            packageModel = new PackageModel();
+            packageModel.set("package_uuid", strPackageID).save();
+            nPackageID = packageModel.get("id");
         }
         PackageFileAttachModel.dao.addAttachFile(nPackageID, item);
     }

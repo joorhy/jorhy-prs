@@ -29,43 +29,44 @@ public class PurchaseModel extends Model<PurchaseModel> {
         String strServicePrePrice = obj.getString("service_pre_price");
         String strEngineeringPrePrice = obj.getString("engineering_pre_price");
 
-        String url = "select id from purchase p where p.purchase_uuid=" + strPurchaseID;
+        String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         int nPurchaseID = 0;
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
             purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
                     .set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("activity_id", 1)
+                    .set("phone_num", strPhoneNum).set("purchase_activity_id", 1)
                     .set("funds_nature_id", strFundsNature).update();
         } else {
-            dao.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
+            purchaseModel = new PurchaseModel();
+            purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
                     .set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("activity_id", 1)
+                    .set("phone_num", strPhoneNum).set("purchase_activity_id", 1)
                     .set("funds_nature_id", strFundsNature).save();
-            nPurchaseID = dao.get("id");
+            nPurchaseID = purchaseModel.get("id");
         }
 
         return ErrorCode.SUCCESS;
     }
 
     public String submitPurchase(String strPurchaseID) {
-        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid="
-                + strPurchaseID;
+        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid='"
+                + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
             int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
-            purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1);
+            purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1).update();
         }
         return ErrorCode.SUCCESS;
     }
 
     public String cancelPurchase(String strPurchaseID) {
-        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid="
-                + strPurchaseID;
+        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid='"
+                + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
@@ -79,8 +80,8 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public String agreePurchase(String strPurchaseID, PurchaseOpinionBean purchaseOpinionBean) {
-        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid="
-                + strPurchaseID;
+        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid='"
+                + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
@@ -89,26 +90,27 @@ public class PurchaseModel extends Model<PurchaseModel> {
             int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
             if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID + 1, purchaseOpinionBean)
                     == ErrorCode.SUCCESS) {
-                purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1);
+                purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1).update();
             }
         }
         return ErrorCode.SUCCESS;
     }
 
     public String disagreePurchase(String strPurchaseID, PurchaseOpinionBean purchaseOpinionBean) {
-        String url = "select id from purchase p where p.purchase_uuid=" + strPurchaseID;
+        String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
-            purchaseModel.set("purchase_activity_id", 1);
+            purchaseModel.set("purchase_activity_id", 1).update();
         }
         return ErrorCode.SUCCESS;
     }
 
     public int getActivityStatus(String strPurchaseID) {
-        String url = "select purchase_activity_id from purchase p where p.purchase_uuid=" + strPurchaseID;
+        String url = "select purchase_activity_id from purchase p where p.purchase_uuid='"
+                + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
             return purchaseModel.get("purchase_activity_id");
@@ -118,8 +120,9 @@ public class PurchaseModel extends Model<PurchaseModel> {
 
     public ArrayList<PurchaseBean> getPurchaseList() {
         ArrayList<PurchaseBean> lstPurchaseBean = new ArrayList<PurchaseBean>();
-        String sql = "select p.purchase_uuid, p.code, p.name, p.funds_src, p.funds_nature_id, p.contacts, " +
-                "p.phone_num, a.status from purchase p left join activity a on p.activity_id=a.id";
+        String sql = "select p.purchase_uuid, p.code, p.name, p.funds_src, p.funds_nature_id, " +
+                "p.contacts,p.phone_num, a.status from purchase p left join purchase_activity a on " +
+                "p.purchase_activity_id=a.id";
         List<PurchaseModel> purchaseList = dao.find(sql);
         for (int i=0; i<purchaseList.size(); i++) {
             PurchaseModel item = purchaseList.get(i);
@@ -137,9 +140,8 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public PurchaseBean getPurchase(String strPurchaseID) {
-        String sql = "select p.code, p.name, p.funds_src, p.funds_nature_id, p.contacts, " +
-                "p.phone_num, a.status from purchase p left join activity a on p.activity_id=a.id " +
-                "where p.purchase_uuid=" + strPurchaseID;
+        String sql = "select p.*, a.status from purchase p left join purchase_activity a on " +
+                "p.purchase_activity_id=a.id where p.purchase_uuid='" + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
         PurchaseBean purchaseBean = null;
         if (purchaseModel != null) {
@@ -156,16 +158,15 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public String addProducts(String strPurchaseID, JSONObject obj, String strProductType) {
-        String url = "select id from purchase p where p.purchase_uuid=" + strPurchaseID;
+        String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
-        if (purchaseModel != null) {
-            nPurchaseID = purchaseModel.get("id");
-        } else {
-            dao.set("purchase_uuid", strPurchaseID).save();
-            nPurchaseID = dao.get("id");
+        if (purchaseModel == null) {
+            purchaseModel = new PurchaseModel();
+            purchaseModel.set("purchase_uuid", strPurchaseID).save();
         }
+        nPurchaseID = purchaseModel.get("id");
 
         int nTotal = obj.getInt("total");
         JSONArray arr = obj.getJSONArray("rows");
@@ -187,15 +188,16 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public void addAttachFile(String strPurchaseID, PurchaseAttachFileBean item) {
-        String url = "select id from purchase p where p.purchase_uuid=" + strPurchaseID;
+        String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
         } else {
-            dao.set("purchase_uuid", strPurchaseID).save();
-            nPurchaseID = dao.get("id");
+            purchaseModel = new PurchaseModel();
+            purchaseModel.set("purchase_uuid", strPurchaseID).save();
+            nPurchaseID = purchaseModel.get("id");
         }
         PurchaseFileAttachModel.dao.addAttachFile(nPurchaseID, item);
     }

@@ -25,12 +25,13 @@ public class UserModel extends Model<UserModel> {
     }
 
     public UserBean getUser(String strUsername) {
-        String url = "select u.username, u.passwd, u.real_name, d.dept_name, r.post from user u " +
+        String url = "select u.*, d.dept_name, r.post from user u " +
                 "left join dept d on u.dept_id=d.id left join role r on r.user_id=u.id where u.id=" +
                 strUsername;
 
         List<UserModel> m = dao.find(url);
         UserBean userBean = new UserBean();
+        userBean.userID = m.get(0).getInt("id");
         userBean.strUsername = m.get(0).getStr("username");
         userBean.strPassword = m.get(0).getStr("passwd");
         userBean.strRealName = m.get(0).getStr("real_name");

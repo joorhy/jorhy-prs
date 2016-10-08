@@ -12,9 +12,10 @@ public class PackageFileAttachModel extends Model<PackageFileAttachModel> {
     public static final PackageFileAttachModel dao = new PackageFileAttachModel();
 
     public void addAttachFile(int nPackageID, PackageAttachFileBean packageAttachFileBean) {
-        dao.set("uuid", packageAttachFileBean.strFileID).set("name", packageAttachFileBean.strFileName)
-                .set("path", packageAttachFileBean.strFilePath).set("size", packageAttachFileBean.fileSize)
-                .set("package_id", nPackageID).save();
+        PackageFileAttachModel packageFileAttachModel = new PackageFileAttachModel();
+        packageFileAttachModel.set("uuid", packageAttachFileBean.strFileID)
+                .set("name", packageAttachFileBean.strFileName).set("path", packageAttachFileBean.strFilePath)
+                .set("size", packageAttachFileBean.fileSize).set("package_id", nPackageID).save();
     }
 
     public void removePackageAttachFiles(int nPackageID) {

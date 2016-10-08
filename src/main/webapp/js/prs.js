@@ -847,7 +847,7 @@ function onLoadAttachFiles() {
     }
 
     function onError(x, e) {
-        alert("onLoadAttachFiles");
+        alert("onLoadAttachFiles Error");
     }
 }
 

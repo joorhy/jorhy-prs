@@ -4,6 +4,7 @@ import bean.*;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
 import model.FundsNatureModel;
+import model.ProductModel;
 import model.PurchaseModel;
 import model.UserModel;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -20,14 +21,9 @@ import java.util.Map;
 public class PurchaseController extends Controller {
     public void toDivideItems() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONToDivideItems());
-            setAttr("total", purchaseBean.getJSONToDivideItems().size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst = ProductModel.dao.getJSONToDivideItems(strPurchaseID);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 
@@ -90,6 +86,7 @@ public class PurchaseController extends Controller {
         UserBean userBean = UserModel.dao.getUser(strUsername);
 
         PurchaseOpinionBean purchaseOpinionBean = new PurchaseOpinionBean();
+        purchaseOpinionBean.userID = userBean.userID;
         purchaseOpinionBean.strApprovePerson = userBean.strRealName;
         purchaseOpinionBean.strApproveDepartment = userBean.strDepartment;
         purchaseOpinionBean.strOpinion = strContent;
@@ -196,42 +193,30 @@ public class PurchaseController extends Controller {
     // 商品类列表
     public void commodity_list() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.COMMODITY));
-            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.COMMODITY).size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst =
+                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.COMMODITY);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 
     // 服务类列表
     public void service_list() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.SERVICE));
-            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.SERVICE).size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst =
+                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.SERVICE);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 
     // 工程类列表
     public void engineering_list() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONProductItems(ProductTypeBean.ENGINEERING));
-            setAttr("total", purchaseBean.getJSONProductItems(ProductTypeBean.ENGINEERING).size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst =
+                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.ENGINEERING);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 

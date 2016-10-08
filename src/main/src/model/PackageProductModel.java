@@ -12,7 +12,8 @@ public class PackageProductModel extends Model<PackageProductModel> {
     public static final PackageProductModel dao = new PackageProductModel();
 
     public void addProduct(int nPurchaseID, ProductBean productBean) {
-        dao.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
+        PackageProductModel packageProductModel = new PackageProductModel();
+        packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
                 .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
                 .set("purchase_id", nPurchaseID).set("spec", productBean.strPrjSpec)
                 .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
