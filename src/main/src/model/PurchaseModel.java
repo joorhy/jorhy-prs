@@ -20,30 +20,35 @@ public class PurchaseModel extends Model<PurchaseModel> {
     private ArrayList<PurchaseBean> lstPurchaseData = new ArrayList<PurchaseBean>();
     public String savePurchase(JSONObject obj) {
         String strPurchaseID = obj.getString("purchase_id");
+        String strPurName = obj.getString("pur_name");
         String strPurCode = obj.getString("pur_code");
         String strFundsSrc = obj.getString("funds_src");
         String strContacts = obj.getString("contacts");
         String strPhoneNum = obj.getString("phone_num");
         String strFundsNature = obj.getString("funds_nature");
-        String strCommodityPrePrice = obj.getString("commodity_pre_price");
-        String strServicePrePrice = obj.getString("service_pre_price");
-        String strEngineeringPrePrice = obj.getString("engineering_pre_price");
+        Double fCommodityPrePrice = obj.getDouble("commodity_pre_price");
+        Double fServicePrePrice = obj.getDouble("service_pre_price");
+        Double fEngineeringPrePrice = obj.getDouble("engineering_pre_price");
 
         String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         int nPurchaseID = 0;
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
-            purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
+            purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode).set("name", strPurName)
                     .set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("purchase_activity_id", 1)
-                    .set("funds_nature_id", strFundsNature).update();
+                    .set("phone_num", strPhoneNum).set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
+                    .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
+                    .set("service_pre_price", fServicePrePrice)
+                    .set("engineering_pre_price", fEngineeringPrePrice).update();
         } else {
             purchaseModel = new PurchaseModel();
             purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
-                    .set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("purchase_activity_id", 1)
-                    .set("funds_nature_id", strFundsNature).save();
+                    .set("name", strPurName).set("funds_src", strFundsSrc).set("contacts", strContacts)
+                    .set("phone_num", strPhoneNum).set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
+                    .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
+                    .set("service_pre_price", fServicePrePrice)
+                    .set("engineering_pre_price", fEngineeringPrePrice).save();
             nPurchaseID = purchaseModel.get("id");
         }
 
@@ -128,6 +133,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
             PurchaseModel item = purchaseList.get(i);
             PurchaseBean purchaseBean = new PurchaseBean();
             purchaseBean.setPurchaseID(item.getStr("purchase_uuid"));
+            purchaseBean.setPurName(item.getStr("name"));
             purchaseBean.setPurCode(item.getStr("code"));
             purchaseBean.setFundsSrc(item.getStr("funds_src"));
             purchaseBean.setFundsNature(String.valueOf(item.getInt("funds_nature_id")));
@@ -139,22 +145,72 @@ public class PurchaseModel extends Model<PurchaseModel> {
         return lstPurchaseBean;
     }
 
-    public PurchaseBean getPurchase(String strPurchaseID) {
+    public Map<String, String> getBaseData(String strPurchaseID) {
         String sql = "select p.*, a.status from purchase p left join purchase_activity a on " +
                 "p.purchase_activity_id=a.id where p.purchase_uuid='" + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
-        PurchaseBean purchaseBean = null;
+        Map<String, String> obj = new HashMap<String, String>();
         if (purchaseModel != null) {
-            purchaseBean = new PurchaseBean();
-            purchaseBean.setPurchaseID(purchaseModel.getStr("purchase_uuid"));
-            purchaseBean.setPurCode(purchaseModel.getStr("code"));
-            purchaseBean.setFundsSrc(purchaseModel.getStr("funds_src"));
-            purchaseBean.setFundsNature(String.valueOf(purchaseModel.getInt("funds_nature_id")));
-            purchaseBean.setContacts(purchaseModel.getStr("contacts"));
-            purchaseBean.setPhoneNum(purchaseModel.getStr("phone_num"));
+            obj.put("purchase_id", purchaseModel.getStr("purchase_uuid"));
+            obj.put("pur_name", purchaseModel.getStr("name"));
+            obj.put("pur_code", purchaseModel.getStr("code"));
+            obj.put("funds_src", purchaseModel.getStr("funds_src"));
+            obj.put("contacts", purchaseModel.getStr("contacts"));
+            obj.put("phone_num", purchaseModel.getStr("phone_num"));
+            obj.put("funds_nature", purchaseModel.getInt("funds_nature_id").toString());
+            obj.put("commodity_pre_price", purchaseModel.getDouble("commodity_pre_price").toString());
+            obj.put("service_pre_price", purchaseModel.getDouble("service_pre_price").toString());
+            obj.put("engineering_pre_price", purchaseModel.getDouble("engineering_pre_price").toString());
         }
 
-        return purchaseBean;
+        return obj;
+    }
+
+    public ArrayList<Map<String, String>> getAttachFiles(String strPurchaseID) {
+        String sql = "select paf.* from purchase_attach_file paf left join purchase p on " +
+                "paf.purchase_id=p.id where p.purchase_uuid='" + strPurchaseID + "'";
+
+        List<PurchaseFileAttachModel> lstModel = PurchaseFileAttachModel.dao.find(sql);
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstModel.size(); i++) {
+            PurchaseFileAttachModel item = lstModel.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("id", item.getStr("uuid"));
+            m.put("name", item.getStr("name"));
+            m.put("size", item.getInt("size").toString());
+            lst.add(m);
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getOpinionItems(String strPurchaseID) {
+        String sql = "select ar.* from approve_record ar left join purchase p on " +
+                "ar.purchase_id=p.id where p.purchase_uuid='" + strPurchaseID + "'";
+
+        List<ApproveRecordModel> lstModel = ApproveRecordModel.dao.find(sql);
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstModel.size(); i++) {
+            ApproveRecordModel item = lstModel.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            //m.put("op_department", item.strApproveDepartment);
+            //m.put("op_approve_person", item.strApprovePerson);
+            m.put("op_approve_date", item.getStr("approve_date"));
+            m.put("op_content", item.getStr("opinion"));
+            lst.add(m);
+        }
+        return lst;
+    }
+
+    public ArrayList<Map<String, String>> getComplaintsItems(String strPurchaseID) {
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        /*for (int i=0; i<lstComplaints.size(); i++) {
+            ComplaintsBean item = lstComplaints.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("comp_deal_date", item.strDealwithDate);
+            m.put("comp_content", item.strDealwithOpinion);
+            lst.add(m);
+        }*/
+        return lst;
     }
 
     public String addProducts(String strPurchaseID, JSONObject obj, String strProductType) {
@@ -192,13 +248,12 @@ public class PurchaseModel extends Model<PurchaseModel> {
 
         int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
-        if (purchaseModel != null) {
-            nPurchaseID = purchaseModel.get("id");
-        } else {
+        if (purchaseModel == null) {
             purchaseModel = new PurchaseModel();
             purchaseModel.set("purchase_uuid", strPurchaseID).save();
             nPurchaseID = purchaseModel.get("id");
         }
+        nPurchaseID = purchaseModel.get("id");
         PurchaseFileAttachModel.dao.addAttachFile(nPurchaseID, item);
     }
 }

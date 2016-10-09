@@ -13,7 +13,7 @@ function initializeUploader() {
     var filters = { max_file_size : '10mb',
                     mime_types: [
                         {title : "Image files", extensions : "jpg,gif,png"},
-                        {title : "Zip files", extensions : "zip"}]};
+                        {title : "Document files", extensions : "doc,pdf,xls"}]};
     var init = { PostInit: onPostInit,
                   FilesAdded: onFilesAdded,
                   FilesRemoved: onFilesRemoved,
@@ -217,7 +217,7 @@ function onLeftMenuLeftClick(node) {
             } else if (rootNode.type == 'payment') {
                 showPaymentPage();
             } else {
-                showAprovalPage();
+                showApprovalPage();
             }
         } else {
             baseData = null;
@@ -242,7 +242,7 @@ function onLeftMenuLeftClick(node) {
         }
     }
 
-    function showAprovalPage() {
+    function showApprovalPage() {
         if (node.type == 'to_approve') {
             $('#contentDiv').panel('setTitle','待审批项目');
             if (rootNode.type == "accounting") {
@@ -302,6 +302,7 @@ function onLeftMenuLeftClick(node) {
 function onLoadPurchase() {
     if (baseData != null) {
         document.getElementById("purchase_id").value = baseData['purchase_id'];
+        $('#pur_name').textbox('setText', baseData['pur_name']);
         $('#pur_code').textbox('setText', baseData['pur_code']);
         $('#funds_src').textbox('setText', baseData['funds_src']);
         $('#contacts').textbox('setText', baseData['contacts']);
@@ -316,6 +317,7 @@ function onLoadPurchase() {
         if (curNode.type == 'create') {
             $('#pur_code').textbox('disable');
         } else {
+            $('#pur_name').textbox('disable');
             $('#pur_code').textbox('disable');
             $('#funds_src').textbox('disable');
             $('#contacts').textbox('disable');
@@ -550,6 +552,7 @@ function submitComplaintsOpinion () {
 }
 
 function savePackage() {
+    $('#tbToDivide').datagrid("acceptChanges");
     $.messager.confirm('操作提示','确认保存此分包?',function(r){
         if (r){
             var baseData = {};
@@ -605,37 +608,6 @@ function cancelPackage() {
     });
 }
 
-function submitPackages() {
-    var url = '/purchase/submit_packages';
-    var data = {purchase_id:document.getElementById("purchase_id").value};
-    $.messager.confirm('操作提示','确认提交分包?',function(r){
-        if (r){
-            $.ajax({
-                type: 'post',
-                url:url,
-                data: data,
-                dataType: 'json',
-                success: onSuccess,
-                error: onError
-            });
-        }
-    });
-
-    function onSuccess(r) {
-        if(r.result == "success") {
-            $('#menuTree').tree('reload', $('#to_divide').target);
-            var cur_node = {};
-            cur_node.id = document.getElementById("purchase_id").value;
-            cur_node.type = "to_divide";
-        } else {
-        }
-    }
-
-    function onError(x, e) {
-        alert("error savePurchasing");
-    }
-}
-
 function rePackage() {
     var url = '/package/cancel';
     var data = {package_id:document.getElementById("package_id").value};
@@ -689,6 +661,7 @@ function savePurchase() {
     function getData() {
         var baseData = {};
         baseData['purchase_id'] = document.getElementById("purchase_id").value;
+        baseData['pur_name'] = $('#pur_name').textbox('getText');
         baseData['pur_code'] = $('#pur_code').textbox('getText');
         baseData['funds_src'] = $('#funds_src').textbox('getText');
         baseData['contacts'] = $('#contacts').textbox('getText');
@@ -883,7 +856,7 @@ function removeAttachFile(file_id) {
 }
 
 function submitPackage() {
-    $.messager.confirm('操作提示','是否确认需要提交单位会计审核?',function(r){
+    $.messager.confirm('操作提示','是否确认提交分包?',function(r){
         if (r){
             var url = '/package/submit';
             var data = {package_id:document.getElementById("package_id").value};
@@ -903,4 +876,16 @@ function submitPackage() {
 
     function onError(x, e) {
     }
+}
+
+function approvePackage() {
+
+}
+
+function onClickToDivide(index, field) {
+    $('#tbToDivide').datagrid('beginEdit', index);
+}
+
+function onEndEditToDivide(index, row) {
+    $('#tbToDivide').datagrid('endEdit', index);
 }

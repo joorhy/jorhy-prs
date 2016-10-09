@@ -3,10 +3,7 @@ package controller;
 import bean.*;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
-import model.FundsNatureModel;
-import model.ProductModel;
-import model.PurchaseModel;
-import model.UserModel;
+import model.*;
 import org.activiti.engine.impl.util.json.JSONObject;
 
 import java.io.File;
@@ -21,7 +18,7 @@ import java.util.Map;
 public class PurchaseController extends Controller {
     public void toDivideItems() {
         String strPurchaseID = getPara("purchase_id");
-        ArrayList<Map<String, String>> lst = ProductModel.dao.getJSONToDivideItems(strPurchaseID);
+        ArrayList<Map<String, String>> lst = ProductModel.dao.getToDivideItems(strPurchaseID);
         setAttr("rows", lst);
         setAttr("total", lst.size());
         renderJson();
@@ -63,15 +60,6 @@ public class PurchaseController extends Controller {
     public void cancel() {
         String strPurchasingID = getPara("purchase_id");
         PurchaseModel.dao.cancelPurchase(strPurchasingID);
-        setAttr("result", "success");
-        renderJson();
-    }
-
-    // 提交分包
-    public void submit_packages() {
-        String strPurchaseID = getPara("purchase_id");
-        PurchaseModel.dao.submitPurchase(strPurchaseID);
-
         setAttr("result", "success");
         renderJson();
     }
@@ -126,13 +114,10 @@ public class PurchaseController extends Controller {
     // 下载附件
     public void download_file() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            String strFileID = getPara("file_id");
-            PurchaseAttachFileBean item = purchaseBean.getAttachFileItem(strFileID);
-            if (item != null) {
-                renderFile(new File(item.strFilePath));
-            }
+        String strFileID = getPara("file_id");
+        PurchaseAttachFileBean item = PurchaseFileAttachModel.dao.getAttachFileItem(strFileID);
+        if (item != null) {
+            renderFile(new File(item.strFilePath));
         } else {
             renderJson();
         }
@@ -142,18 +127,15 @@ public class PurchaseController extends Controller {
     public void remove_file() {
         String strPurchaseID = getPara("purchase_id");
         if (strPurchaseID != null) {
-            PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-            if (purchaseBean != null) {
-                String strFileID = getPara("file_id");
-                PurchaseAttachFileBean item = purchaseBean.getAttachFileItem(strFileID);
-                if (item != null) {
-                    File file = new File(item.strFilePath);
-                    if (file != null) {
-                        file.delete();
-                    }
+            String strFileID = getPara("file_id");
+            PurchaseAttachFileBean item = PurchaseFileAttachModel.dao.getAttachFileItem(strFileID);
+            if (item != null) {
+                File file = new File(item.strFilePath);
+                if (file != null) {
+                    file.delete();
                 }
-                purchaseBean.delAttachFile(strFileID);
             }
+            PurchaseFileAttachModel.dao.delAttachFile(strFileID);
         }
         setAttr("result", "success");
         renderJson();
@@ -163,11 +145,8 @@ public class PurchaseController extends Controller {
     public void attach_files() {
         String strPurchaseID = getPara("purchase_id");
         if (strPurchaseID != null) {
-            PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-            if (purchaseBean != null) {
-                ArrayList<Map<String, String>> lst = purchaseBean.getJSONAttachFiles();
-                setAttr("files", lst);
-            }
+            ArrayList<Map<String, String>> lst = PurchaseModel.dao.getAttachFiles(strPurchaseID);
+            setAttr("files", lst);
         }
         renderJson();
     }
@@ -175,13 +154,9 @@ public class PurchaseController extends Controller {
     // 基础信息
     public void base_info() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("result", "success");
-            setAttr("base", purchaseBean.getJSONBaseData());
-        } else {
-            setAttr("result", "failed");
-        }
+        setAttr("result", "success");
+        setAttr("base", PurchaseModel.dao.getBaseData(strPurchaseID));
+
         renderJson();
     }
 
@@ -194,7 +169,7 @@ public class PurchaseController extends Controller {
     public void commodity_list() {
         String strPurchaseID = getPara("purchase_id");
         ArrayList<Map<String, String>> lst =
-                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.COMMODITY);
+                ProductModel.dao.getProductItems(strPurchaseID, ProductTypeBean.COMMODITY);
         setAttr("rows", lst);
         setAttr("total", lst.size());
         renderJson();
@@ -204,7 +179,7 @@ public class PurchaseController extends Controller {
     public void service_list() {
         String strPurchaseID = getPara("purchase_id");
         ArrayList<Map<String, String>> lst =
-                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.SERVICE);
+                ProductModel.dao.getProductItems(strPurchaseID, ProductTypeBean.SERVICE);
         setAttr("rows", lst);
         setAttr("total", lst.size());
         renderJson();
@@ -214,7 +189,7 @@ public class PurchaseController extends Controller {
     public void engineering_list() {
         String strPurchaseID = getPara("purchase_id");
         ArrayList<Map<String, String>> lst =
-                ProductModel.dao.getJSONProductItems(strPurchaseID, ProductTypeBean.ENGINEERING);
+                ProductModel.dao.getProductItems(strPurchaseID, ProductTypeBean.ENGINEERING);
         setAttr("rows", lst);
         setAttr("total", lst.size());
         renderJson();
@@ -223,28 +198,18 @@ public class PurchaseController extends Controller {
     // 审批意见列表
     public void opinion_list() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONOpinionItems());
-            setAttr("total", purchaseBean.getJSONOpinionItems().size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst = PurchaseModel.dao.getOpinionItems(strPurchaseID);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 
     // 投诉列表
     public void complaints_list() {
         String strPurchaseID = getPara("purchase_id");
-        PurchaseBean purchaseBean = PurchaseModel.dao.getPurchase(strPurchaseID);
-        if (purchaseBean != null) {
-            setAttr("rows", purchaseBean.getJSONComplaintsItems());
-            setAttr("total", purchaseBean.getJSONComplaintsItems().size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> lst = PurchaseModel.dao.getComplaintsItems(strPurchaseID);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 }

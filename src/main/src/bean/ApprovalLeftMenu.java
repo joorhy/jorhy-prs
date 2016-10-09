@@ -73,7 +73,7 @@ public class ApprovalLeftMenu {
         for (int i = 0; i< lstPurchasing.size(); i++) {
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", lstPurchasing.get(i).getPurchaseID());
-            childrenNode.put("text", lstPurchasing.get(i).getPurCode());
+            childrenNode.put("text", lstPurchasing.get(i).getPurName());
             childrenNode.put("iconCls", "icon-cut");
             String strNodeType = getNodeType(strUserRole,
                     PurchaseModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));

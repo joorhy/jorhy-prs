@@ -23,7 +23,7 @@
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="submitPackage()">提交审核</a></td>
+           onclick="approvePackage()">提交审核</a></td>
     </td>
 </div>
 </body>

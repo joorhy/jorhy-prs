@@ -11,13 +11,24 @@ import java.util.List;
 public class PackageProductModel extends Model<PackageProductModel> {
     public static final PackageProductModel dao = new PackageProductModel();
 
-    public void addProduct(int nPurchaseID, ProductBean productBean) {
-        PackageProductModel packageProductModel = new PackageProductModel();
-        packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
-                .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
-                .set("purchase_id", nPurchaseID).set("spec", productBean.strPrjSpec)
-                .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
-                .set("packaged_count", productBean.nPackagedCount).save();
+    public void addProduct(int nPackageID, ProductBean productBean) {
+        String sql = "select id from package_product p where p.uuid='" + productBean.strProductID + "'";
+
+        PackageProductModel packageProductModel = dao.findFirst(sql);
+        if (packageProductModel != null) {
+            packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
+                    .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
+                    .set("package_id", nPackageID).set("spec", productBean.strPrjSpec)
+                    .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
+                    .set("packaged_count", productBean.nPackagedCount).update();
+        } else {
+            packageProductModel = new PackageProductModel();
+            packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
+                    .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
+                    .set("package_id", nPackageID).set("spec", productBean.strPrjSpec)
+                    .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
+                    .set("packaged_count", productBean.nPackagedCount).save();
+        }
     }
 
     public void removePurchaseProducts(int nPurchaseID) {

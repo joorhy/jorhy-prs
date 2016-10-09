@@ -17,37 +17,36 @@ public class PackageModel extends Model<PackageModel> {
     public static final PackageModel dao = new PackageModel();
 
     public void savePackage(JSONObject obj) {
-        String strPackageID = obj.getString("package_uuid");
-        String strPackCode = obj.getString("package_code");
-        String strPurAddress = obj.getString("package_address");
-        String strExpertCount = obj.getString("expert_count");
+        String strPackageID = obj.getString("package_id");
+        String strPackCode = obj.getString("pack_code");
+        String strPurAddress = obj.getString("pur_address");
+        int nExpertCount = obj.getInt("expert_count");
         String strPurDate = obj.getString("pur_date");
         String strPurMethod = obj.getString("pur_method");
-        String strPublicity = obj.getString("publicity");
-        String strSupplier = obj.getString("vendor");
-        String strAmount = obj.getString("amount");
+        Boolean isPublicity = obj.getBoolean("pur_publicity");
+        String strSupplier = obj.getString("pur_supplier");
+        double fAmount = obj.getDouble("pur_amount");
         String strPurchaseID = obj.getString("purchase_id");
 
         String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
         int nPackageId = 0;
-                PackageModel packageModel = PackageModel.dao.findFirst(url);
+        PackageModel packageModel = PackageModel.dao.findFirst(url);
         if (packageModel != null) {
             nPackageId = packageModel.get("id");
             packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
-                    .set("package_address", strPurAddress).set("expert_count", strExpertCount)
+                    .set("pur_address", strPurAddress).set("expert_count", nExpertCount)
                     .set("pur_date", strPurDate).set("pur_method", strPurMethod)
-                    .set("publicity", strPublicity).set("vendor", strSupplier)
-                    .set("amount", strAmount).set("package_activity_id", 1).update();
+                    .set("publicity", isPublicity).set("vendor", strSupplier)
+                    .set("amount", fAmount).set("package_activity_id", PackageActivityBean.INITIALIZE).update();
         } else {
             packageModel = new PackageModel();
             packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
-                    .set("package_address", strPurAddress).set("expert_count", strExpertCount)
+                    .set("pur_address", strPurAddress).set("expert_count", nExpertCount)
                     .set("pur_date", strPurDate).set("pur_method", strPurMethod)
-                    .set("publicity", strPublicity).set("vendor", strSupplier)
-                    .set("amount", strAmount).set("package_activity_id", 1).save();
+                    .set("publicity", isPublicity).set("vendor", strSupplier)
+                    .set("amount", fAmount).set("package_activity_id", PackageActivityBean.INITIALIZE).save();
             nPackageId = packageModel.get("id");
         }
-        ProductModel.dao.updatePackagedCount(strPurchaseID, 0);
     }
 
     public void removePackage(String strPacketID) {
@@ -110,16 +109,27 @@ public class PackageModel extends Model<PackageModel> {
         return ErrorCode.SUCCESS;
     }
 
-    public PackageBean getPackage(String strPacketID) {
-        String sql = "select p.*, a.status from package p left join package_activity a on " +
-                "p.package_activity_id=a.id where p.package_uuid='" + strPacketID + "'";
+    public Map<String, String> getBaseData(String strPacketID) {
+        String sql = "select p.*, pur.purchase_uuid, a.status from package p left join package_activity a on " +
+                "p.package_activity_id=a.id left join purchase pur on p.purchase_id=pur.id " +
+                "where p.package_uuid='" + strPacketID + "'";
         PackageModel packageModel = PackageModel.dao.findFirst(sql);
-        PackageBean purchaseBean = null;
+
+        Map<String, String> obj = new HashMap<String, String>();
         if (packageModel != null) {
-            purchaseBean = new PackageBean();
+            obj.put("package_id", packageModel.getStr("package_uuid"));
+            obj.put("pack_code", packageModel.getStr("package_code"));
+            obj.put("pur_address", packageModel.getStr("pur_address"));
+            obj.put("expert_count",packageModel.getInt("expert_count").toString());
+            obj.put("pur_date", packageModel.getStr("pur_date"));
+            obj.put("pur_method", packageModel.getStr("pur_method"));
+            obj.put("pur_publicity", packageModel.getBoolean("publicity").toString());
+            obj.put("pur_supplier", packageModel.getStr("vendor"));
+            obj.put("pur_amount", packageModel.getDouble("amount").toString());
+            obj.put("purchase_id", packageModel.getStr("purchase_uuid"));
         }
 
-        return purchaseBean;
+        return obj;
     }
 
     public ArrayList<Map<String, String>> getPackageList(String strPurchaseID) {
@@ -153,34 +163,77 @@ public class PackageModel extends Model<PackageModel> {
         return lst;
     }
 
-    public String addProducts(String strPackageID, JSONObject obj) {
-        String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
+    public ArrayList<Map<String, String>> getProductItems(String strPackageID) {
+        String sql = "select pp.* from package_product pp left join package p on pp.package_id=p.id " +
+                "where p.package_uuid='" + strPackageID + "'";
 
-        int nPackageID = 0;
-        PackageModel packageModel = PackageModel.dao.findFirst(url);
-        if (packageModel != null) {
-            nPackageID = packageModel.get("id");
-        } else {
-            packageModel = new PackageModel();
-            packageModel.set("purchase_uuid", strPackageID).save();
-            nPackageID = packageModel.get("id");
+        List<PackageProductModel> lstModel = PackageProductModel.dao.find(sql);
+        ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
+        for (int i = 0; i < lstModel.size(); i++) {
+            PackageProductModel item = lstModel.get(i);
+            Map<String, String> obj = new HashMap<String, String>();
+            obj.put("project_id", item.getStr("uuid"));
+            obj.put("product_type", item.getStr("type"));
+            obj.put("prj_name", item.getStr("name"));
+            obj.put("prj_count", item.getInt("count").toString());
+            obj.put("prj_price", item.getDouble("price").toString());
+            obj.put("prj_pre_price", item.getDouble("pre_price").toString());
+            obj.put("prj_param", item.getStr("param"));
+            obj.put("prj_spec", item.getStr("spec"));
+            productArray.add(obj);
         }
+        return productArray;
+    }
 
-        int nTotal = obj.getInt("total");
-        JSONArray arr = obj.getJSONArray("rows");
-        for (int i=0; i<nTotal; i++) {
-            JSONObject item = (JSONObject)arr.get(i);
-            ProductBean prjItem = new ProductBean();
-            prjItem.strPrjName = item.getString("prj_name");
-            prjItem.nPrjCount = item.getInt("prj_count");
-            prjItem.fPrjPrice = item.getDouble("prj_price");
-            prjItem.strProductID = item.getString("project_id");
-            prjItem.strPrjSpec = item.getString("prj_spec");
-            prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
-            prjItem.strPrjParam = item.getString("prj_param");
-            prjItem.strPrjType = item.getString("prj_type");
-            prjItem.nPackagedCount = 0;
-            PackageProductModel.dao.addProduct(nPackageID, prjItem);
+    public ArrayList<Map<String, String>> getAttachFiles(String strPackageID) {
+        String sql = "select * from package_attach_file paf left join package p on paf.package_id=p.id " +
+                "where p.package_uuid='" + strPackageID + "'";
+
+        List<PackageFileAttachModel> lstModel = PackageFileAttachModel.dao.find(sql);
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+        for (int i=0; i<lstModel.size(); i++) {
+            PackageFileAttachModel item = lstModel.get(i);
+            Map<String, String> m = new HashMap<String, String>();
+            m.put("id", item.getStr("uuid"));
+            m.put("name", item.getStr("name"));
+            m.put("size", item.getInt("size").toString());
+            lst.add(m);
+        }
+        return lst;
+    }
+
+    public String addProducts(String strPackageID, String strPurchaseID, JSONObject obj) {
+        String sql = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
+        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+        if (purchaseModel != null) {
+            sql = "select id from package p where p.package_uuid='" + strPackageID + "'";
+
+            int nPackageID = 0;
+            PackageModel packageModel = PackageModel.dao.findFirst(sql);
+            if (packageModel == null) {
+                packageModel = new PackageModel();
+                packageModel.set("package_uuid", strPackageID).set("purchase_id", purchaseModel.getInt("id"))
+                        .set("package_activity_id", PackageActivityBean.INITIALIZE).save();
+            }
+            nPackageID = packageModel.get("id");
+
+            int nTotal = obj.getInt("total");
+            JSONArray arr = obj.getJSONArray("rows");
+            for (int i = 0; i < nTotal; i++) {
+                JSONObject item = (JSONObject) arr.get(i);
+                ProductBean prjItem = new ProductBean();
+                prjItem.strPrjName = item.getString("prj_name");
+                prjItem.nPrjCount = item.getInt("prj_count");
+                prjItem.fPrjPrice = item.getDouble("prj_price");
+                prjItem.strProductID = item.getString("project_id");
+                prjItem.strPrjSpec = item.getString("prj_spec");
+                prjItem.fPrjPrePrice = item.getDouble("prj_pre_price");
+                prjItem.strPrjParam = item.getString("prj_param");
+                prjItem.strPrjType = item.getString("product_type");
+                prjItem.nPackagedCount = item.getInt("prj_package_count");
+                PackageProductModel.dao.addProduct(nPackageID, prjItem);
+                ProductModel.dao.updatePackagedCount(prjItem.strProductID, prjItem.nPackagedCount);
+            }
         }
         return ErrorCode.SUCCESS;
     }

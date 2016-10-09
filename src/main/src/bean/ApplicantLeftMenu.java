@@ -29,7 +29,7 @@ public class ApplicantLeftMenu {
             PurchaseBean purchaseBean = lstPurchase.get(i);
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", purchaseBean.getPurchaseID());
-            childrenNode.put("text", purchaseBean.getPurCode());
+            childrenNode.put("text", purchaseBean.getPurName());
             childrenNode.put("iconCls", "icon-cut");
             switch (PurchaseModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case PurchaseActivityBean.INITIALIZE:

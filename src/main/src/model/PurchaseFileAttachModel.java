@@ -19,10 +19,32 @@ public class PurchaseFileAttachModel extends Model<PurchaseFileAttachModel> {
     }
 
     public void removePurchaseAttachFiles(int nPurchaseID) {
-        String url = "select paf.id from purchase_attach_file paf where paf.purchase_id=" + nPurchaseID;
-        List<PurchaseFileAttachModel> m = dao.find(url);
+        String sql = "select paf.id from purchase_attach_file paf where paf.purchase_id=" + nPurchaseID;
+        List<PurchaseFileAttachModel> m = dao.find(sql);
         dao.deleteById(m);
     }
 
+    public PurchaseAttachFileBean getAttachFileItem(String strFileID) {
+        String sql = "select paf.*, p.purchase_uuid from purchase_attach_file paf left join purchase p " +
+                "on paf.purchase_id=p.id where paf.uuid='" + strFileID + "'";
 
+        PurchaseFileAttachModel purchaseFileAttachModel = dao.findFirst(sql);
+        if (purchaseFileAttachModel != null) {
+            PurchaseAttachFileBean purchaseAttachFileBean = new PurchaseAttachFileBean();
+            purchaseAttachFileBean.strFileID = purchaseFileAttachModel.getStr("uuid");
+            purchaseAttachFileBean.strFileName = purchaseFileAttachModel.getStr("name");
+            purchaseAttachFileBean.strFilePath = purchaseFileAttachModel.getStr("path");
+            purchaseAttachFileBean.fileSize = purchaseFileAttachModel.getInt("size");
+            purchaseAttachFileBean.strPurchaseID = purchaseFileAttachModel.getStr("purchase_uuid");
+
+            return purchaseAttachFileBean;
+        }
+        return null;
+    }
+
+    public void delAttachFile(String strFileID) {
+        String sql = "select paf.id from purchase_attach_file paf where paf.uuid='" + strFileID + "'";
+        PurchaseFileAttachModel purchaseFileAttachModel = dao.findFirst(sql);
+        purchaseFileAttachModel.delete();
+    }
 }

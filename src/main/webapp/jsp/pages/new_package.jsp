@@ -26,7 +26,9 @@
         <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
                onclick="savePackage()">保存</a></td>
         <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-               onclick="cancelPackage()">取消</a></td>
+               onclick="submitPackage()">提交分包</a></td>
+        <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+               onclick="cancelPackage()">撤销消</a></td>
         </td>
     </div>
 </body>

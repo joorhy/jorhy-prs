@@ -32,15 +32,12 @@ public class PackageController extends Controller {
         JSONObject objBaseData = new JSONObject(strBaseData);
         JSONObject objProducts = new JSONObject(strProducts);
         String strPackageID = objBaseData.getString("package_id");
-        PackageModel.dao.addProducts(strPackageID, objProducts);
+        String strPurchaseID = objBaseData.getString("purchase_id");
+        PackageModel.dao.addProducts(strPackageID, strPurchaseID, objProducts);
         PackageModel.dao.savePackage(objBaseData);
 
         setAttr("result", "success");
         renderJson();
-    }
-
-    public void submitPackage() {
-
     }
 
     // 取消
@@ -101,13 +98,10 @@ public class PackageController extends Controller {
     // 下载附件
     public void download_file() {
         String strPackageID = getPara("package_id");
-        PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
-        if (packageBean != null) {
-            String strFileID = getPara("file_id");
-            PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
-            if (item != null) {
-                renderFile(new File(item.strFilePath));
-            }
+        String strFileID = getPara("file_id");
+        PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
+        if (item != null) {
+            renderFile(new File(item.strFilePath));
         } else {
             renderJson();
         }
@@ -117,18 +111,15 @@ public class PackageController extends Controller {
     public void remove_file() {
         String strPackageID = getPara("package_id");
         if (strPackageID != null) {
-            PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
-            if (packageBean != null) {
-                String strFileID = getPara("file_id");
-                PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
-                if (item != null) {
-                    File file = new File(item.strFilePath);
-                    if (file != null) {
-                        file.delete();
-                    }
+            String strFileID = getPara("file_id");
+            PackageAttachFileBean item = PackageFileAttachModel.dao.getAttachFileItem(strFileID);
+            if (item != null) {
+                File file = new File(item.strFilePath);
+                if (file != null) {
+                    file.delete();
                 }
-                PackageFileAttachModel.dao.removeAttachFile(strFileID);
             }
+            PackageFileAttachModel.dao.removeAttachFile(strFileID);
         }
         setAttr("result", "success");
         renderJson();
@@ -139,11 +130,8 @@ public class PackageController extends Controller {
         String strPackageID = getPara("package_id");
         if (strPackageID != null)
         {
-            PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
-            if (packageBean != null) {
-                ArrayList<Map<String, String>> lst = packageBean.getJSONAttachFiles();
-                setAttr("files", lst);
-            }
+            ArrayList<Map<String, String>> lst = PackageModel.dao.getAttachFiles(strPackageID);
+            setAttr("files", lst);
         }
         renderJson();
     }
@@ -151,27 +139,18 @@ public class PackageController extends Controller {
     // 基础信息
     public void base_info() {
         String strPackageID = getPara("package_id");
-        PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
-        if (packageBean != null) {
-            setAttr("result", "success");
-            setAttr("base", packageBean.getJSONBaseData());
-        } else {
-            setAttr("result", "failed");
-        }
+        setAttr("result", "success");
+        setAttr("base", PackageModel.dao.getBaseData(strPackageID));
         renderJson();
     }
 
     // 分包列表
     public void package_list() {
         String strPackageID = getPara("package_id");
-        PackageBean packageBean = PackageModel.dao.getPackage(strPackageID);
-        if (packageBean != null) {
-            setAttr("rows", packageBean.getJSONPackageItems());
-            setAttr("total", packageBean.getJSONPackageItems().size());
-        } else {
-            setAttr("rows", new ArrayList<Map<String, String>>());
-            setAttr("total", 0);
-        }
+        ArrayList<Map<String, String>> productArr = PackageModel.dao.getProductItems(strPackageID);
+        setAttr("rows", productArr);
+        setAttr("total", productArr.size());
+
         renderJson();
     }
 }

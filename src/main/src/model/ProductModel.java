@@ -41,15 +41,16 @@ public class ProductModel extends Model<ProductModel> {
         dao.deleteById(m);
     }
 
-    public void updatePackagedCount(String strPurchaseID, int packagedCount) {
-        String sql = "select p.id from product p where p.purchase_id=" + strPurchaseID;
+    public void updatePackagedCount(String strProductID, int packagedCount) {
+        String sql = "select p.id, p.packaged_count from product p where p.uuid='" + strProductID + "'";
         ProductModel productModel = ProductModel.dao.findFirst(sql);
         if (productModel != null) {
-            productModel.set("packaged_count", packagedCount).update();
+            int nPackagedCount = productModel.get("packaged_count");
+            productModel.set("packaged_count", nPackagedCount + packagedCount).update();
         }
     }
 
-    public ArrayList<Map<String, String>> getJSONProductItems(String strPurchaseID, String strProductType) {
+    public ArrayList<Map<String, String>> getProductItems(String strPurchaseID, String strProductType) {
         String sql = "select p.* from product p left join purchase pur on p.purchase_id=pur.id where " +
                 "pur.purchase_uuid='" + strPurchaseID +  "' and p.type='" + strProductType + "'";
 
@@ -71,7 +72,7 @@ public class ProductModel extends Model<ProductModel> {
         return productArray;
     }
 
-    public ArrayList<Map<String, String>> getJSONToDivideItems(String strPurchaseID) {
+    public ArrayList<Map<String, String>> getToDivideItems(String strPurchaseID) {
         String sql = "select p.* from product p left join purchase pur on p.purchase_id=pur.id where " +
                 "pur.purchase_uuid='" + strPurchaseID +  "'";
         List<ProductModel> productModelList = dao.find(sql);
@@ -83,7 +84,8 @@ public class ProductModel extends Model<ProductModel> {
                 obj.put("project_id", item.getStr("uuid"));
                 obj.put("product_type", item.getStr("type"));
                 obj.put("prj_name", item.getStr("name"));
-                obj.put("prj_count", String.valueOf(item.getInt("count")));
+                obj.put("prj_package_count", String.valueOf(item.getInt("count") - item.getInt("packaged_count")));
+                obj.put("prj_count", String.valueOf(item.getInt("count") - item.getInt("packaged_count")));
                 obj.put("prj_price", String.valueOf(item.getDouble("price")));
                 obj.put("prj_pre_price", String.valueOf(item.getDouble("pre_price")));
                 obj.put("prj_param", item.getStr("param"));

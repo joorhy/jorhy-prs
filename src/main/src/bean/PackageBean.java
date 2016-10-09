@@ -12,17 +12,17 @@ import java.util.Map;
  */
 public class PackageBean {
     private String strPackID;                        // 包ID
-    public String strPackName;                      // 包名
-    public String strPackCode;                      // 采购文号
-    public String strPurAddress;                    // 采购地点
-    public String strPurDate;                       // 采购日期
-    public String strExpertCount;                   // 抽取专家人数
-    public String strPurMethod;                     // 采购方式
-    public String strPublicity;                     // 采购需求公告
-    public String strSupplier;                      // 中标供应商
-    public String strAmount;                        // 中标金额
-    public String strPurchaseID;                    // 采购函ID
-    public int packageCount;
+    private String strPackName;                      // 包名
+    private String strPackCode;                      // 采购文号
+    private String strPurAddress;                    // 采购地点
+    private String strPurDate;                       // 采购日期
+    private Integer nExpertCount;                   // 抽取专家人数
+    private String strPurMethod;                     // 采购方式
+    private Boolean isPublicity;                     // 采购需求公告
+    private String strSupplier;                      // 中标供应商
+    private Double fAmount;                        // 中标金额
+    private String strPurchaseID;                    // 采购函ID
+    private int nPackageCount;
 
     public ArrayList<ProductBean> lstProduct = new ArrayList<ProductBean>();           // 采购项目
     /**
@@ -37,53 +37,51 @@ public class PackageBean {
         return strPackID;
     }
 
-    /**
-     * 定义 JSON 接口
-     */
-    public Map<String, String> getJSONBaseData() {
-        Map<String, String> obj = new HashMap<String, String>();
-        obj.put("package_id", strPackID);
-        obj.put("pack_code", strPackCode);
-        obj.put("pur_address", strPurAddress);
-        obj.put("expert_count", strExpertCount);
-        obj.put("pur_date", strPurDate);
-        obj.put("pur_method", strPurMethod);
-        obj.put("pur_publicity", strPublicity);
-        obj.put("pur_supplier", strSupplier);
-        obj.put("pur_amount", strAmount);
-        obj.put("purchase_id", strPurchaseID);
-
-        return obj;
+    public void setPackageID(String strPackageID) {
+        this.strPackID = strPackageID;
     }
 
-    public ArrayList<Map<String, String>> getJSONPackageItems() {
-        ArrayList<Map<String, String>> productArray = new ArrayList<Map<String, String>>();
-        for (int i = 0; i < lstProduct.size(); i++) {
-            ProductBean item = lstProduct.get(i);
-            Map<String, String> obj = new HashMap<String, String>();
-            obj.put("project_id", item.strProductID);
-            obj.put("product_type", item.strPrjType);
-            obj.put("prj_name", item.strPrjName);
-            obj.put("prj_count", String.valueOf(item.nPrjCount));
-            obj.put("prj_price", String.valueOf(item.fPrjPrice));
-            obj.put("prj_pre_price", String.valueOf(item.fPrjPrePrice));
-            obj.put("prj_param", item.strPrjParam);
-            obj.put("prj_spec", item.strPrjSpec);
-            productArray.add(obj);
-        }
-        return productArray;
+    public void setPackageName(String strPackName) {
+        this.strPackName = strPackName;
     }
 
-    public ArrayList<Map<String, String>> getJSONAttachFiles() {
-        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int i=0; i<lstAttachFile.size(); i++) {
-            PackageAttachFileBean item = lstAttachFile.get(i);
-            Map<String, String> m = new HashMap<String, String>();
-            m.put("id", item.strFileID);
-            m.put("name", item.strFileName);
-            m.put("size", String.valueOf(item.fileSize));
-            lst.add(m);
-        }
-        return lst;
+    public void setPackageCode(String strPackageCode) {
+        this.strPackCode = strPackageCode;
+    }
+
+    public void setPurAddress(String strPurAddress) {
+        this.strPurAddress = strPurAddress;
+    }
+
+    public void setPurDate(String strPurDate) {
+        this.strPurDate = strPurDate;
+    }
+
+    public void setExpertCount(int nExpertCount) {
+        this.nExpertCount = nExpertCount;
+    }
+
+    public void setPurMethod(String strPurMethod) {
+        this.strPurMethod = strPurMethod;
+    }
+
+    public void setPublicity(Boolean isPublicity) {
+        this.isPublicity = isPublicity;
+    }
+
+    public void setSupplier(String strSupplier) {
+        this.strSupplier = strSupplier;
+    }
+
+    public void setAmount(Double fAmount) {
+        this.fAmount = fAmount;
+    }
+
+    public void setPurchaseID (String strPurchaseID) {
+        this.strPurchaseID = strPurchaseID;
+    }
+
+    public void setPackageCount (int nPackageCount) {
+        this.nPackageCount = nPackageCount;
     }
 }

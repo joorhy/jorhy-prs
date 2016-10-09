@@ -29,7 +29,7 @@
 <body onload="refreshCode();">
 <div class="div">
     <form  action="/login" method="post">
-        <div class="fl"><img src="login.jpg"></div>
+        <!--div class="fl"><img src="login.jpg"></div-->
         <table>
             <tr align="left">
                 <td>用户名：</td>

@@ -31,7 +31,7 @@ public class PurchaseLeftMenu {
             PurchaseBean purchaseBean = lstPurchase.get(i);
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", lstPurchase.get(i).getPurchaseID());
-            childrenNode.put("text", lstPurchase.get(i).getPurCode());
+            childrenNode.put("text", lstPurchase.get(i).getPurName());
             childrenNode.put("iconCls", "icon-cut");
             switch (purchaseBean.getComplaintsStatus()) {
                 case 1:// 投诉
