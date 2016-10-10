@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `approve_record` (
   CONSTRAINT `fk_approve_record_pruchase_activity1` FOREIGN KEY (`purchase_activity_id`) REFERENCES `purchase_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_approve_record_purchase1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_approve_record_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.approve_record 的数据：~0 rows (大约)
+-- 正在导出表  prs.approve_record 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `approve_record` DISABLE KEYS */;
 /*!40000 ALTER TABLE `approve_record` ENABLE KEYS */;
 
@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `finance_dept` (
 -- 正在导出表  prs.finance_dept 的数据：~5 rows (大约)
 /*!40000 ALTER TABLE `finance_dept` DISABLE KEYS */;
 REPLACE INTO `finance_dept` (`id`, `name`, `role_id`) VALUES
-	(1, '农业股', 7),
-	(2, '教科文股', 8),
+	(1, '农业股', 8),
+	(2, '教科文股', 10),
 	(3, '投资股', 9),
-	(4, '行财股', 10),
-	(5, '社保股', 11);
+	(4, '行财股', 11),
+	(5, '社保股', 12);
 /*!40000 ALTER TABLE `finance_dept` ENABLE KEYS */;
 
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `package` (
   KEY `fk_package_package_activity1_idx` (`package_activity_id`),
   CONSTRAINT `fk_package_package_activity1` FOREIGN KEY (`package_activity_id`) REFERENCES `package_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_package_purchase1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在导出表  prs.package 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `package` DISABLE KEYS */;
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `package_product` (
   PRIMARY KEY (`id`),
   KEY `fk_product_copy1_package1_idx` (`package_id`),
   CONSTRAINT `fk_product_copy1_package1` FOREIGN KEY (`package_id`) REFERENCES `package` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在导出表  prs.package_product 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `package_product` DISABLE KEYS */;
@@ -233,18 +233,20 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `perm` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.permission 的数据：~7 rows (大约)
+-- 正在导出表  prs.permission 的数据：~9 rows (大约)
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 REPLACE INTO `permission` (`id`, `perm`) VALUES
 	(1, 'applicant'),
 	(2, 'accounting'),
-	(3, 'director'),
-	(4, 'regulatory'),
-	(5, 'bureau'),
-	(6, 'purchase'),
-	(7, 'payment');
+	(3, 'leader'),
+	(4, 'director'),
+	(5, 'sector'),
+	(6, 'regulatory'),
+	(7, 'bureau'),
+	(8, 'purchase'),
+	(9, 'payment');
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 
 
@@ -291,17 +293,23 @@ CREATE TABLE IF NOT EXISTS `purchase` (
   `commodity_pre_price` double DEFAULT NULL,
   `service_pre_price` double DEFAULT NULL,
   `engineering_pre_price` double DEFAULT NULL,
+  `dept_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_purchase_funds_nature1_idx` (`funds_nature_id`),
   KEY `fk_purchase_pruchase_activity1_idx` (`purchase_activity_id`),
+  KEY `fk_purchase_dept1_idx` (`dept_id`),
+  KEY `fk_purchase_role1_idx` (`role_id`),
+  CONSTRAINT `fk_purchase_dept1` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_purchase_role1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_purchase_funds_nature1` FOREIGN KEY (`funds_nature_id`) REFERENCES `funds_nature` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_purchase_pruchase_activity1` FOREIGN KEY (`purchase_activity_id`) REFERENCES `purchase_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  prs.purchase 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
-REPLACE INTO `purchase` (`id`, `code`, `purchase_uuid`, `name`, `funds_src`, `funds_nature_id`, `contacts`, `phone_num`, `purchase_activity_id`, `commodity_pre_price`, `service_pre_price`, `engineering_pre_price`) VALUES
-	(8, '1', '2e5QEb9HanUwBgTHYKvukzsmmzSqRzXdH3fQ', '过程', '1', 1, '1', '1', 1, 100, 100, 100);
+REPLACE INTO `purchase` (`id`, `code`, `purchase_uuid`, `name`, `funds_src`, `funds_nature_id`, `contacts`, `phone_num`, `purchase_activity_id`, `commodity_pre_price`, `service_pre_price`, `engineering_pre_price`, `dept_id`, `role_id`) VALUES
+	(8, '1', '2e5QEb9HanUwBgTHYKvukzsmmzSqRzXdH3fQ', '过程', '1', 1, '1', '1', 2, 100, 100, 100, 1, 2);
 /*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
 
 
@@ -311,19 +319,21 @@ CREATE TABLE IF NOT EXISTS `purchase_activity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.purchase_activity 的数据：~8 rows (大约)
+-- 正在导出表  prs.purchase_activity 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `purchase_activity` DISABLE KEYS */;
 REPLACE INTO `purchase_activity` (`id`, `status`) VALUES
-	(1, 'initialize'),
-	(2, 'acc_approve'),
-	(3, 'dir_approve'),
-	(4, 'financial_approve'),
-	(5, 'fin_bureau_approve'),
-	(6, 'subcontracting'),
-	(7, 'subcontracted'),
-	(8, 'paid');
+	(1, 'applicant'),
+	(2, 'accounting'),
+	(3, 'leader'),
+	(4, 'director'),
+	(5, 'sector'),
+	(6, 'regulatory'),
+	(7, 'bureau'),
+	(8, 'purchase'),
+	(9, 'payment'),
+	(10, 'paid');
 /*!40000 ALTER TABLE `purchase_activity` ENABLE KEYS */;
 
 
@@ -339,10 +349,12 @@ CREATE TABLE IF NOT EXISTS `purchase_attach_file` (
   PRIMARY KEY (`id`),
   KEY `fk_purchase_attach_file_purchase1_idx` (`purchase_id`),
   CONSTRAINT `fk_purchase_attach_file_purchase1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.purchase_attach_file 的数据：~0 rows (大约)
+-- 正在导出表  prs.purchase_attach_file 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `purchase_attach_file` DISABLE KEYS */;
+REPLACE INTO `purchase_attach_file` (`id`, `uuid`, `name`, `path`, `size`, `purchase_id`) VALUES
+	(1, 'o_1aumh7qpq1s1i1t8f9jus4nh9t7', 'IMG_20160908_092400_426.jpg', 'D:\\share\\jorhy-prs\\src\\main\\webapp\\upload\\IMG_20160908_092400_426.jpg', 2720982, 8);
 /*!40000 ALTER TABLE `purchase_attach_file` ENABLE KEYS */;
 
 
@@ -359,9 +371,9 @@ CREATE TABLE IF NOT EXISTS `role` (
   KEY `fk_role_permission1_idx` (`permission_id`),
   CONSTRAINT `fk_role_permission1` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_role_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.role 的数据：~14 rows (大约)
+-- 正在导出表  prs.role 的数据：~17 rows (大约)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 REPLACE INTO `role` (`id`, `role`, `post`, `user_id`, `permission_id`) VALUES
 	(1, 'applicant', '办事员', 1, 1),
@@ -370,14 +382,17 @@ REPLACE INTO `role` (`id`, `role`, `post`, `user_id`, `permission_id`) VALUES
 	(4, 'financial_leader', '分管财政局长', 4, 3),
 	(5, 'organization_leader', '分管组织部长', 5, 3),
 	(6, 'propaganda_leader', '分管宣传部长', 6, 3),
-	(7, 'agriculture_sector', '农业股', 7, 4),
-	(8, 'ESC_sector', '教科文股', 8, 4),
-	(9, 'investment_sector', '投资股', 9, 4),
-	(10, 'AF_sector', '行财股', 10, 4),
-	(11, 'SS_sector', '社保股', 11, 4),
-	(12, 'financial_bureau', '财政局局长', 12, 5),
-	(13, 'purchase', '执行部门', 13, 6),
-	(14, 'payment', '支付中心', 14, 7);
+	(7, 'director', '局长', 16, 4),
+	(8, 'agriculture_sector', '农业股', 7, 5),
+	(9, 'ESC_sector', '教科文股', 8, 5),
+	(10, 'investment_sector', '投资股', 9, 5),
+	(11, 'AF_sector', '行财股', 10, 5),
+	(12, 'SS_sector', '社保股', 11, 5),
+	(13, 'regulatory_unit', '财政监管股', 15, 6),
+	(14, 'financial_bureau', '财政局局长', 12, 7),
+	(15, 'purchase', '执行部门', 13, 8),
+	(16, 'payment', '支付中心', 14, 9),
+	(17, 'director', '局长', 7, 4);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 
 
@@ -392,9 +407,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   KEY `fk_user_dept_idx` (`dept_id`),
   CONSTRAINT `fk_user_dept` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.user 的数据：~14 rows (大约)
+-- 正在导出表  prs.user 的数据：~16 rows (大约)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 REPLACE INTO `user` (`id`, `username`, `passwd`, `dept_id`, `real_name`) VALUES
 	(1, '1', '1', 1, '赵某某'),
@@ -410,7 +425,9 @@ REPLACE INTO `user` (`id`, `username`, `passwd`, `dept_id`, `real_name`) VALUES
 	(11, '11', '11', 2, '小褚'),
 	(12, '12', '12', 2, '卫局长'),
 	(13, '13', '13', 3, '蒋工'),
-	(14, '14', '14', 1, '沈会计');
+	(14, '14', '14', 1, '沈会计'),
+	(15, '15', '15', 2, '李XX'),
+	(16, '16', '16', 1, '李镇长');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Model;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
 
     private Map<String,ArrayList<PurchaseAttachFileBean>> mapAttachFile = new HashMap<String, ArrayList<PurchaseAttachFileBean>>();
     private ArrayList<PurchaseBean> lstPurchaseData = new ArrayList<PurchaseBean>();
-    public String savePurchase(JSONObject obj) {
+    public String savePurchase(JSONObject obj, String strUsername) {
         String strPurchaseID = obj.getString("purchase_id");
         String strPurName = obj.getString("pur_name");
         String strPurCode = obj.getString("pur_code");
@@ -29,42 +30,44 @@ public class PurchaseModel extends Model<PurchaseModel> {
         Double fCommodityPrePrice = obj.getDouble("commodity_pre_price");
         Double fServicePrePrice = obj.getDouble("service_pre_price");
         Double fEngineeringPrePrice = obj.getDouble("engineering_pre_price");
-
-        String url = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
-        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
-        int nPurchaseID = 0;
-        if (purchaseModel != null) {
-            nPurchaseID = purchaseModel.get("id");
-            purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode).set("name", strPurName)
-                    .set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
-                    .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
-                    .set("service_pre_price", fServicePrePrice)
-                    .set("engineering_pre_price", fEngineeringPrePrice).update();
-        } else {
-            purchaseModel = new PurchaseModel();
-            purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
-                    .set("name", strPurName).set("funds_src", strFundsSrc).set("contacts", strContacts)
-                    .set("phone_num", strPhoneNum).set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
-                    .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
-                    .set("service_pre_price", fServicePrePrice)
-                    .set("engineering_pre_price", fEngineeringPrePrice).save();
-            nPurchaseID = purchaseModel.get("id");
+        String sql = "select u.dept_id,r.id from user u left join role r on r.user_id=u.id where " +
+                "u.username='" + strUsername + "'";
+        UserModel userModel = UserModel.dao.findFirst(sql);
+        if (userModel != null) {
+            sql = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
+            PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+            if (purchaseModel != null) {
+                purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode).set("name", strPurName)
+                        .set("funds_src", strFundsSrc).set("contacts", strContacts)
+                        .set("phone_num", strPhoneNum).set("engineering_pre_price", fEngineeringPrePrice)
+                        .set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
+                        .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
+                        .set("service_pre_price", fServicePrePrice).set("dept_id", userModel.getInt("dept_id"))
+                        .set("role_id", userModel.getInt("id")).update();
+            } else {
+                purchaseModel = new PurchaseModel();
+                purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
+                        .set("name", strPurName).set("funds_src", strFundsSrc).set("contacts", strContacts)
+                        .set("phone_num", strPhoneNum).set("engineering_pre_price", fEngineeringPrePrice)
+                        .set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
+                        .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
+                        .set("service_pre_price", fServicePrePrice).set("dept_id", userModel.getInt("dept_id"))
+                        .set("role_id", userModel.getInt("id")).save();
+            }
         }
-
         return ErrorCode.SUCCESS;
     }
 
     public String submitPurchase(String strPurchaseID) {
-        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid='"
-                + strPurchaseID + "'";
+        String url = "select p.id,p.purchase_activity_id,p.role_id from purchase p " +
+                "where p.purchase_uuid='" + strPurchaseID + "'";
 
-        int nPurchaseID = 0;
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
-            nPurchaseID = purchaseModel.get("id");
             int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
-            purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1).update();
+            int nRoleId = purchaseModel.get("role_id");
+            purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1)
+                    .set("role_id", nRoleId + 1).update();
         }
         return ErrorCode.SUCCESS;
     }
@@ -85,19 +88,30 @@ public class PurchaseModel extends Model<PurchaseModel> {
     }
 
     public String agreePurchase(String strPurchaseID, PurchaseOpinionBean purchaseOpinionBean) {
-        String url = "select id, purchase_activity_id from purchase p where p.purchase_uuid='"
-                + strPurchaseID + "'";
+        String sql = "select u.dept_id,r.id,r.permission_id from user u left join role r on " +
+                "r.user_id=u.id where u.id=" + purchaseOpinionBean.userID;
+        UserModel userModel = UserModel.dao.findFirst(sql);
+        if (userModel != null) {
+            sql = "select p.id,p.purchase_activity_id,p.dept_id,p.role_id from purchase p " +
+                    "where p.purchase_uuid='" + strPurchaseID + "'";
+            PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+            if (purchaseModel != null) {
+                int nPurchaseID = purchaseModel.get("id");
+                int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
+                if (purchaseOpinionBean.nextApproveRoleId == 0) {
+                    purchaseOpinionBean.nextApproveRoleId = (Integer)purchaseModel.get("role_id") + 1;
+                }
 
-        int nPurchaseID = 0;
-        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
-        if (purchaseModel != null) {
-            nPurchaseID = purchaseModel.get("id");
-            int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
-            if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID + 1, purchaseOpinionBean)
-                    == ErrorCode.SUCCESS) {
-                purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1).update();
+                if (userModel.getInt("permission_id") == purchaseModel.get("purchase_activity_id")) {
+                    if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID + 1,
+                            purchaseOpinionBean) == ErrorCode.SUCCESS) {
+                        purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1)
+                                .set("role_id", purchaseOpinionBean.nextApproveRoleId).update();
+                    }
+                }
             }
         }
+
         return ErrorCode.SUCCESS;
     }
 
@@ -108,7 +122,8 @@ public class PurchaseModel extends Model<PurchaseModel> {
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(url);
         if (purchaseModel != null) {
             nPurchaseID = purchaseModel.get("id");
-            purchaseModel.set("purchase_activity_id", 1).update();
+            purchaseModel.set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
+                    .set("role_id", RoleBean.APPLICANT).update();
         }
         return ErrorCode.SUCCESS;
     }
@@ -123,11 +138,8 @@ public class PurchaseModel extends Model<PurchaseModel> {
         return PurchaseActivityBean.INITIALIZE;
     }
 
-    public ArrayList<PurchaseBean> getPurchaseList() {
+    public ArrayList<PurchaseBean> getPurchaseList(String sql) {
         ArrayList<PurchaseBean> lstPurchaseBean = new ArrayList<PurchaseBean>();
-        String sql = "select p.purchase_uuid, p.code, p.name, p.funds_src, p.funds_nature_id, " +
-                "p.contacts,p.phone_num, a.status from purchase p left join purchase_activity a on " +
-                "p.purchase_activity_id=a.id";
         List<PurchaseModel> purchaseList = dao.find(sql);
         for (int i=0; i<purchaseList.size(); i++) {
             PurchaseModel item = purchaseList.get(i);
@@ -139,7 +151,6 @@ public class PurchaseModel extends Model<PurchaseModel> {
             purchaseBean.setFundsNature(String.valueOf(item.getInt("funds_nature_id")));
             purchaseBean.setContacts(item.getStr("contacts"));
             purchaseBean.setPhoneNum(item.getStr("phone_num"));
-            //purchaseBean.setS
             lstPurchaseBean.add(purchaseBean);
         }
         return lstPurchaseBean;
@@ -186,17 +197,22 @@ public class PurchaseModel extends Model<PurchaseModel> {
     public ArrayList<Map<String, String>> getOpinionItems(String strPurchaseID) {
         String sql = "select ar.* from approve_record ar left join purchase p on " +
                 "ar.purchase_id=p.id where p.purchase_uuid='" + strPurchaseID + "'";
+        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
 
         List<ApproveRecordModel> lstModel = ApproveRecordModel.dao.find(sql);
-        ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
-        for (int i=0; i<lstModel.size(); i++) {
+        for (int i = 0; i < lstModel.size(); i++) {
             ApproveRecordModel item = lstModel.get(i);
-            Map<String, String> m = new HashMap<String, String>();
-            //m.put("op_department", item.strApproveDepartment);
-            //m.put("op_approve_person", item.strApprovePerson);
-            m.put("op_approve_date", item.getStr("approve_date"));
-            m.put("op_content", item.getStr("opinion"));
-            lst.add(m);
+            sql = "select u.real_name,d.dept_name from user u left join dept d on u.dept_id=d.id " +
+                    "where u.id=" + item.getInt("user_id");
+            UserModel userModel = UserModel.dao.findFirst(sql);
+            if (userModel != null) {
+                Map<String, String> m = new HashMap<String, String>();
+                m.put("op_department", userModel.getStr("dept_name"));
+                m.put("op_approve_person", userModel.getStr("real_name"));
+                m.put("op_approve_date", item.getStr("approve_date"));
+                m.put("op_content", item.getStr("opinion"));
+                lst.add(m);
+            }
         }
         return lst;
     }

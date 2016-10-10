@@ -16,8 +16,11 @@ public class PaymentLeftMenu {
     public static final String PAID                   = "paid";                           // 已支付
 
     /** 定义静态函数 */
-    static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList();
+    static public JSONArray getTree(String strUsername) {
+        /** 仅查询分包完成的采购项目 */
+        String sql = "select p.* from purchase p where p.purchase_activity_id>="
+                + PurchaseActivityBean.SUBCONTRACTED;
+        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList(sql);
 
         JSONArray unpaidChildren = new JSONArray();
         JSONArray paidChildren = new JSONArray();

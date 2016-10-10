@@ -36,12 +36,18 @@
     <td>
     <td>上级审核人</td>
     <td>
-        <select id="approve_person" class="easyui-combobox" style="width:120px">
+        <!--select id="approve_person" class="easyui-combobox" style="width:120px">
             <option value="default">请选择审批人</option>
             <option value="nyjjz">农业局局长</option>
             <option value="czjjz">财政局局长</option>
             <option value="xcbz">宣传部长</option>
             <option value="zzbz">组织部长</option>
+        </select-->
+        <select id="approve_person" class="easyui-combobox" style="width:120px"
+                data-options="
+                    valueField: 'id',
+                    textField: 'text',
+                    url: '/purchase/approve_leader'">
         </select>
     </td>
     </td>

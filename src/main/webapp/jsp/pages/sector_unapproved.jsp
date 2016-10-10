@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: JooLiu
-  Date: 2016/8/22
-  Time: 17:59
+  Date: 2016/10/10
+  Time: 13:56
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -25,7 +25,7 @@
 </div><br/>
 <div>
     <jsp:include page="../element/purchase_opinion.jsp"/>
-</div><br/>
+</div>
 <div>
     <td align="left">
     <td style="width:15%;">审批意见</td><br/>
@@ -37,30 +37,11 @@
 </div><br/>
 <div align="right">
     <td>
-    <td>财政局资金分管股室</td>
-    <td>
-        <!--select id="approve_department" class="easyui-combobox" style="width:120px">
-            <option value="default">请选择分管股室</option>
-            <option value="nyg">农业股</option>
-            <option value="jkwg">教科文股</option>
-            <option value="tzg">投资股</option>
-            <option value="xcg">行财股</option>
-            <option value="sbg">社保股</option>
-        </select-->
-        <select id="approve_department" class="easyui-combobox" style="width:120px"
-                data-options="
-                    valueField: 'id',
-                    textField: 'text',
-                    url: '/purchase/approve_sector'">
-        </select>
-    </td>
-    </td>
-    <td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:120"
-           onclick="agreePurchase()">同意并提交审核</a></td>
+           onclick="agreePurchase()">同意</a></td>
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
            onclick="disagreePurchase()">不同意</a></td>
     </td>
-</div><br/>
-</body>
+</div>
+</body><br/>
 </html>

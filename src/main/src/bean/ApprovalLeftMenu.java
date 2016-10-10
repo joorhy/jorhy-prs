@@ -22,16 +22,44 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.ACC_APPROVE:
                     strNodeType = ApprovalLeftMenu.TO_APPROVE;
                     break;
+                case PurchaseActivityBean.LEAD_APPROVE:
                 case PurchaseActivityBean.DIR_APPROVE:
+                case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
                 case PurchaseActivityBean.SUBCONTRACTING:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
-        } else if (strUserRole.equals(RoleBean.DIRECTOR)) {
+        } else if (strUserRole.equals(RoleBean.LEADER)) {
+            switch (nStatus) {
+                case PurchaseActivityBean.LEAD_APPROVE:
+                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
+                    break;
+                case PurchaseActivityBean.DIR_APPROVE:
+                case PurchaseActivityBean.SECTOR_APPROVE:
+                case PurchaseActivityBean.FINANCIAL_APPROVE:
+                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
+                case PurchaseActivityBean.SUBCONTRACTING:
+                    strNodeType = ApprovalLeftMenu.APPROVED;
+                    break;
+            }
+        }
+        else if (strUserRole.equals(RoleBean.DIRECTOR)) {
             switch (nStatus) {
                 case PurchaseActivityBean.DIR_APPROVE:
+                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
+                    break;
+                case PurchaseActivityBean.SECTOR_APPROVE:
+                case PurchaseActivityBean.FINANCIAL_APPROVE:
+                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
+                case PurchaseActivityBean.SUBCONTRACTING:
+                    strNodeType = ApprovalLeftMenu.APPROVED;
+                    break;
+            }
+        } else if (strUserRole.equals(RoleBean.SECTOR)) {
+            switch (nStatus) {
+                case PurchaseActivityBean.SECTOR_APPROVE:
                     strNodeType = ApprovalLeftMenu.TO_APPROVE;
                     break;
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
@@ -64,8 +92,12 @@ public class ApprovalLeftMenu {
     }
 
     /** 定义静态函数 */
-    static public JSONArray getTree(String strUserRole) {
-        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList();
+    static public JSONArray getTree(String strUsername, String strUserRole) {
+        String sql = "select p.* from purchase p left join role r on " +
+                "((p.purchase_activity_id>r.permission_id) or " +
+                "(p.purchase_activity_id=r.permission_id and p.role_id=r.id)) " +
+                "left join user u on u.id=r.user_id where u.username='" + strUsername + "'";
+        ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList(sql);
 
         JSONArray toApprovePrjChildren = new JSONArray();
         JSONArray approvedPrjChildren = new JSONArray();

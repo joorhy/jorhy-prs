@@ -18,9 +18,12 @@ public class ApplicantLeftMenu {
     public static final String IMPLEMENTED              = "implemented";                        // 已完成
 
     /** 定义静态函数 */
-    static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList();
+    static public JSONArray getTree(String strUsername) {
+        /** 仅查询本单位的采购项目 */
+        String sql = "select p.* from purchase p left join user u on p.dept_id=u.dept_id " +
+                "where u.username='" + strUsername + "'";
 
+        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList(sql);
         JSONArray newPrjChildren = new JSONArray();
         JSONArray committedPrjChildren = new JSONArray();
         JSONArray executedPrjChildren = new JSONArray();
@@ -37,7 +40,9 @@ public class ApplicantLeftMenu {
                     newPrjChildren.put(childrenNode);
                     break;
                 case PurchaseActivityBean.ACC_APPROVE:
+                case PurchaseActivityBean.LEAD_APPROVE:
                 case PurchaseActivityBean.DIR_APPROVE:
+                case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
                 case PurchaseActivityBean.SUBCONTRACTING:

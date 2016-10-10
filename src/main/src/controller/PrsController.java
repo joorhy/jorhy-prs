@@ -19,13 +19,13 @@ public class PrsController extends Controller {
             String strUserRole = UserModel.dao.getUserRole(strUsername);
             if (strUserRole != null) {
                 if (strUserRole.equals(RoleBean.APPLICANT)) {
-                    renderText(ApplicantLeftMenu.getTree().toString());
+                    renderText(ApplicantLeftMenu.getTree(strUsername).toString());
                 } else if (strUserRole.equals(RoleBean.PURCHASE)) {
-                    renderText(PurchaseLeftMenu.getTree().toString());
+                    renderText(PurchaseLeftMenu.getTree(strUsername).toString());
                 } else if(strUserRole.equals(RoleBean.PAYMENT)) {
-                    renderText(PaymentLeftMenu.getTree().toString());
+                    renderText(PaymentLeftMenu.getTree(strUsername).toString());
                 } else {
-                    renderText(ApprovalLeftMenu.getTree(strUserRole).toString());
+                    renderText(ApprovalLeftMenu.getTree(strUsername, strUserRole).toString());
                 }
             }
         }

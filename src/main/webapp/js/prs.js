@@ -247,8 +247,12 @@ function onLeftMenuLeftClick(node) {
             $('#contentDiv').panel('setTitle','待审批项目');
             if (rootNode.type == "accounting") {
                 $('#contentDiv').panel('refresh', '../jsp/pages/accounting_unapproved.jsp');
+            } else if (rootNode.type == "leader") {
+                $('#contentDiv').panel('refresh', '../jsp/pages/leader_unapproved.jsp');
             } else if (rootNode.type == "director") {
                 $('#contentDiv').panel('refresh', '../jsp/pages/director_unapproved.jsp');
+            } else if (rootNode.type == "sector") {
+                $('#contentDiv').panel('refresh', '../jsp/pages/sector_unapproved.jsp');
             } else if (rootNode.type == "regulatory") {
                 $('#contentDiv').panel('refresh', '../jsp/pages/regulatory_unapproved.jsp');
             }else if (rootNode.type == "bureau") {

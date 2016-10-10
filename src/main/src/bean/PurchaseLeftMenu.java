@@ -19,9 +19,11 @@ public class PurchaseLeftMenu {
     public static final String FAILED                   = "failed";                             // 流标
 
     /** 定义静态函数 */
-    static public JSONArray getTree() {
-        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList();
-
+    static public JSONArray getTree(String strUsername) {
+        /** 仅查询审批完成的采购项目 */
+        String sql = "select p.* from purchase p where p.purchase_activity_id>="
+                + PurchaseActivityBean.SUBCONTRACTING;
+        ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList(sql);
         JSONArray subcontractingChildren = new JSONArray();
         JSONArray subcontractedChildren = new JSONArray();
         JSONArray completedChildren = new JSONArray();

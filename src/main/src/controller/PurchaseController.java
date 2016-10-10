@@ -31,8 +31,9 @@ public class PurchaseController extends Controller {
         String strService = getPara("service");
         String strEngineering = getPara("engineering");
 
+        String strUsername = String.valueOf(getSession().getAttribute("loginUser"));
         JSONObject objBaseData = new JSONObject(strBaseData);
-        PurchaseModel.dao.savePurchase(objBaseData);
+        PurchaseModel.dao.savePurchase(objBaseData, strUsername);
 
         String strPurchaseID = objBaseData.getString("purchase_id");
         JSONObject objCommodity = new JSONObject(strCommodity);
@@ -163,6 +164,16 @@ public class PurchaseController extends Controller {
     public void funds_nature() {
         String strFunds_nature = FundsNatureModel.dao.getFundsNatureList().toString();
         renderText(strFunds_nature);
+    }
+
+    public void approve_leader() {
+        String strApproveLeader = DirectorsModel.dao.getDirectorList().toString();
+        renderText(strApproveLeader);
+    }
+
+    public void approve_sector() {
+        String strApproveSector = FinanceDeptModel.dao.getFinanceDeptList().toString();
+        renderText(strApproveSector);
     }
 
     // 商品类列表
