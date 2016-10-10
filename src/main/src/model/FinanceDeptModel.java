@@ -19,7 +19,7 @@ public class FinanceDeptModel extends Model<FinanceDeptModel> {
         for (int i=0; i<m.size(); i++) {
             FinanceDeptModel item  = m.get(i);
             JSONObject obj = new JSONObject();
-            obj.put("id", item.getInt("id"));
+            obj.put("id", item.getInt("role_id"));
             obj.put("text", item.getStr("name"));
             if (i == 0) {
                 obj.put("selected", true);

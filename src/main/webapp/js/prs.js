@@ -459,20 +459,23 @@ function savePurchaseProductItem(){
 }
 
 function agreePurchase() {
+    var next_role_id = 0;
     if (rootNode.type == 'accounting') {
-        if ($('#approve_person').combobox('getValue') == 'default') {
+        if ($('#approve_person').combobox('getText') == 'default') {
             $.messager.alert("警告", "请选择上级审核人");
             return;
         } else {
             approve_content = '确认需要' + $('#approve_person').combobox('getText') + '审核?';
         }
+        next_role_id = $('#approve_person').combobox('getValue');
     } else if (rootNode.type == 'director') {
-        if ($('#approve_department').combobox('getValue') == 'default') {
+        if ($('#approve_department').combobox('getText') == 'default') {
             $.messager.alert("警告", "请选择财政局资金分管股室");
             return;
         } else {
             approve_content = '确认需要提交财政局' + $('#approve_department').combobox('getText') + '进行资金审核?';
         }
+        next_role_id = $('#approve_department').combobox('getValue');
     } else if (rootNode.type == 'regulatory') {
         if ($('#purchasing_nature').combobox('getValue') == 'default') {
             $.messager.alert("警告", "请选择采购性质");
@@ -487,7 +490,7 @@ function agreePurchase() {
     var url = '/purchase/approve';
     var data = {purchase_id:document.getElementById("purchase_id").value,
                 content:$('#opinion').textbox('getText'),
-                opinion:'agree'}
+                opinion:'agree',next_role_id:next_role_id}
     $.messager.confirm('操作提示', approve_content, function(r){
         if (r){
             $.ajax({

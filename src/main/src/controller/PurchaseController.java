@@ -83,6 +83,7 @@ public class PurchaseController extends Controller {
         SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
         purchaseOpinionBean.strApproveDate = sdf.format(currentTime);
         if (strOpinion.equals("agree")) {
+            purchaseOpinionBean.nextApproveRoleId = Integer.valueOf(getPara("next_role_id"));
             PurchaseModel.dao.agreePurchase(strPurchaseID, purchaseOpinionBean);
         } else {
             PurchaseModel.dao.disagreePurchase(strPurchaseID, purchaseOpinionBean);

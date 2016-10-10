@@ -99,7 +99,14 @@ public class PurchaseModel extends Model<PurchaseModel> {
                 int nPurchaseID = purchaseModel.get("id");
                 int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
                 if (purchaseOpinionBean.nextApproveRoleId == 0) {
-                    purchaseOpinionBean.nextApproveRoleId = (Integer)purchaseModel.get("role_id") + 1;
+                    int lastApproveRoleId = purchaseModel.get("role_id");
+                    if (lastApproveRoleId >= 3 && lastApproveRoleId <= 6) {
+                        purchaseOpinionBean.nextApproveRoleId = 7;
+                    } else if (lastApproveRoleId >= 8 && lastApproveRoleId <= 12) {
+                        purchaseOpinionBean.nextApproveRoleId = 13;
+                    } else {
+                        purchaseOpinionBean.nextApproveRoleId = lastApproveRoleId + 1;
+                    }
                 }
 
                 if (userModel.getInt("permission_id") == purchaseModel.get("purchase_activity_id")) {
