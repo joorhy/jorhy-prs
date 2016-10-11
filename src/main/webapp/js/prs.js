@@ -343,6 +343,37 @@ function onLoadPurchase() {
     }
 }
 
+function onLoadPreviewPurchase() {
+    document.getElementById("preview_title").textContent = 'XXX县采购' + baseData['pur_name'] + '函件';
+    if (baseData != null) {
+        $('#preview_pur_name').textbox('setText', baseData['pur_name']);
+        $('#preview_pur_code').textbox('setText', baseData['pur_code']);
+        $('#preview_funds_src').textbox('setText', baseData['funds_src']);
+        $('#preview_contacts').textbox('setText', baseData['contacts']);
+        $('#preview_phone_num').textbox('setText', baseData['phone_num']);
+        $('#preview_funds_nature').combobox('setValue', baseData['funds_nature']);
+        $('#preview_commodity_pre_price').textbox('setText', baseData['commodity_pre_price']);
+        $('#preview_service_pre_price').textbox('setText', baseData['service_pre_price']);
+        $('#preview_engineering_pre_price').textbox('setText', baseData['engineering_pre_price']);
+        $('#preview_commodity_total_price').textbox('setText', baseData['commodity_total_price']);
+        $('#preview_service_total_price').textbox('setText', baseData['service_total_price']);
+        $('#preview_engineering_total_price').textbox('setText', baseData['engineering_total_price']);
+
+        $('#preview_pur_name').textbox('disable');
+        $('#preview_pur_code').textbox('disable');
+        $('#preview_funds_src').textbox('disable');
+        $('#preview_contacts').textbox('disable');
+        $('#preview_phone_num').textbox('disable');
+        $('#preview_funds_nature').combobox('disable');
+        $('#preview_commodity_pre_price').textbox('disable');
+        $('#preview_service_pre_price').textbox('disable');
+        $('#preview_engineering_pre_price').textbox('disable');
+        $('#preview_commodity_total_price').textbox('disable');
+        $('#preview_service_total_price').textbox('disable');
+        $('#preview_engineering_total_price').textbox('disable');
+    }
+}
+
 function onLoadPackage() {
     if (baseData != null) {
         document.getElementById("package_id").value = baseData['package_id'];
@@ -558,7 +589,15 @@ function disagreePurchase() {
 }
 
 function printPreviewPurchase() {
+    //$('#dlgPreviewPurchase').dialog('open').dialog('center').dialog('setTitle','采购项目预览');
+    window.open("../jsp/prs_print_preview.jsp");
+}
 
+function printPurchase() {
+    var print_window = window.open("../jsp/pages/purchase_print_preview.jsp");
+    print_window.document.body.innerHTML = document.getElementById('print_area').innerHTML;
+    //print_window.document.forms[0].elements[0].value="let it go";
+    print_window.print();
 }
 
 function complaintsPurchase () {

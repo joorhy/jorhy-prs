@@ -32,26 +32,26 @@
            onclick="printPreviewPurchase()">打印预览</a></td>
 </div><br/>
 
-<div id="dlgComplaintPurchase" class="easyui-dialog" style="width:400px"
-     closed="true" buttons="#dlg_complaints_buttons">
-    <div style="margin:0;padding:5px 5px">
-        <div style="margin-bottom:10px">
-            <td>项目执行状态</td>
-            <input id="prj_status" class="easyui-switchbutton" tyle="width:200px"
-                   data-options="onText:'正常',offText:'暂停'">
-        </div>
+<div id="dlgPreviewPurchase" class="easyui-dialog" style="width:1000px"
+     closed="true" buttons="#dlg_preview_buttons">
+    <span id="print_area">
+        <h1 id="preview_title" style="width:100%;text-align:center"></h1>
         <div>
-            <td>投诉处理意见</td>
-            <input id="complaints_opinion" class="easyui-textbox" required="true" multiline="true"
-                   style="width:100%;height:120px" >
+            <jsp:include page="../element/purchase_preview_base.jsp"/>
+        </div><br/>
+        <div>
+            <jsp:include page="../element/purchase_preview_opinion.jsp"/>
+        </div><br/>
+        <div>
+            <jsp:include page="../element/purchase_preview_products.jsp"/>
         </div>
-    </div>
+    </span>
 </div>
-<div id="dlg_complaints_buttons">
+<div id="dlg_preview_buttons">
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"
-       onclick="submitComplaintsOpinion()" style="width:90px">确定</a>
+       onclick="printPurchase()" style="width:90px">打印</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-       onclick="javascript:$('#dlgComplaintPurchase').dialog('close')" style="width:90px">取消</a>
+       onclick="javascript:$('#dlgPreviewPurchase').dialog('close')" style="width:90px">取消</a>
 </div>
 </body>
 </html>
