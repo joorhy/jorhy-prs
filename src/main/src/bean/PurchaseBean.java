@@ -19,6 +19,7 @@ public class PurchaseBean {
     private String strContacts;                                                         // 联系人
     private String strPhoneNum;                                                         // 联系电话
     private String strFundsNature;                                                      // 资金性质
+    private String strPurchaseType;                                                     // 采购类型
     /** 购买项目详细内容 */
     private String strCommodityPrePrice;                                                // 商品类预算总金额
     private String strServicePrePrice;                                                  // 服务类预算总金额
@@ -108,20 +109,12 @@ public class PurchaseBean {
         return strEngineeringPrePrice;
     }
 
-    public ArrayList<ProductBean> getProductList() {
-        return lstProduct;
+    public String getPurchaseType() {
+        return strPurchaseType;
     }
 
-    public ArrayList<PurchaseAttachFileBean> getAttachFileList() {
-        return lstAttachFile;
-    }
-
-    public ArrayList<PurchaseOpinionBean> getOpinionList() {
-        return lstOpinion;
-    }
-
-    public ArrayList<ComplaintsBean> getComplaintsList() {
-        return lstComplaints;
+    public void setPurchaseType(String strPurchaseType) {
+        this.strPurchaseType = strPurchaseType;
     }
 
 }

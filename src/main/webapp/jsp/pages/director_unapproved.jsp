@@ -39,14 +39,6 @@
     <td>
     <td>财政局资金分管股室</td>
     <td>
-        <!--select id="approve_department" class="easyui-combobox" style="width:120px">
-            <option value="default">请选择分管股室</option>
-            <option value="nyg">农业股</option>
-            <option value="jkwg">教科文股</option>
-            <option value="tzg">投资股</option>
-            <option value="xcg">行财股</option>
-            <option value="sbg">社保股</option>
-        </select-->
         <select id="approve_department" class="easyui-combobox" style="width:120px"
                 data-options="
                     valueField: 'id',

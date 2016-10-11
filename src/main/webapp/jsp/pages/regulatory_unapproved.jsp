@@ -39,16 +39,11 @@
     <td>
         <td>采购性质</td>
         <td>
-            <select id="purchasing_nature" class="easyui-combobox" style="width:120px">
-                <option value="default">请选择采购性质</option>
-                <option value="gkzb">公开招标</option>
-                <option value="xjcg">询价采购</option>
-                <option value="jzxtp">竞争性谈判</option>
-                <option value="jzxcs">竞争性磋商</option>
-                <option value="dyly">单一来源</option>
-                <option value="sczg">商场直购</option>
-                <option value="wsjj">网上竞价</option>
-                <option value="zxcg">自行采购</option>
+            <select id="purchase_nature" class="easyui-combobox" style="width:120px"
+                    data-options="
+                    valueField: 'id',
+                    textField: 'text',
+                    url: '/purchase/purchase_nature'">
             </select>
         </td>
     </td>

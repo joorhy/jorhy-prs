@@ -110,6 +110,7 @@ public class ApprovalLeftMenu {
             String strNodeType = getNodeType(strUserRole,
                     PurchaseModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));
             childrenNode.put("type", strNodeType);
+            childrenNode.put("level", lstPurchasing.get(i).getPurchaseType());
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
             } else if (strNodeType.equals(ApprovalLeftMenu.APPROVED)) {

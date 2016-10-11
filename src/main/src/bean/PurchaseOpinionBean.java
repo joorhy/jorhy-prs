@@ -9,5 +9,6 @@ public class PurchaseOpinionBean {
     public String strApproveDepartment;                // 审批部门
     public String strOpinion;                            // 意见内容
     public String strApproveDate;                       // 审批日期
-    public int nextApproveRoleId;                        // 下一步审批角色
+    public int nextApproveRoleId;                      // 下一步审批角色
+    public int purchaseNatureId;                       // 采购性质
 }

@@ -29,7 +29,7 @@
 </div><br>
 <div align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="complaintsPurchase()">投诉处理</a></td>
+           onclick="printPreviewPurchase()">打印预览</a></td>
 </div><br/>
 
 <div id="dlgComplaintPurchase" class="easyui-dialog" style="width:400px"

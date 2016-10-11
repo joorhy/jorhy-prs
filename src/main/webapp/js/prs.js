@@ -248,7 +248,11 @@ function onLeftMenuLeftClick(node) {
             if (rootNode.type == "accounting") {
                 $('#contentDiv').panel('refresh', '../jsp/pages/accounting_unapproved.jsp');
             } else if (rootNode.type == "leader") {
-                $('#contentDiv').panel('refresh', '../jsp/pages/leader_unapproved.jsp');
+                if (node.level == "1") {
+                    $('#contentDiv').panel('refresh', '../jsp/pages/director_unapproved.jsp');
+                } else {
+                    $('#contentDiv').panel('refresh', '../jsp/pages/leader_unapproved.jsp');
+                }
             } else if (rootNode.type == "director") {
                 $('#contentDiv').panel('refresh', '../jsp/pages/director_unapproved.jsp');
             } else if (rootNode.type == "sector") {
@@ -460,6 +464,7 @@ function savePurchaseProductItem(){
 
 function agreePurchase() {
     var next_role_id = 0;
+    var purchase_nature_id = 0;
     if (rootNode.type == 'accounting') {
         if ($('#approve_person').combobox('getText') == 'default') {
             $.messager.alert("警告", "请选择上级审核人");
@@ -468,21 +473,23 @@ function agreePurchase() {
             approve_content = '确认需要' + $('#approve_person').combobox('getText') + '审核?';
         }
         next_role_id = $('#approve_person').combobox('getValue');
-    } else if (rootNode.type == 'director') {
+    } else if ((rootNode.type == 'director') || (rootNode.type == "leader" && curNode.level == "1")) {
         if ($('#approve_department').combobox('getText') == 'default') {
             $.messager.alert("警告", "请选择财政局资金分管股室");
             return;
         } else {
-            approve_content = '确认需要提交财政局' + $('#approve_department').combobox('getText') + '进行资金审核?';
+            approve_content = '确认需要提交财政局' + $('#approve_department').combobox('getText')
+                + '进行资金审核?';
         }
         next_role_id = $('#approve_department').combobox('getValue');
     } else if (rootNode.type == 'regulatory') {
-        if ($('#purchasing_nature').combobox('getValue') == 'default') {
+        if ($('#purchase_nature').combobox('getValue') == 'default') {
             $.messager.alert("警告", "请选择采购性质");
             return;
         } else {
             approve_content = '确认提交审核?';
         }
+        purchase_nature_id = $('#purchase_nature').combobox('getValue');
     } else {
         approve_content = "确认同意";
     }
@@ -490,7 +497,7 @@ function agreePurchase() {
     var url = '/purchase/approve';
     var data = {purchase_id:document.getElementById("purchase_id").value,
                 content:$('#opinion').textbox('getText'),
-                opinion:'agree',next_role_id:next_role_id}
+                opinion:'agree',next_role_id:next_role_id,purchase_nature_id:purchase_nature_id}
     $.messager.confirm('操作提示', approve_content, function(r){
         if (r){
             $.ajax({
@@ -548,6 +555,10 @@ function disagreePurchase() {
     function onError(x, e) {
         alert("error cancelPurchasing");
     }
+}
+
+function printPreviewPurchase() {
+
 }
 
 function complaintsPurchase () {
@@ -674,6 +685,7 @@ function savePurchase() {
         baseData['contacts'] = $('#contacts').textbox('getText');
         baseData['phone_num'] = $('#phone_num').textbox('getText');
         baseData['funds_nature'] = $('#funds_nature').combobox('getValue');
+        baseData['purchase_type'] = $('#purchase_type').combobox('getValue');
         baseData['commodity_pre_price'] = $('#commodity_pre_price').textbox('getText') == ''
             ? '0' : $('#commodity_pre_price').textbox('getText');
         baseData['service_pre_price'] = $('#service_pre_price').textbox('getText') == ''
@@ -703,7 +715,8 @@ function submitPurchase() {
     $.messager.confirm('操作提示','确认提交审核?',function(r){
         if (r){
             var url = '/purchase/submit';
-            var data = {purchase_id:document.getElementById("purchase_id").value};
+            var data = {purchase_id:document.getElementById("purchase_id").value,
+                purchase_type:$('#purchase_type').combobox("getValue")};
             $.ajax({
                 type: 'post',
                 url: url,

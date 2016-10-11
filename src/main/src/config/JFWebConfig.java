@@ -57,6 +57,8 @@ public class JFWebConfig extends JFinalConfig {
         arp.addMapping("package_attach_file", PackageFileAttachModel.class);
         arp.addMapping("directors", DirectorsModel.class);
         arp.addMapping("finance_dept", FinanceDeptModel.class);
+        arp.addMapping("purchase_type", PurchaseTypeModel.class);
+        arp.addMapping("purchase_nature", PurchaseNatureModel.class);
     }
     public void configInterceptor(Interceptors me) {
 

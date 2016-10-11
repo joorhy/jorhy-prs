@@ -52,7 +52,8 @@ public class PurchaseController extends Controller {
     // 提交审核按钮
     public void submit() {
         String strPurchasingID = getPara("purchase_id");
-        PurchaseModel.dao.submitPurchase(strPurchasingID);
+        int nPurchaseType = Integer.valueOf(getPara("purchase_type"));
+        PurchaseModel.dao.submitPurchase(strPurchasingID, nPurchaseType);
         setAttr("result", "success");
         renderJson();
     }
@@ -84,6 +85,7 @@ public class PurchaseController extends Controller {
         purchaseOpinionBean.strApproveDate = sdf.format(currentTime);
         if (strOpinion.equals("agree")) {
             purchaseOpinionBean.nextApproveRoleId = Integer.valueOf(getPara("next_role_id"));
+            purchaseOpinionBean.purchaseNatureId = Integer.valueOf(getPara("purchase_nature_id"));
             PurchaseModel.dao.agreePurchase(strPurchaseID, purchaseOpinionBean);
         } else {
             PurchaseModel.dao.disagreePurchase(strPurchaseID, purchaseOpinionBean);
@@ -162,6 +164,11 @@ public class PurchaseController extends Controller {
         renderJson();
     }
 
+    public void purchase_type() {
+        String strPurchaseType = PurchaseTypeModel.dao.getPurchaseTypeList().toString();
+        renderText(strPurchaseType);
+    }
+
     public void funds_nature() {
         String strFunds_nature = FundsNatureModel.dao.getFundsNatureList().toString();
         renderText(strFunds_nature);
@@ -175,6 +182,11 @@ public class PurchaseController extends Controller {
     public void approve_sector() {
         String strApproveSector = FinanceDeptModel.dao.getFinanceDeptList().toString();
         renderText(strApproveSector);
+    }
+
+    public void purchase_nature() {
+        String strPurchaseNature = PurchaseNatureModel.dao.getPurchaseNatureList().toString();
+        renderText(strPurchaseNature);
     }
 
     // 商品类列表

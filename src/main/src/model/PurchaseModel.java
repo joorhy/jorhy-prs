@@ -27,6 +27,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
         String strContacts = obj.getString("contacts");
         String strPhoneNum = obj.getString("phone_num");
         String strFundsNature = obj.getString("funds_nature");
+        int nPurchaseType = obj.getInt("purchase_type");
         Double fCommodityPrePrice = obj.getDouble("commodity_pre_price");
         Double fServicePrePrice = obj.getDouble("service_pre_price");
         Double fEngineeringPrePrice = obj.getDouble("engineering_pre_price");
@@ -43,7 +44,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
                         .set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
                         .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
                         .set("service_pre_price", fServicePrePrice).set("dept_id", userModel.getInt("dept_id"))
-                        .set("role_id", userModel.getInt("id")).update();
+                        .set("role_id", userModel.getInt("id")).set("purchase_type_id", nPurchaseType).update();
             } else {
                 purchaseModel = new PurchaseModel();
                 purchaseModel.set("purchase_uuid", strPurchaseID).set("code", strPurCode)
@@ -52,13 +53,13 @@ public class PurchaseModel extends Model<PurchaseModel> {
                         .set("purchase_activity_id", PurchaseActivityBean.INITIALIZE)
                         .set("funds_nature_id", strFundsNature).set("commodity_pre_price", fCommodityPrePrice)
                         .set("service_pre_price", fServicePrePrice).set("dept_id", userModel.getInt("dept_id"))
-                        .set("role_id", userModel.getInt("id")).save();
+                        .set("role_id", userModel.getInt("id")).set("purchase_type_id", nPurchaseType).save();
             }
         }
         return ErrorCode.SUCCESS;
     }
 
-    public String submitPurchase(String strPurchaseID) {
+    public String submitPurchase(String strPurchaseID, int nPurchaseType) {
         String url = "select p.id,p.purchase_activity_id,p.role_id from purchase p " +
                 "where p.purchase_uuid='" + strPurchaseID + "'";
 
@@ -67,7 +68,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
             int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
             int nRoleId = purchaseModel.get("role_id");
             purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1)
-                    .set("role_id", nRoleId + 1).update();
+                    .set("role_id", nRoleId + 1).set("purchase_type_id", nPurchaseType).update();
         }
         return ErrorCode.SUCCESS;
     }
@@ -92,14 +93,14 @@ public class PurchaseModel extends Model<PurchaseModel> {
                 "r.user_id=u.id where u.id=" + purchaseOpinionBean.userID;
         UserModel userModel = UserModel.dao.findFirst(sql);
         if (userModel != null) {
-            sql = "select p.id,p.purchase_activity_id,p.dept_id,p.role_id from purchase p " +
-                    "where p.purchase_uuid='" + strPurchaseID + "'";
+            sql = "select p.* from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
             PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
             if (purchaseModel != null) {
                 int nPurchaseID = purchaseModel.get("id");
                 int nPurchaseActivityID =  purchaseModel.get("purchase_activity_id");
+                int nPurchaseTypeID = purchaseModel.get("purchase_type_id");
+                int lastApproveRoleId = purchaseModel.get("role_id");
                 if (purchaseOpinionBean.nextApproveRoleId == 0) {
-                    int lastApproveRoleId = purchaseModel.get("role_id");
                     if (lastApproveRoleId >= 3 && lastApproveRoleId <= 6) {
                         purchaseOpinionBean.nextApproveRoleId = 7;
                     } else if (lastApproveRoleId >= 8 && lastApproveRoleId <= 12) {
@@ -109,11 +110,23 @@ public class PurchaseModel extends Model<PurchaseModel> {
                     }
                 }
 
+                if (lastApproveRoleId >= 3 && lastApproveRoleId <= 6 && nPurchaseTypeID == 1) {
+                    nPurchaseActivityID += 2;
+                } else {
+                    nPurchaseActivityID += 1;
+                }
+
                 if (userModel.getInt("permission_id") == purchaseModel.get("purchase_activity_id")) {
-                    if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID + 1,
+                    if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID,
                             purchaseOpinionBean) == ErrorCode.SUCCESS) {
-                        purchaseModel.set("purchase_activity_id", nPurchaseActivityID + 1)
-                                .set("role_id", purchaseOpinionBean.nextApproveRoleId).update();
+                        if (purchaseOpinionBean.nextApproveRoleId == 0) {
+                            purchaseModel.set("purchase_activity_id", nPurchaseActivityID)
+                                    .set("role_id", purchaseOpinionBean.nextApproveRoleId).update();
+                        } else {
+                            purchaseModel.set("purchase_activity_id", nPurchaseActivityID)
+                                    .set("role_id", purchaseOpinionBean.nextApproveRoleId)
+                                    .set("purchase_nature_id", purchaseOpinionBean.purchaseNatureId).update();
+                        }
                     }
                 }
             }
@@ -158,6 +171,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
             purchaseBean.setFundsNature(String.valueOf(item.getInt("funds_nature_id")));
             purchaseBean.setContacts(item.getStr("contacts"));
             purchaseBean.setPhoneNum(item.getStr("phone_num"));
+            purchaseBean.setPurchaseType(String.valueOf(item.getInt("purchase_type_id")));
             lstPurchaseBean.add(purchaseBean);
         }
         return lstPurchaseBean;
