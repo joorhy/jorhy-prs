@@ -20,7 +20,16 @@
 <div id="main_layout" class="easyui-layout" style="width:1200px;height:100%;">
     <div id="previewDiv" class="easyui-panel" region="center" title="简介"
          style="padding:5px;width:100%;">
-        <jsp:include page="pages/purchase_print_preview.jsp" />
+        <h1 id="preview_title" style="width:100%;text-align:center"></h1>
+        <div>
+            <jsp:include page="./element/purchase_preview_base.jsp"/>
+        </div><br/>
+        <div>
+            <jsp:include page="./element/purchase_preview_opinion.jsp"/>
+        </div><br/>
+        <div>
+            <jsp:include page="./element/purchase_preview_products.jsp"/>
+        </div>
     </div>
 </div>
 </html>

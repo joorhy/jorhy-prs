@@ -15,7 +15,7 @@
         <input id="purchase_id" type="hidden" value=""/></td>
         <td align="left">
         <td style="width:15%">采购项目名称</td>
-        <td style="width:35%"><input id="preview_pur_name" class="easyui-textbox"/></td>
+        <td style="width:35%"><u id="preview_pur_name"></u></td>
         <td style="width:15%">采购函编号</td>
         <td style="width:35%;"><input id="preview_pur_code" class="easyui-textbox"/></td>
         </td>

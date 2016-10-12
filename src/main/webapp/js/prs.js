@@ -310,7 +310,7 @@ function onLeftMenuLeftClick(node) {
 function onLoadPurchase() {
     if (baseData != null) {
         document.getElementById("purchase_id").value = baseData['purchase_id'];
-        $('#pur_name').textbox('setValue', baseData['pur_name']);
+        $('#pur_name').textbox('setText', baseData['pur_name']);
         $('#pur_code').textbox('setText', baseData['pur_code']);
         $('#funds_src').textbox('setText', baseData['funds_src']);
         $('#contacts').textbox('setText', baseData['contacts']);
@@ -344,9 +344,10 @@ function onLoadPurchase() {
 }
 
 function onLoadPreviewPurchase() {
-    document.getElementById("preview_title").textContent = 'XXX县采购' + baseData['pur_name'] + '函件';
+    /*document.getElementById("preview_title").textContent = 'XXX县采购' + baseData['pur_name'] + '函件';
     if (baseData != null) {
-        $('#preview_pur_name').textbox('setValue', baseData['pur_name']);
+        document.getElementById("preview_pur_name").textContent = baseData['pur_name'];
+        //$('#preview_pur_name').textbox('setText', baseData['pur_name']);
         $('#preview_pur_code').textbox('setText', baseData['pur_code']);
         $('#preview_funds_src').textbox('setText', baseData['funds_src']);
         $('#preview_contacts').textbox('setText', baseData['contacts']);
@@ -359,7 +360,7 @@ function onLoadPreviewPurchase() {
         $('#preview_service_total_price').textbox('setText', baseData['service_total_price']);
         $('#preview_engineering_total_price').textbox('setText', baseData['engineering_total_price']);
 
-        $('#preview_pur_name').textbox('disable');
+        //$('#preview_pur_name').textbox('disable');
         $('#preview_pur_code').textbox('disable');
         $('#preview_funds_src').textbox('disable');
         $('#preview_contacts').textbox('disable');
@@ -371,11 +372,7 @@ function onLoadPreviewPurchase() {
         $('#preview_commodity_total_price').textbox('disable');
         $('#preview_service_total_price').textbox('disable');
         $('#preview_engineering_total_price').textbox('disable');
-    }
-}
-
-function test() {
-
+    }*/
 }
 
 function onLoadPackage() {
@@ -593,13 +590,18 @@ function disagreePurchase() {
 }
 
 function printPreviewPurchase() {
-    $('#dlgPreviewPurchase').dialog('open').dialog('center').dialog('setTitle','采购项目预览');
+    //$('#dlgPreviewPurchase').dialog('open').dialog('center').dialog('setTitle','');
+    $.ajax({
+        type: 'post',
+        url:'/purchase/purchase_preview',
+        data:'' ,
+        dataType: 'json',
+    });
 }
 
 function printPurchase() {
     window.document.body.innerHTML = document.getElementById('print_area').innerHTML;
-    //window.print();
-    //$("#print_area").jqprint();
+    //$("#print_area").jqprint({debug:true,importCSS:true,printContainer:true});
 }
 
 function complaintsPurchase () {

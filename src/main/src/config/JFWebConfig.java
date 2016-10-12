@@ -1,6 +1,5 @@
 package config;
 
-import bean.PurchaseAttachFileBean;
 import com.jfinal.config.*;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
@@ -27,6 +26,7 @@ public class JFWebConfig extends JFinalConfig {
         me.add("/prs", PrsController.class);
         me.add("/purchase", PurchaseController.class);
         me.add("/package", PackageController.class);
+        me.add("/preview", PurchasePreviewController.class);
     }
     public void configPlugin(Plugins me) {
         me.add(new EhCachePlugin());

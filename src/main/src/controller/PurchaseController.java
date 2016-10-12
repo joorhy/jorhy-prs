@@ -16,6 +16,10 @@ import java.util.Map;
  * Created by JooLiu on 2016/8/23.
  */
 public class PurchaseController extends Controller {
+    public void purchase_preview() {
+        forwardAction("/preview");
+    }
+
     public void toDivideItems() {
         String strPurchaseID = getPara("purchase_id");
         ArrayList<Map<String, String>> lst = ProductModel.dao.getToDivideItems(strPurchaseID);
