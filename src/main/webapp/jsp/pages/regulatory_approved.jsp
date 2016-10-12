@@ -32,7 +32,7 @@
            onclick="printPreviewPurchase()">打印预览</a></td>
 </div><br/>
 
-<div id="dlgPreviewPurchase" class="easyui-dialog" style="width:1000px"
+<div id="dlgPreviewPurchase" class="easyui-dialog" style="width:1200px"
      closed="true" buttons="#dlg_preview_buttons">
     <span id="print_area">
         <h1 id="preview_title" style="width:100%;text-align:center"></h1>
