@@ -198,6 +198,70 @@ public class PurchaseModel extends Model<PurchaseModel> {
         return obj;
     }
 
+    public ArrayList<Map<String, String>> getPreviewBaseData(String strPurchaseID) {
+        String sql = "select p.*, pn.name as nature_name from purchase p left join purchase_nature pn on " +
+                "p.purchase_nature_id=pn.id where p.purchase_uuid='" + strPurchaseID + "'";
+        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+        ArrayList<Map<String, String>> previewArray = new ArrayList<Map<String, String>>();
+        if (purchaseModel != null) {
+            Map<String, String> objName = new HashMap<String, String>();
+            objName.put("name", "采购项目名称");
+            objName.put("value", purchaseModel.getStr("name"));
+            objName.put("group",  "采购信息");
+            previewArray.add(objName);
+
+            Map<String, String> objCode = new HashMap<String, String>();
+            objCode.put("name", "采购函编号");
+            objCode.put("value", purchaseModel.getStr("code"));
+            objCode.put("group",  "采购信息");
+            previewArray.add(objCode);
+
+            Map<String, String> objFundsSrc = new HashMap<String, String>();
+            objFundsSrc.put("name", "资金来源");
+            objFundsSrc.put("value",  purchaseModel.getStr("funds_src"));
+            objFundsSrc.put("group",  "采购信息");
+            previewArray.add(objFundsSrc);
+
+            Map<String, String> objFundsNature = new HashMap<String, String>();
+            objFundsNature.put("name", "资金性质");
+            objFundsNature.put("value",  purchaseModel.getStr("nature_name"));
+            objFundsNature.put("group",  "采购信息");
+            previewArray.add(objFundsNature);
+
+            Map<String, String> objContacts = new HashMap<String, String>();
+            objContacts.put("name", "联系人");
+            objContacts.put("value",  purchaseModel.getStr("contacts"));
+            objContacts.put("group",  "联系方式");
+            previewArray.add(objContacts);
+
+            Map<String, String> objPhoneNum = new HashMap<String, String>();
+            objPhoneNum.put("name", "联系电话");
+            objPhoneNum.put("value",  purchaseModel.getStr("phone_num"));
+            objPhoneNum.put("group",  "联系方式");
+            previewArray.add(objPhoneNum);
+
+            Map<String, String> objCommodityPrePrice = new HashMap<String, String>();
+            objCommodityPrePrice.put("name", "产品类预算总价");
+            objCommodityPrePrice.put("value",  purchaseModel.getDouble("commodity_pre_price").toString());
+            objCommodityPrePrice.put("group",  "预算");
+            previewArray.add(objCommodityPrePrice);
+
+            Map<String, String> objServicePrePrice = new HashMap<String, String>();
+            objServicePrePrice.put("name", "服务类预算总价");
+            objServicePrePrice.put("value",  purchaseModel.getDouble("service_pre_price").toString());
+            objServicePrePrice.put("group",  "预算");
+            previewArray.add(objServicePrePrice);
+
+            Map<String, String> objEngineeringPrePrice = new HashMap<String, String>();
+            objEngineeringPrePrice.put("name", "工程类预算总价");
+            objEngineeringPrePrice.put("value",  purchaseModel.getDouble("engineering_pre_price").toString());
+            objEngineeringPrePrice.put("group",  "预算");
+            previewArray.add(objEngineeringPrePrice);
+        }
+
+        return previewArray;
+    }
+
     public ArrayList<Map<String, String>> getAttachFiles(String strPurchaseID) {
         String sql = "select paf.* from purchase_attach_file paf left join purchase p on " +
                 "paf.purchase_id=p.id where p.purchase_uuid='" + strPurchaseID + "'";

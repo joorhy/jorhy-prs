@@ -344,35 +344,7 @@ function onLoadPurchase() {
 }
 
 function onLoadPreviewPurchase() {
-    /*document.getElementById("preview_title").textContent = 'XXX县采购' + baseData['pur_name'] + '函件';
-    if (baseData != null) {
-        document.getElementById("preview_pur_name").textContent = baseData['pur_name'];
-        //$('#preview_pur_name').textbox('setText', baseData['pur_name']);
-        $('#preview_pur_code').textbox('setText', baseData['pur_code']);
-        $('#preview_funds_src').textbox('setText', baseData['funds_src']);
-        $('#preview_contacts').textbox('setText', baseData['contacts']);
-        $('#preview_phone_num').textbox('setText', baseData['phone_num']);
-        $('#preview_funds_nature').combobox('setValue', baseData['funds_nature']);
-        $('#preview_commodity_pre_price').textbox('setText', baseData['commodity_pre_price']);
-        $('#preview_service_pre_price').textbox('setText', baseData['service_pre_price']);
-        $('#preview_engineering_pre_price').textbox('setText', baseData['engineering_pre_price']);
-        $('#preview_commodity_total_price').textbox('setText', baseData['commodity_total_price']);
-        $('#preview_service_total_price').textbox('setText', baseData['service_total_price']);
-        $('#preview_engineering_total_price').textbox('setText', baseData['engineering_total_price']);
-
-        //$('#preview_pur_name').textbox('disable');
-        $('#preview_pur_code').textbox('disable');
-        $('#preview_funds_src').textbox('disable');
-        $('#preview_contacts').textbox('disable');
-        $('#preview_phone_num').textbox('disable');
-        $('#preview_funds_nature').combobox('disable');
-        $('#preview_commodity_pre_price').textbox('disable');
-        $('#preview_service_pre_price').textbox('disable');
-        $('#preview_engineering_pre_price').textbox('disable');
-        $('#preview_commodity_total_price').textbox('disable');
-        $('#preview_service_total_price').textbox('disable');
-        $('#preview_engineering_total_price').textbox('disable');
-    }*/
+    document.getElementById("preview_title").textContent = 'XXX县采购' + baseData['pur_name'] + '函件';
 }
 
 function onLoadPackage() {
@@ -590,18 +562,12 @@ function disagreePurchase() {
 }
 
 function printPreviewPurchase() {
-    //$('#dlgPreviewPurchase').dialog('open').dialog('center').dialog('setTitle','');
-    $.ajax({
-        type: 'post',
-        url:'/purchase/purchase_preview',
-        data:'' ,
-        dataType: 'json',
-    });
+    $('#dlgPreviewPurchase').dialog('open').dialog('center').dialog('setTitle','');
 }
 
 function printPurchase() {
-    window.document.body.innerHTML = document.getElementById('print_area').innerHTML;
-    //$("#print_area").jqprint({debug:true,importCSS:true,printContainer:true});
+    $("#print_area").jqprint();
+    $('#dlgPreviewPurchase').dialog('close');
 }
 
 function complaintsPurchase () {

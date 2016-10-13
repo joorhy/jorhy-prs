@@ -12,8 +12,7 @@
 <body>
 <table id="dgPreviewOpinionLst" class="easyui-datagrid" title="已经审批单位意见" style="width:100%;height:225px"
        data-options="rownumbers:true,singleSelect:true,url:'/purchase/opinion_list',method:'post',
-                         queryParams:{purchase_id:document.getElementById('purchase_id').value},
-                         toolbar:tbPreviewOpinion">
+                         queryParams:{purchase_id:document.getElementById('purchase_id').value}">
     <thead>
     <tr>
         <th data-options="field:'op_department',width:80">单位</th>
@@ -23,9 +22,5 @@
     </tr>
     </thead>
 </table>
-<div id="tbPreviewOpinion" style="height:auto">
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true"
-       onclick="viewOpinion()">查看</a>
-</div>
 </body>
 </html>

@@ -16,10 +16,6 @@ import java.util.Map;
  * Created by JooLiu on 2016/8/23.
  */
 public class PurchaseController extends Controller {
-    public void purchase_preview() {
-        forwardAction("/preview");
-    }
-
     public void toDivideItems() {
         String strPurchaseID = getPara("purchase_id");
         ArrayList<Map<String, String>> lst = ProductModel.dao.getToDivideItems(strPurchaseID);
@@ -165,6 +161,15 @@ public class PurchaseController extends Controller {
         setAttr("result", "success");
         setAttr("base", PurchaseModel.dao.getBaseData(strPurchaseID));
 
+        renderJson();
+    }
+
+    public void preview_base_info() {
+        String strPurchaseID = "2e5QEb9HanUwBgTHYKvukzsmmzSqRzXdH3fQ";//getPara("purchase_id");
+        ArrayList<Map<String, String>> lst =
+                PurchaseModel.dao.getPreviewBaseData(strPurchaseID);
+        setAttr("rows", lst);
+        setAttr("total", lst.size());
         renderJson();
     }
 

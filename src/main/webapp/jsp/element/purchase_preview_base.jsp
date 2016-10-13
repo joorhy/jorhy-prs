@@ -10,36 +10,12 @@
 <head>
 </head>
 <body>
-<div class="easyui-panel" title="基础信息" style="width:100%" data-options="onLoad:onLoadPreviewPurchase()">
-    <table>
-        <input id="purchase_id" type="hidden" value=""/></td>
-        <td align="left">
-        <td style="width:15%">采购项目名称</td>
-        <td style="width:35%"><u id="preview_pur_name"></u></td>
-        <td style="width:15%">采购函编号</td>
-        <td style="width:35%;"><input id="preview_pur_code" class="easyui-textbox"/></td>
-        </td>
-        <tr/>
-        <td align="left">
-        <td style="width:15%;">资金来源</td>
-        <td style="width:35%;"><input id="preview_funds_src" class="easyui-textbox"/></td>
-        <td style="width:15%;">资金性质</td>
-        <td style="width:35%;">
-            <select id="preview_funds_nature" class="easyui-combobox" style="width:50%;"
-                    data-options="
-                    valueField: 'id',
-                    textField: 'text',
-                    url: '/purchase/funds_nature'">
-            </select>
-        </td>
-        </td>
-        <tr/>
-        <td align="left">
-        <td style="width:15%;">联系人</td>
-        <td style="width:35%;"><input id="preview_contacts" class="easyui-textbox"/></td>
-        <td style="width:15%;">联系电话</td>
-        <td style="width:35%;"><input id="preview_phone_num" class="easyui-textbox"/></td>
-        </td>
+<div class="easyui-panel" title="基础信息" style="width:100%"
+     data-options="onLoad:onLoadPreviewPurchase()">
+    <table id="privew_base" class="easyui-propertygrid" style="width:100%" data-options="
+                url:'/purchase/preview_base_info',
+                queryParams:{purchase_id:document.getElementById('purchase_id').value},
+                method:'post',showGroup:false,showHeader:false,scrollbarSize:0">
     </table>
 </div>
 </body>
