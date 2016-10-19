@@ -77,7 +77,8 @@ public class PackageController extends Controller {
     // 上传附件
     public void upload_file() {
         String strPackageID = getPara("package_id");
-        if (strPackageID != null) {
+        String strPurchaseID = getPara("purchase_id");
+        if (strPackageID != null && strPurchaseID != null) {
             PackageAttachFileBean item = new PackageAttachFileBean();
             item.strPackageID = strPackageID;
             item.strFileID = getPara("file_id");
@@ -89,7 +90,7 @@ public class PackageController extends Controller {
             item.fileSize = (int)file.length();
             item.strFilePath = file.getPath();
 
-            PackageModel.dao.addAttachFile(strPackageID, item);
+            PackageModel.dao.addAttachFile(strPurchaseID, strPackageID, item);
         }
         setAttr("result", "success");
         renderJson();
@@ -138,9 +139,14 @@ public class PackageController extends Controller {
 
     // 基础信息
     public void base_info() {
+        String strPurchaseID = getPara("purchase_id");
         String strPackageID = getPara("package_id");
         setAttr("result", "success");
-        setAttr("base", PackageModel.dao.getBaseData(strPackageID));
+        if (strPurchaseID != null) {
+            setAttr("base", PackageModel.dao.getBaseDataByPurchaseID(strPurchaseID));
+        } else {
+            setAttr("base", PackageModel.dao.getBaseDataByPackageID(strPackageID));
+        }
         renderJson();
     }
 

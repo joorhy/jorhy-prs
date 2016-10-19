@@ -45,6 +45,8 @@ public class PurchaseFileAttachModel extends Model<PurchaseFileAttachModel> {
     public void delAttachFile(String strFileID) {
         String sql = "select paf.id from purchase_attach_file paf where paf.uuid='" + strFileID + "'";
         PurchaseFileAttachModel purchaseFileAttachModel = dao.findFirst(sql);
-        purchaseFileAttachModel.delete();
+        if (purchaseFileAttachModel != null) {
+            purchaseFileAttachModel.delete();
+        }
     }
 }

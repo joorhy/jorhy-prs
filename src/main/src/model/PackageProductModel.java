@@ -17,17 +17,19 @@ public class PackageProductModel extends Model<PackageProductModel> {
         PackageProductModel packageProductModel = dao.findFirst(sql);
         if (packageProductModel != null) {
             packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
-                    .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
+                    .set("name", productBean.strPrjName).set("count", productBean.nPackagedCount)
                     .set("package_id", nPackageID).set("spec", productBean.strPrjSpec)
                     .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
-                    .set("packaged_count", productBean.nPackagedCount).update();
+                    .set("packaged_count", productBean.nPackagedCount).set("price", productBean.fPrjPrice)
+                    .update();
         } else {
             packageProductModel = new PackageProductModel();
             packageProductModel.set("uuid", productBean.strProductID).set("type", productBean.strPrjType)
-                    .set("name", productBean.strPrjName).set("count", productBean.nPrjCount)
+                    .set("name", productBean.strPrjName).set("count", productBean.nPackagedCount)
                     .set("package_id", nPackageID).set("spec", productBean.strPrjSpec)
                     .set("pre_price", productBean.fPrjPrePrice).set("param", productBean.strPrjParam)
-                    .set("packaged_count", productBean.nPackagedCount).save();
+                    .set("packaged_count", productBean.nPackagedCount).set("price", productBean.fPrjPrice)
+                    .save();
         }
     }
 

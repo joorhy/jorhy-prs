@@ -50,7 +50,8 @@ function initializeUploader() {
                     'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
             } else {
                 uploader.settings.url = "/package/upload_file?file_id=" + file.id +
-                    "&package_id=" + document.getElementById("package_id").value;
+                    "&package_id=" + document.getElementById("package_id").value +
+                    "&purchase_id=" + document.getElementById("purchase_id").value;
                 document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
                     '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
                     document.getElementById("package_id").value + '> ' + file.name +
@@ -125,8 +126,31 @@ function showNewPurchasePage() {
 
 function showNewPackagePage() {
     baseData = null;
-    $('#contentDiv').panel('setTitle', '新建分包');
-    $('#contentDiv').panel('refresh', '../jsp/pages/new_package.jsp');
+    url = '/package/base_info';
+    data = {purchase_id:curNode.id};
+
+    $.ajax({
+        type: 'post',
+        url:url,
+        data: data,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
+
+    function onSuccess(r) {
+        if (r.result == 'success') {
+            baseData = r.base;
+            $('#contentDiv').panel('setTitle', '新建分包');
+            $('#contentDiv').panel('refresh', '../jsp/pages/new_package.jsp');
+        } else {
+            baseData = null;
+        }
+    }
+
+    function onError(x, e) {
+
+    }
 }
 
 function showNewPaymentPage() {
@@ -349,16 +373,26 @@ function onLoadPreviewPurchase() {
 
 function onLoadPackage() {
     if (baseData != null) {
-        document.getElementById("package_id").value = baseData['package_id'];
-        $('#pack_code').textbox('setText', baseData['pack_code']);
-        $('#pack_code').textbox('disable');
-        $('#pur_address').textbox('setText', baseData['pur_address']);
-        $('#expert_count').textbox('setText', baseData['expert_count']);
-        $('#pur_date').datebox('setValue', baseData['pur_date']);
-        $('#pur_method').combobox('setValue', baseData['pur_method']);
-        $('#pur_publicity').switchbutton('setValue', baseData['pur_publicity']);
-        $('#pur_supplier').textbox('setText', baseData['pur_supplier']);
-        $('#pur_amount').textbox('setText', baseData['pur_amount']);
+        if (baseData['pack_type'] == 'new_package') {
+            document.getElementById("package_id").value = Math.uuid(36, 62);
+            $('#pur_name').textbox('setText', baseData['pur_name']);
+            $('#pur_code').textbox('setText', baseData['pur_code']);
+        } else {
+            document.getElementById("package_id").value = baseData['package_id'];
+            $('#pur_name').textbox('setText', baseData['pur_name']);
+            $('#pur_code').textbox('setText', baseData['pur_code']);
+            $('#pack_code').textbox('setText', baseData['pack_code']);
+            $('#pack_code').textbox('disable');
+            $('#pur_address').textbox('setText', baseData['pur_address']);
+            $('#expert_count').textbox('setText', baseData['expert_count']);
+            $('#pur_date').datebox('setValue', baseData['pur_date']);
+            $('#pur_method').combobox('setValue', baseData['pur_method']);
+            $('#pur_publicity').switchbutton('setValue', baseData['pur_publicity']);
+            $('#pur_supplier').textbox('setText', baseData['pur_supplier']);
+            $('#pur_amount').textbox('setText', baseData['pur_amount']);
+        }
+        $('#pur_name').textbox('disable');
+        $('#pur_code').textbox('disable');
     } else {
         document.getElementById("package_id").value = Math.uuid(36, 62);
     }

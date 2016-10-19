@@ -119,7 +119,7 @@ public class PurchaseModel extends Model<PurchaseModel> {
                 if (userModel.getInt("permission_id") == purchaseModel.get("purchase_activity_id")) {
                     if (ApproveRecordModel.dao.addApproveRecord(nPurchaseID, nPurchaseActivityID,
                             purchaseOpinionBean) == ErrorCode.SUCCESS) {
-                        if (purchaseOpinionBean.nextApproveRoleId == 0) {
+                        if (purchaseOpinionBean.purchaseNatureId == 0) {
                             purchaseModel.set("purchase_activity_id", nPurchaseActivityID)
                                     .set("role_id", purchaseOpinionBean.nextApproveRoleId).update();
                         } else {

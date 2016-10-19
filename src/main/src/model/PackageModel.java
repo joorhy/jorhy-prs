@@ -33,14 +33,14 @@ public class PackageModel extends Model<PackageModel> {
         PackageModel packageModel = PackageModel.dao.findFirst(url);
         if (packageModel != null) {
             nPackageId = packageModel.get("id");
-            packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
+            packageModel.set("package_uuid", strPackageID).set("package_code", strPackCode)
                     .set("pur_address", strPurAddress).set("expert_count", nExpertCount)
                     .set("pur_date", strPurDate).set("pur_method", strPurMethod)
                     .set("publicity", isPublicity).set("vendor", strSupplier)
                     .set("amount", fAmount).set("package_activity_id", PackageActivityBean.INITIALIZE).update();
         } else {
             packageModel = new PackageModel();
-            packageModel.set("package_uuid", strPurchaseID).set("package_code", strPackCode)
+            packageModel.set("package_uuid", strPackageID).set("package_code", strPackCode)
                     .set("pur_address", strPurAddress).set("expert_count", nExpertCount)
                     .set("pur_date", strPurDate).set("pur_method", strPurMethod)
                     .set("publicity", isPublicity).set("vendor", strSupplier)
@@ -109,14 +109,17 @@ public class PackageModel extends Model<PackageModel> {
         return ErrorCode.SUCCESS;
     }
 
-    public Map<String, String> getBaseData(String strPacketID) {
-        String sql = "select p.*, pur.purchase_uuid, a.status from package p left join package_activity a on " +
-                "p.package_activity_id=a.id left join purchase pur on p.purchase_id=pur.id " +
-                "where p.package_uuid='" + strPacketID + "'";
+    public Map<String, String> getBaseDataByPackageID(String strPacketID) {
+        String sql = "select p.*, pur.code as pur_code, pur.name as pur_name from package p left join " +
+                "package_activity a on p.package_activity_id=a.id left join purchase pur " +
+                "on p.purchase_id=pur.id where p.package_uuid='" + strPacketID + "'";
         PackageModel packageModel = PackageModel.dao.findFirst(sql);
 
         Map<String, String> obj = new HashMap<String, String>();
         if (packageModel != null) {
+            obj.put("pack_type", "packaged");
+            obj.put("pur_code", packageModel.getStr("pur_code"));
+            obj.put("pur_name", packageModel.getStr("pur_name"));
             obj.put("package_id", packageModel.getStr("package_uuid"));
             obj.put("pack_code", packageModel.getStr("package_code"));
             obj.put("pur_address", packageModel.getStr("pur_address"));
@@ -127,6 +130,21 @@ public class PackageModel extends Model<PackageModel> {
             obj.put("pur_supplier", packageModel.getStr("vendor"));
             obj.put("pur_amount", packageModel.getDouble("amount").toString());
             obj.put("purchase_id", packageModel.getStr("purchase_uuid"));
+        }
+
+        return obj;
+    }
+
+    public Map<String, String> getBaseDataByPurchaseID(String strPurchaseID) {
+        String sql = "select pur.code as pur_code, pur.name as pur_name from purchase pur " +
+                "where pur.purchase_uuid='" + strPurchaseID + "'";
+        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+
+        Map<String, String> obj = new HashMap<String, String>();
+        if (purchaseModel != null) {
+            obj.put("pack_type", "new_package");
+            obj.put("pur_code", purchaseModel.getStr("pur_code"));
+            obj.put("pur_name", purchaseModel.getStr("pur_name"));
         }
 
         return obj;
@@ -238,18 +256,23 @@ public class PackageModel extends Model<PackageModel> {
         return ErrorCode.SUCCESS;
     }
 
-    public void addAttachFile(String strPackageID, PackageAttachFileBean item) {
-        String url = "select id from package p where p.package_uuid='" + strPackageID + "'";
+    public void addAttachFile(String strPurchaseID, String strPackageID, PackageAttachFileBean item) {
+        String sql = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
+        PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
+        if (purchaseModel != null) {
+            sql = "select id from package p where p.package_uuid='" + strPackageID + "'";
 
-        int nPackageID = 0;
-        PackageModel packageModel= PackageModel.dao.findFirst(url);
-        if (packageModel != null) {
-            nPackageID = packageModel.get("id");
-        } else {
-            packageModel = new PackageModel();
-            packageModel.set("package_uuid", strPackageID).save();
-            nPackageID = packageModel.get("id");
+            int nPackageID = 0;
+            PackageModel packageModel = PackageModel.dao.findFirst(sql);
+            if (packageModel != null) {
+                nPackageID = packageModel.get("id");
+            } else {
+                packageModel = new PackageModel();
+                packageModel.set("purchase_id", purchaseModel.getInt("id")).set("package_uuid", strPackageID)
+                        .set("package_activity_id", PackageActivityBean.INITIALIZE).save();
+                nPackageID = packageModel.get("id");
+            }
+            PackageFileAttachModel.dao.addAttachFile(nPackageID, item);
         }
-        PackageFileAttachModel.dao.addAttachFile(nPackageID, item);
     }
 }
