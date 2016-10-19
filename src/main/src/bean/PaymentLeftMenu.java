@@ -19,7 +19,7 @@ public class PaymentLeftMenu {
     static public JSONArray getTree(String strUsername) {
         /** 仅查询分包完成的采购项目 */
         String sql = "select p.* from purchase p where p.purchase_activity_id>="
-                + PurchaseActivityBean.SUBCONTRACTED;
+                + PurchaseActivityBean.PURCHASE;
         ArrayList<PurchaseBean> lstPurchasing = PurchaseModel.dao.getPurchaseList(sql);
 
         JSONArray unpaidChildren = new JSONArray();
@@ -35,11 +35,11 @@ public class PaymentLeftMenu {
                     new JSONArray(PackageModel.dao.getToPayPackageList(purchaseBean.getPurchaseID()));
             childrenNode.put("children", packetChildren);
             switch (PurchaseModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
-                case PurchaseActivityBean.SUBCONTRACTED:
+                case PurchaseActivityBean.PURCHASE:
                     childrenNode.put("type", PaymentLeftMenu.TO_PAY);
                     unpaidChildren.put(childrenNode);
                     break;
-                case PurchaseActivityBean.PAID:
+                case PurchaseActivityBean.PAYMENT:
                     childrenNode.put("type", PaymentLeftMenu.PAID);
                     paidChildren.put(childrenNode);
                     break;

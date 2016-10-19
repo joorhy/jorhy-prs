@@ -45,13 +45,14 @@ public class ApplicantLeftMenu {
                 case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
                     break;
-                case PurchaseActivityBean.SUBCONTRACTED: {
+                case PurchaseActivityBean.PAYMENT: {
                     JSONArray packageChildren =
-                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.PAID));
                     childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
                     childrenNode.put("children", packageChildren);
                     executedPrjChildren.put(childrenNode);

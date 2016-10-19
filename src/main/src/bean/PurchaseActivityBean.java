@@ -12,7 +12,6 @@ public class PurchaseActivityBean {
     public static final int SECTOR_APPROVE              = 5;          // 分管股室审批
     public static final int FINANCIAL_APPROVE           = 6;          // 财政监管股室股审批
     public static final int FIN_BUREAU_APPROVE          = 7;          // 财政局审批
-    public static final int SUBCONTRACTING              = 8;          // 未分包
-    public static final int SUBCONTRACTED               = 9;          // 已分包
-    public static final int PAID                        = 10;          // 已支付
+    public static final int PURCHASE                    = 8;          // 未分包
+    public static final int PAYMENT                     = 9;          // 未分包
 }

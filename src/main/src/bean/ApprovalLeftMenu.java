@@ -27,7 +27,7 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
@@ -40,7 +40,7 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
@@ -53,7 +53,7 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
@@ -64,7 +64,7 @@ public class ApprovalLeftMenu {
                     break;
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
@@ -74,7 +74,7 @@ public class ApprovalLeftMenu {
                     strNodeType = ApprovalLeftMenu.TO_APPROVE;
                     break;
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }
@@ -83,7 +83,7 @@ public class ApprovalLeftMenu {
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
                     strNodeType = ApprovalLeftMenu.TO_APPROVE;
                     break;
-                case PurchaseActivityBean.SUBCONTRACTING:
+                case PurchaseActivityBean.PURCHASE:
                     strNodeType = ApprovalLeftMenu.APPROVED;
                     break;
             }

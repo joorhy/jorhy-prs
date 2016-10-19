@@ -66,12 +66,10 @@ public class PackageModel extends Model<PackageModel> {
         String url = "select id, package_activity_id from package p where p.package_uuid='"
                 + strPackageID + "'";
 
-        int nPackageID = 0;
         PackageModel packageModel = PackageModel.dao.findFirst(url);
         if (packageModel != null) {
-            nPackageID = packageModel.get("id");
             int nPackageActivityID =  packageModel.get("package_activity_id");
-            packageModel.set("package_activity_id", nPackageActivityID + 1);
+            packageModel.set("package_activity_id", nPackageActivityID + 1).update();
         }
         return ErrorCode.SUCCESS;
     }
@@ -150,9 +148,26 @@ public class PackageModel extends Model<PackageModel> {
         return obj;
     }
 
-    public ArrayList<Map<String, String>> getPackageList(String strPurchaseID) {
-        String sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
-                "on p.purchase_id=pur.id";
+    public ArrayList<Map<String, String>> getPackageList(String strPurchaseID, int nPackageType) {
+        String sql;
+        switch (nPackageType) {
+            case PackageActivityBean.INITIALIZE:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                    "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.INITIALIZE;
+                break;
+            case PackageActivityBean.TO_APPLY_PAY:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_APPLY_PAY;
+                break;
+            case PackageActivityBean.TO_PAY:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_PAY;
+                break;
+            default:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id";
+                break;
+        }
 
         return getPackageList(strPurchaseID, sql);
     }

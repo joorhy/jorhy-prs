@@ -22,7 +22,7 @@ public class PurchaseLeftMenu {
     static public JSONArray getTree(String strUsername) {
         /** 仅查询审批完成的采购项目 */
         String sql = "select p.* from purchase p where p.purchase_activity_id>="
-                + PurchaseActivityBean.SUBCONTRACTING;
+                + PurchaseActivityBean.PURCHASE;
         ArrayList<PurchaseBean> lstPurchase = PurchaseModel.dao.getPurchaseList(sql);
         JSONArray subcontractingChildren = new JSONArray();
         JSONArray subcontractedChildren = new JSONArray();
@@ -45,22 +45,41 @@ public class PurchaseLeftMenu {
                     failedChildren.put(childrenNode);
                     break;
                 default: {
-                    JSONArray packageChildren =
-                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID()));
-                    childrenNode.put("children", packageChildren);
-                    switch (PurchaseModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
-                        case PurchaseActivityBean.SUBCONTRACTING:
-                            childrenNode.put("type", PurchaseLeftMenu.TO_DIVIDE);
-                            subcontractingChildren.put(childrenNode);
-                            break;
-                        case PurchaseActivityBean.SUBCONTRACTED:
-                            childrenNode.put("type", PurchaseLeftMenu.DIVIDED);
-                            subcontractedChildren.put(childrenNode);
-                            break;
-                        case PurchaseActivityBean.PAID:
-                            childrenNode.put("type", PurchaseLeftMenu.FINISHED);
-                            completedChildren.put(childrenNode);
-                            break;
+                    JSONArray packageInitChildren =
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.INITIALIZE));
+                    JSONObject childrenInitNode = new JSONObject();
+                    childrenInitNode.put("id", lstPurchase.get(i).getPurchaseID());
+                    childrenInitNode.put("text", lstPurchase.get(i).getPurName());
+                    childrenInitNode.put("iconCls", "icon-cut");
+                    childrenInitNode.put("children", packageInitChildren);
+                    childrenInitNode.put("type", PurchaseLeftMenu.TO_DIVIDE);
+                    subcontractingChildren.put(childrenInitNode);
+
+                    JSONArray packageDividedChildren =
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.TO_APPLY_PAY));
+                    if (packageDividedChildren.length() > 0) {
+                        JSONObject childrenDividedNode = new JSONObject();
+                        childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());
+                        childrenDividedNode.put("text", lstPurchase.get(i).getPurName());
+                        childrenDividedNode.put("iconCls", "icon-cut");
+                        childrenDividedNode.put("children", packageDividedChildren);
+                        childrenDividedNode.put("type", PurchaseLeftMenu.DIVIDED);
+                        subcontractedChildren.put(childrenDividedNode);
+                    }
+
+                    JSONArray packageFinishedChildren =
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.TO_PAY));
+                    if (packageFinishedChildren.length() > 0) {
+                        JSONObject childrenFinishNode = new JSONObject();
+                        childrenFinishNode.put("id", lstPurchase.get(i).getPurchaseID());
+                        childrenFinishNode.put("text", lstPurchase.get(i).getPurName());
+                        childrenFinishNode.put("iconCls", "icon-cut");
+                        childrenFinishNode.put("children", packageFinishedChildren);
+                        childrenFinishNode.put("type", PurchaseLeftMenu.FINISHED);
+                        completedChildren.put(childrenFinishNode);
                     }
                 }
                 break;
