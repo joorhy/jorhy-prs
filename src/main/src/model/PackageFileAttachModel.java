@@ -11,11 +11,12 @@ import java.util.List;
 public class PackageFileAttachModel extends Model<PackageFileAttachModel> {
     public static final PackageFileAttachModel dao = new PackageFileAttachModel();
 
-    public void addAttachFile(int nPackageID, PackageAttachFileBean packageAttachFileBean) {
+    public void addAttachFile(int nPackageID, String strFileType, PackageAttachFileBean packageAttachFileBean) {
         PackageFileAttachModel packageFileAttachModel = new PackageFileAttachModel();
         packageFileAttachModel.set("uuid", packageAttachFileBean.strFileID)
                 .set("name", packageAttachFileBean.strFileName).set("path", packageAttachFileBean.strFilePath)
-                .set("size", packageAttachFileBean.fileSize).set("package_id", nPackageID).save();
+                .set("size", packageAttachFileBean.fileSize).set("package_id", nPackageID)
+                .set("type", strFileType).save();
     }
 
     public void removePackageAttachFiles(int nPackageID) {

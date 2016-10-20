@@ -89,7 +89,7 @@ public class PackageModel extends Model<PackageModel> {
             int nPackageActivityID =  packageModel.get("package_activity_id");
             if (PackageRecordModel.dao.addApproveRecord(nPackageID, nPackageActivityID + 1, packageOpinionBean)
                     == ErrorCode.SUCCESS) {
-                packageModel.set("package_activity_id", nPackageActivityID + 1);
+                packageModel.set("package_activity_id", nPackageActivityID + 1).update();
             }
         }
         return ErrorCode.SUCCESS;
@@ -218,9 +218,9 @@ public class PackageModel extends Model<PackageModel> {
         return productArray;
     }
 
-    public ArrayList<Map<String, String>> getAttachFiles(String strPackageID) {
+    public ArrayList<Map<String, String>> getAttachFiles(String strPackageID, String strFileType) {
         String sql = "select * from package_attach_file paf left join package p on paf.package_id=p.id " +
-                "where p.package_uuid='" + strPackageID + "'";
+                "where p.package_uuid='" + strPackageID + "' and paf.type='" + strFileType + "'";
 
         List<PackageFileAttachModel> lstModel = PackageFileAttachModel.dao.find(sql);
         ArrayList<Map<String, String>> lst = new ArrayList<Map<String, String>>();
@@ -271,10 +271,11 @@ public class PackageModel extends Model<PackageModel> {
         return ErrorCode.SUCCESS;
     }
 
-    public void addAttachFile(String strPurchaseID, String strPackageID, PackageAttachFileBean item) {
+    public void addAttachFile(String strPurchaseID, String strPackageID, String strFileType,
+                              PackageAttachFileBean item) {
         String sql = "select id from purchase p where p.purchase_uuid='" + strPurchaseID + "'";
         PurchaseModel purchaseModel = PurchaseModel.dao.findFirst(sql);
-        if (purchaseModel != null) {
+        if (purchaseModel != null || strPurchaseID == "") {
             sql = "select id from package p where p.package_uuid='" + strPackageID + "'";
 
             int nPackageID = 0;
@@ -287,7 +288,7 @@ public class PackageModel extends Model<PackageModel> {
                         .set("package_activity_id", PackageActivityBean.INITIALIZE).save();
                 nPackageID = packageModel.get("id");
             }
-            PackageFileAttachModel.dao.addAttachFile(nPackageID, item);
+            PackageFileAttachModel.dao.addAttachFile(nPackageID, strFileType, item);
         }
     }
 }

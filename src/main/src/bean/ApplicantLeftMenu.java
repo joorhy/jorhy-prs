@@ -48,16 +48,20 @@ public class ApplicantLeftMenu {
                 case PurchaseActivityBean.PURCHASE:
                     childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
-                    break;
-                case PurchaseActivityBean.PAYMENT: {
-                    JSONArray packageChildren =
+
+                    JSONArray packageDividedChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
-                                    PackageActivityBean.PAID));
-                    childrenNode.put("type", ApplicantLeftMenu.EXECUTED);
-                    childrenNode.put("children", packageChildren);
-                    executedPrjChildren.put(childrenNode);
+                                    PackageActivityBean.TO_APPLY_PAY));
+                    if (packageDividedChildren.length() > 0) {
+                        JSONObject childrenDividedNode = new JSONObject();
+                        childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());
+                        childrenDividedNode.put("text", lstPurchase.get(i).getPurName());
+                        childrenDividedNode.put("iconCls", "icon-cut");
+                        childrenDividedNode.put("children", packageDividedChildren);
+                        childrenDividedNode.put("type", ApplicantLeftMenu.EXECUTED);
+                        executedPrjChildren.put(childrenDividedNode);
+                    }
                     break;
-                }
             }
         }
 

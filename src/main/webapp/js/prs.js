@@ -8,8 +8,9 @@ function initializeUploader() {
     if (page_type == "purchase") {
         url = "/purchase/upload_file";
     } else {
-        url = "/package/upload_file";
+        url = "/package/upload_evaluation_file";
     }
+
     var filters = { max_file_size : '10mb',
                     mime_types: [
                         {title : "Image files", extensions : "jpg,gif,png"},
@@ -49,10 +50,10 @@ function initializeUploader() {
                     'data-options="iconCls:\'icon-remove\',plain:true" ' +
                     'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
             } else {
-                uploader.settings.url = "/package/upload_file?file_id=" + file.id +
+                uploader.settings.url = "/package/upload_evaluation_file?file_id=" + file.id +
                     "&package_id=" + document.getElementById("package_id").value +
                     "&purchase_id=" + document.getElementById("purchase_id").value;
-                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                document.getElementById('evaluationFileList').innerHTML += '<div id="' + file.id + '">' +
                     '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
                     document.getElementById("package_id").value + '> ' + file.name +
                     '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
@@ -62,6 +63,72 @@ function initializeUploader() {
             }
         });
         uploader.start();
+    }
+
+    function onFilesRemoved(up, files) {
+
+    }
+
+    function onUploadProgress(up, file) {
+        document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent
+            + "%</span>";
+    }
+
+    function onFileUploaded(up, file, resp) {
+
+    }
+
+    function onError() {
+        document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+    }
+}
+
+function initializeAcceptanceUploader() {
+    var container = document.getElementById('acceptance_uploader');
+
+    var url =  "/package/upload_acceptance_file";
+    var filters = { max_file_size : '10mb',
+        mime_types: [
+            {title : "Image files", extensions : "jpg,gif,png"},
+            {title : "Document files", extensions : "doc,pdf,xls"}]};
+    var init = { PostInit: onPostInit,
+        FilesAdded: onFilesAdded,
+        FilesRemoved: onFilesRemoved,
+        UploadProgress: onUploadProgress,
+        FileUploaded: onFileUploaded,
+        Error: onError};
+
+    acceptance_uploader = new plupload.Uploader({
+        runtimes : 'html5,html4',
+        browse_button : 'acceptanceFiles', // you can pass in id...
+        container: container, // ... or DOM Element itself
+        url : url,
+        filters : filters,
+        unique_names: true,
+        init:init
+    });
+    acceptance_uploader.init();
+
+    function onPostInit() {
+
+    }
+
+    function onFilesAdded(up, files) {
+        plupload.each(files, function(file) {
+            alert(document.getElementById("package_id").value);
+            alert(document.getElementById("purchase_id").value);
+            acceptance_uploader.settings.url = "/package/upload_acceptance_file?file_id=" + file.id +
+                "&package_id=" + document.getElementById("package_id").value +
+                "&purchase_id=" + document.getElementById("purchase_id").value;
+            document.getElementById('acceptanceFileList').innerHTML += '<div id="' + file.id + '">' +
+                '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
+                document.getElementById("package_id").value + '> ' + file.name +
+                '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                'data-options="iconCls:\'icon-remove\',plain:true" ' +
+                'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+        });
+        acceptance_uploader.start();
     }
 
     function onFilesRemoved(up, files) {
@@ -208,8 +275,8 @@ function onLeftMenuLeftClick(node) {
             url = '/package/base_info';
             data = {package_id:node.id};
         }
-    } else if (rootNode.type == 'payment') {
-        if (node.type == 'to_pay' || node.type == 'paid') {
+    } else if (rootNode.type == 'accounting') {
+        if (node.type == 'to_approve' || node.type == 'approved') {
             document.getElementById('purchase_id').value = node.id;
             url = '/purchase/base_info';
             data = {purchase_id:node.id};
@@ -238,8 +305,8 @@ function onLeftMenuLeftClick(node) {
                 showApplicantPage();
             } else if (rootNode.type == 'purchase') {
                 showPurchasePage();
-            } else if (rootNode.type == 'payment') {
-                showPaymentPage();
+            } else if (rootNode.type == 'accounting') {
+                showAccountingPage();
             } else {
                 showApprovalPage();
             }
@@ -269,9 +336,7 @@ function onLeftMenuLeftClick(node) {
     function showApprovalPage() {
         if (node.type == 'to_approve') {
             $('#contentDiv').panel('setTitle','待审批项目');
-            if (rootNode.type == "accounting") {
-                $('#contentDiv').panel('refresh', '../jsp/pages/accounting_unapproved.jsp');
-            } else if (rootNode.type == "leader") {
+            if (rootNode.type == "leader") {
                 if (node.level == "1") {
                     $('#contentDiv').panel('refresh', '../jsp/pages/director_unapproved.jsp');
                 } else {
@@ -315,17 +380,18 @@ function onLeftMenuLeftClick(node) {
         }
     }
 
-    function showPaymentPage() {
-        if (node.type == 'to_pay' || node.type == 'paid') {
-            $('#contentDiv').panel('setTitle', node.text);
+    function showAccountingPage() {
+        if (node.type == 'to_approve') {
+            $('#contentDiv').panel('refresh', '../jsp/pages/accounting_unapproved.jsp');
+        } else if (node.type == 'approved') {
             $('#contentDiv').panel('refresh', '../jsp/pages/view_purchase.jsp');
         } else {
             $('#contentDiv').panel('setTitle', node.text);
             var parentNode = $('#menuTree').tree('getParent', node.target)
             if (parentNode.type == 'to_pay') {
-                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
-            } else {
                 $('#contentDiv').panel('refresh', '../jsp/pages/paid.jsp');
+            } else {
+                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
             }
         }
     }
@@ -821,20 +887,13 @@ function viePurchaseComplaints() {
 
 }
 
-function onLoadAttachFiles() {
+function onLoadAcceptanceFiles() {
     // 初始化长传插件
     page_type = document.getElementById('page_type').value;
-    initializeUploader();
+    initializeAcceptanceUploader();
 
-    var url = null;
-    var data = null;
-    if (page_type == "purchase") {
-        url = '/purchase/attach_files';
-        data = {purchase_id: document.getElementById("purchase_id").value};
-    } else {
-        url = '/package/attach_files';
-        data = {package_id: document.getElementById("package_id").value};
-    }
+    var url = '/package/attach_acceptance_files';
+    var data = {package_id: document.getElementById("package_id").value};
     $.ajax({
         type: 'post',
         url: url,
@@ -849,35 +908,102 @@ function onLoadAttachFiles() {
         for(var key in r.files) {
             var file = r.files[key];
             if (curNode.type == 'create' || (curNode.type == 'package' && parentNode.type == 'to_divide')) {
-                if (page_type == "purchase") {
-                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                        '<a href=/purchase/download_file?file_id=' + file.id + '&purchase_id=' +
-                        document.getElementById("purchase_id").value + '> ' + file.name +
-                        '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
-                        '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                        'data-options="iconCls:\'icon-remove\',plain:false" ' +
-                        'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
-                } else {
-                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                        '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
-                        document.getElementById("package_id").value + '> ' + file.name +
-                        '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
-                        '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                        'data-options="iconCls:\'icon-remove\',plain:false" ' +
-                        'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
-                }
+                document.getElementById('acceptanceFileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
+                    document.getElementById("package_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
             } else {
-                if (page_type == "purchase") {
-                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                        '<a href=/purchase/download_file?file_id=' + file.id + '&purchase_id=' +
-                        document.getElementById("purchase_id").value + '> ' + file.name +
-                        '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
-                } else {
-                    document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
-                        '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
-                        document.getElementById("package_id").value + '> ' + file.name +
-                        '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
-                }
+                document.getElementById('acceptanceFileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
+                    document.getElementById("package_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+            }
+        }
+    }
+
+    function onError(x, e) {
+        alert("onLoadAcceptanceFiles Error");
+    }
+}
+
+function onLoadEveluationFilse() {
+    // 初始化长传插件
+    page_type = document.getElementById('page_type').value;
+    initializeUploader('evaluation');
+
+    var url = '/package/attach_evaluation_files';
+    var data = {package_id: document.getElementById("package_id").value};
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
+
+    function onSuccess(r) {
+        var parentNode = $('#menuTree').tree('getParent', curNode.target)
+        for(var key in r.files) {
+            var file = r.files[key];
+            if (curNode.type == 'create' || (curNode.type == 'package' && parentNode.type == 'to_divide')) {
+                document.getElementById('evaluationFileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
+                    document.getElementById("package_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            } else {
+                document.getElementById('evaluationFileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/package/download_file?file_id=' + file.id + '&package_id=' +
+                    document.getElementById("package_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
+            }
+        }
+    }
+
+    function onError(x, e) {
+        alert("onLoadEveluationFilse Error");
+    }
+}
+
+function onLoadAttachFiles() {
+    // 初始化长传插件
+    page_type = document.getElementById('page_type').value;
+    initializeUploader('purchase');
+
+    var url = '/purchase/attach_files';
+    var data = {purchase_id: document.getElementById("purchase_id").value};
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: onSuccess,
+        error: onError
+    });
+
+    function onSuccess(r) {
+        var parentNode = $('#menuTree').tree('getParent', curNode.target)
+        for(var key in r.files) {
+            var file = r.files[key];
+            if (curNode.type == 'create' || (curNode.type == 'package' && parentNode.type == 'to_divide')) {
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/purchase/download_file?file_id=' + file.id + '&purchase_id=' +
+                    document.getElementById("purchase_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size) + ')</a> <b></b>&nbsp;' +
+                    '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                    'data-options="iconCls:\'icon-remove\',plain:false" ' +
+                    'onclick=removeAttachFile(' + file.id + ')> 删除</a><br/></div>';
+            } else {
+                document.getElementById('fileList').innerHTML += '<div id="' + file.id + '">' +
+                    '<a href=/purchase/download_file?file_id=' + file.id + '&purchase_id=' +
+                    document.getElementById("purchase_id").value + '> ' + file.name +
+                    '(' + getReadableFileSizeString(file.size)  + ')</a> <b></b><br/></div>';
             }
         }
     }
@@ -942,7 +1068,26 @@ function submitPackage() {
 }
 
 function approvePackage() {
+    $.messager.confirm('操作提示','是否确认提交审核?',function(r){
+        if (r){
+            var url = '/package/approve';
+            var data = {package_id:document.getElementById("package_id").value,content:'',opinion:'agree'};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
 
+    function onSuccess(r) {
+    }
+
+    function onError(x, e) {
+    }
 }
 
 function onClickToDivide(index, field) {

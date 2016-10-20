@@ -1,5 +1,6 @@
 package bean;
 
+import model.PackageModel;
 import model.PurchaseModel;
 import org.activiti.engine.impl.util.json.JSONArray;
 import org.activiti.engine.impl.util.json.JSONObject;
@@ -114,7 +115,26 @@ public class ApprovalLeftMenu {
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
             } else if (strNodeType.equals(ApprovalLeftMenu.APPROVED)) {
-                approvedPrjChildren.put(childrenNode);
+                if (strUserRole.equals(RoleBean.ACCOUNTING)) {
+                    PurchaseBean purchaseBean = lstPurchasing.get(i);
+                    JSONArray packageFinishedChildren =
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.TO_PAY));
+                    if (packageFinishedChildren.length() > 0) {
+                        JSONObject childrenFinishNode = new JSONObject();
+                        childrenFinishNode.put("id", purchaseBean.getPurchaseID());
+                        childrenFinishNode.put("text", purchaseBean.getPurName());
+                        childrenFinishNode.put("iconCls", "icon-cut");
+                        childrenFinishNode.put("children", packageFinishedChildren);
+                        childrenFinishNode.put("type", strNodeType);
+                        childrenNode.put("level", purchaseBean.getPurchaseType());
+                        approvedPrjChildren.put(childrenFinishNode);
+                    } else {
+                        approvedPrjChildren.put(childrenNode);
+                    }
+                } else {
+                    approvedPrjChildren.put(childrenNode);
+                }
             } else if (strNodeType.equals(ApprovalLeftMenu.REJECTED)) {
                 rejectedPrjChildren.put(childrenNode);
             }

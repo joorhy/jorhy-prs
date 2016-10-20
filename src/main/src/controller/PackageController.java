@@ -75,10 +75,8 @@ public class PackageController extends Controller {
     }
 
     // 上传附件
-    public void upload_file() {
-        String strPackageID = getPara("package_id");
-        String strPurchaseID = getPara("purchase_id");
-        if (strPackageID != null && strPurchaseID != null) {
+    private void upload_file(String strPurchaseID, String strPackageID, String strFileType) {
+        if (strPurchaseID != null && strPackageID != null) {
             PackageAttachFileBean item = new PackageAttachFileBean();
             item.strPackageID = strPackageID;
             item.strFileID = getPara("file_id");
@@ -90,8 +88,22 @@ public class PackageController extends Controller {
             item.fileSize = (int)file.length();
             item.strFilePath = file.getPath();
 
-            PackageModel.dao.addAttachFile(strPurchaseID, strPackageID, item);
+            PackageModel.dao.addAttachFile(strPurchaseID, strPackageID, strFileType, item);
         }
+    }
+
+    public void upload_evaluation_file() {
+        String strPackageID = getPara("package_id");
+        String strPurchaseID = getPara("purchase_id");
+        upload_file(strPurchaseID, strPackageID, PackageAttachFileBean.EVALUATION);
+        setAttr("result", "success");
+        renderJson();
+    }
+
+    public void upload_acceptance_file() {
+        String strPackageID = getPara("package_id");
+        String strPurchaseID = getPara("purchase_id");
+        upload_file(strPurchaseID, strPackageID, PackageAttachFileBean.ACCEPTANCE);
         setAttr("result", "success");
         renderJson();
     }
@@ -127,11 +139,23 @@ public class PackageController extends Controller {
     }
 
     // 附件列表
-    public void attach_files() {
+    public void attach_evaluation_files() {
         String strPackageID = getPara("package_id");
         if (strPackageID != null)
         {
-            ArrayList<Map<String, String>> lst = PackageModel.dao.getAttachFiles(strPackageID);
+            ArrayList<Map<String, String>> lst = PackageModel.dao.getAttachFiles(strPackageID,
+                    PackageAttachFileBean.EVALUATION);
+            setAttr("files", lst);
+        }
+        renderJson();
+    }
+
+    public void attach_acceptance_files() {
+        String strPackageID = getPara("package_id");
+        if (strPackageID != null)
+        {
+            ArrayList<Map<String, String>> lst = PackageModel.dao.getAttachFiles(strPackageID,
+                    PackageAttachFileBean.ACCEPTANCE);
             setAttr("files", lst);
         }
         renderJson();

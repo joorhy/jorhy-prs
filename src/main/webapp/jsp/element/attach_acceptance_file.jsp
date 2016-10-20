@@ -12,13 +12,13 @@
 </head>
 <body>
 <div class="easyui-panel" title="验收报告" style="width:100%;height:225px;"
-     data-options="fit:false,border:true,onLoad:onLoadAttachFiles()">
+     data-options="fit:false,border:true,onLoad:onLoadAcceptanceFiles()">
     <input id="page_type" hidden="true" value="acceptance"/>
-    <div id="container">
-        <a id='pickFiles' href="javascript:void(0)" class="easyui-linkbutton"
+    <div id="acceptance_uploader">
+        <a id='acceptanceFiles' href="javascript:void(0)" class="easyui-linkbutton"
            data-options="iconCls:'icon-add',plain:true">添加验收报告</a>
     </div>
-    <div id="fileList"></div>
+    <div id="acceptanceFileList"></div>
     <br/>
     <pre id="console"></pre>
 </div>

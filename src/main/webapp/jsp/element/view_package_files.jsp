@@ -11,9 +11,9 @@
 </head>
 <body>
 <div class="easyui-panel" title="评标结果报告" style="width:100%;height:225px;"
-     data-options="fit:false,border:true,onLoad:onLoadAttachFiles()">
+     data-options="fit:false,border:true,onLoad:onLoadEveluationFilse()">
     <input id="page_type" hidden="true" value="package"/>
-    <div id="fileList"></div>
+    <div id="evaluationFileList"></div>
 </div>
 </body>
 </html>
