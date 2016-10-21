@@ -8,68 +8,16 @@ import org.activiti.engine.impl.util.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by JooLiu on 2016/8/25.
+ * Created by JooLiu on 2016/10/21.
  */
-public class ApprovalLeftMenu {
+public class RegulatoryLeftMenu {
     /** 定义审批者目录结构 */
     public static final String TO_APPROVE               = "to_approve";                         // 待审批
     public static final String APPROVED                 = "approved";                           // 已审批
     public static final String REJECTED                 = "rejected";                           // 审批未通过
 
-    static private String getNodeType(String strUserRole, int nStatus) {
-        String strNodeType = "";
-        if (strUserRole.equals(RoleBean.LEADER)) {
-            switch (nStatus) {
-                case PurchaseActivityBean.LEAD_APPROVE:
-                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
-                    break;
-                case PurchaseActivityBean.DIR_APPROVE:
-                case PurchaseActivityBean.SECTOR_APPROVE:
-                case PurchaseActivityBean.FINANCIAL_APPROVE:
-                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.PURCHASE:
-                    strNodeType = ApprovalLeftMenu.APPROVED;
-                    break;
-            }
-        }
-        else if (strUserRole.equals(RoleBean.DIRECTOR)) {
-            switch (nStatus) {
-                case PurchaseActivityBean.DIR_APPROVE:
-                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
-                    break;
-                case PurchaseActivityBean.SECTOR_APPROVE:
-                case PurchaseActivityBean.FINANCIAL_APPROVE:
-                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.PURCHASE:
-                    strNodeType = ApprovalLeftMenu.APPROVED;
-                    break;
-            }
-        } else if (strUserRole.equals(RoleBean.SECTOR)) {
-            switch (nStatus) {
-                case PurchaseActivityBean.SECTOR_APPROVE:
-                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
-                    break;
-                case PurchaseActivityBean.FINANCIAL_APPROVE:
-                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.PURCHASE:
-                    strNodeType = ApprovalLeftMenu.APPROVED;
-                    break;
-            }
-        } else if (strUserRole.equals(RoleBean.BUREAU)) {
-            switch (nStatus) {
-                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
-                    break;
-                case PurchaseActivityBean.PURCHASE:
-                    strNodeType = ApprovalLeftMenu.APPROVED;
-                    break;
-            }
-        }
-        return strNodeType;
-    }
-
     /** 定义静态函数 */
-    static public JSONArray getTree(String strUsername, String strUserRole) {
+    static public JSONArray getTree(String strUsername) {
         String sql = "select p.* from purchase p left join role r on " +
                 "((p.purchase_activity_id>r.permission_id) or " +
                 "(p.purchase_activity_id=r.permission_id and p.role_id=r.id)) " +
@@ -80,18 +28,41 @@ public class ApprovalLeftMenu {
         JSONArray approvedPrjChildren = new JSONArray();
         JSONArray rejectedPrjChildren = new JSONArray();
         for (int i = 0; i< lstPurchasing.size(); i++) {
+            PurchaseBean purchaseBean = lstPurchasing.get(i);
             JSONObject childrenNode = new JSONObject();
             childrenNode.put("id", lstPurchasing.get(i).getPurchaseID());
             childrenNode.put("text", lstPurchasing.get(i).getPurName());
             childrenNode.put("iconCls", "icon-cut");
-            String strNodeType = getNodeType(strUserRole,
-                    PurchaseModel.dao.getActivityStatus(lstPurchasing.get(i).getPurchaseID()));
+            String strNodeType = "";
+            switch (PurchaseModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
+                case PurchaseActivityBean.FINANCIAL_APPROVE:
+                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
+                    break;
+                case PurchaseActivityBean.FIN_BUREAU_APPROVE:
+                case PurchaseActivityBean.PURCHASE:
+                    strNodeType = ApprovalLeftMenu.APPROVED;
+                    break;
+            }
             childrenNode.put("type", strNodeType);
             childrenNode.put("level", lstPurchasing.get(i).getPurchaseType());
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
             } else if (strNodeType.equals(ApprovalLeftMenu.APPROVED)) {
-                approvedPrjChildren.put(childrenNode);
+                JSONArray packageToPayChildren =
+                        new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                PackageActivityBean.TO_PAY));
+                if (packageToPayChildren.length() > 0) {
+                    JSONObject childrenToPayhNode = new JSONObject();
+                    childrenToPayhNode.put("id", purchaseBean.getPurchaseID());
+                    childrenToPayhNode.put("text", purchaseBean.getPurName());
+                    childrenToPayhNode.put("iconCls", "icon-cut");
+                    childrenToPayhNode.put("children", packageToPayChildren);
+                    childrenToPayhNode.put("type", strNodeType);
+                    childrenNode.put("level", purchaseBean.getPurchaseType());
+                    approvedPrjChildren.put(childrenToPayhNode);
+                } else {
+                    approvedPrjChildren.put(childrenNode);
+                }
             } else if (strNodeType.equals(ApprovalLeftMenu.REJECTED)) {
                 rejectedPrjChildren.put(childrenNode);
             }
@@ -124,7 +95,7 @@ public class ApprovalLeftMenu {
         rootNode.put("id", "root");
         rootNode.put("text", "项目审批管理中心");
         rootNode.put("iconCls", "icon-cut");
-        rootNode.put("type", strUserRole);
+        rootNode.put("type", RoleBean.REGULATORY);
         rootNode.put("children", lstChildren);
 
         JSONArray lstRoot = new JSONArray();

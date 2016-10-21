@@ -58,7 +58,7 @@ public class PurchaseLeftMenu {
 
                     JSONArray packageDividedChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
-                                    PackageActivityBean.TO_APPLY_PAY));
+                                    PackageActivityBean.ACCEPTANCE));
                     if (packageDividedChildren.length() > 0) {
                         JSONObject childrenDividedNode = new JSONObject();
                         childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());
@@ -71,7 +71,7 @@ public class PurchaseLeftMenu {
 
                     JSONArray packageFinishedChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
-                                    PackageActivityBean.TO_PAY));
+                                    PackageActivityBean.APPLIED));
                     if (packageFinishedChildren.length() > 0) {
                         JSONObject childrenFinishNode = new JSONObject();
                         childrenFinishNode.put("id", lstPurchase.get(i).getPurchaseID());

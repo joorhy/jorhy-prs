@@ -155,13 +155,17 @@ public class PackageModel extends Model<PackageModel> {
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
                     "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.INITIALIZE;
                 break;
-            case PackageActivityBean.TO_APPLY_PAY:
+            case PackageActivityBean.ACCEPTANCE:
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
-                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_APPLY_PAY;
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.ACCEPTANCE;
+                break;
+            case PackageActivityBean.APPLIED:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.APPLIED;
                 break;
             case PackageActivityBean.TO_PAY:
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
-                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_PAY;
+                    "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_PAY;
                 break;
             default:
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +

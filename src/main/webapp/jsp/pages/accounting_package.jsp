@@ -20,11 +20,17 @@
 </div>
 <div>
     <jsp:include page="../element/view_package_files.jsp"/>
+</div>
+<div>
+    <jsp:include page="../element/view_acceptance_files.jsp"/>
 </div><br/>
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="repackage()">资金支付</a></td>
+           onclick="agreePackage()">同意支付</a></td>
+    </td>
+    <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
+           onclick="disagreePackage()">不同意支付</a></td>
     </td>
 </div>
 </body>

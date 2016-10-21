@@ -51,7 +51,7 @@ public class ApplicantLeftMenu {
 
                     JSONArray packageDividedChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
-                                    PackageActivityBean.TO_APPLY_PAY));
+                                    PackageActivityBean.ACCEPTANCE));
                     if (packageDividedChildren.length() > 0) {
                         JSONObject childrenDividedNode = new JSONObject();
                         childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());

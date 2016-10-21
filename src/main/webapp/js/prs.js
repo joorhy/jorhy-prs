@@ -391,7 +391,7 @@ function onLeftMenuLeftClick(node) {
             if (parentNode.type == 'to_pay') {
                 $('#contentDiv').panel('refresh', '../jsp/pages/paid.jsp');
             } else {
-                $('#contentDiv').panel('refresh', '../jsp/pages/unpaid.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/accounting_package.jsp');
             }
         }
     }
@@ -1072,6 +1072,52 @@ function approvePackage() {
         if (r){
             var url = '/package/approve';
             var data = {package_id:document.getElementById("package_id").value,content:'',opinion:'agree'};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
+
+    function onSuccess(r) {
+    }
+
+    function onError(x, e) {
+    }
+}
+
+function agreePackage() {
+    $.messager.confirm('操作提示','是否确认同意支付?',function(r){
+        if (r){
+            var url = '/package/approve';
+            var data = {package_id:document.getElementById("package_id").value,content:'',opinion:'agree'};
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
+        }
+    });
+
+    function onSuccess(r) {
+    }
+
+    function onError(x, e) {
+    }
+}
+
+function disagreePackage() {
+    $.messager.confirm('操作提示','是否确认退回支付?',function(r){
+        if (r){
+            var url = '/package/approve';
+            var data = {package_id:document.getElementById("package_id").value,content:'',opinion:'disagree'};
             $.ajax({
                 type: 'post',
                 url: url,

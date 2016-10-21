@@ -20,7 +20,11 @@ public class PrsController extends Controller {
             if (strUserRole != null) {
                 if (strUserRole.equals(RoleBean.APPLICANT)) {
                     renderText(ApplicantLeftMenu.getTree(strUsername).toString());
-                } else if (strUserRole.equals(RoleBean.PURCHASE)) {
+                } else if (strUserRole.equals(RoleBean.ACCOUNTING)) {
+                    renderText(AccountingLeftMenu.getTree(strUsername).toString());
+                } else if (strUserRole.equals(RoleBean.REGULATORY)) {
+                    renderText(RegulatoryLeftMenu.getTree(strUsername).toString());
+                }  else if (strUserRole.equals(RoleBean.PURCHASE)) {
                     renderText(PurchaseLeftMenu.getTree(strUsername).toString());
                 } else if(strUserRole.equals(RoleBean.PAYMENT)) {
                     renderText(PaymentLeftMenu.getTree(strUsername).toString());
