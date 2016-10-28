@@ -326,7 +326,11 @@ function onLeftMenuLeftClick(node) {
         } else {
             $('#contentDiv').panel('setTitle',node.text);
             if (node.type == 'package') {
-                $('#contentDiv').panel('refresh', '../jsp/pages/acceptance.jsp');
+                if (parentNode.type == 'implemented') {
+                    $('#contentDiv').panel('refresh', '../jsp/pages/view_acceptance.jsp');
+                } else {
+                    $('#contentDiv').panel('refresh', '../jsp/pages/acceptance.jsp');
+                }
             } else {
                 $('#contentDiv').panel('refresh','../jsp/pages/view_purchase.jsp');
             }
@@ -389,7 +393,9 @@ function onLeftMenuLeftClick(node) {
             $('#contentDiv').panel('setTitle', node.text);
             var parentNode = $('#menuTree').tree('getParent', node.target)
             if (parentNode.type == 'to_pay') {
-                $('#contentDiv').panel('refresh', '../jsp/pages/paid.jsp');
+                $('#contentDiv').panel('refresh', '../jsp/pages/payment_package.jsp');
+            } else if (parentNode.type == 'paid') {
+                $('#contentDiv').panel('refresh', '../jsp/pages/paid_package.jsp');
             } else {
                 $('#contentDiv').panel('refresh', '../jsp/pages/accounting_package.jsp');
             }
@@ -1134,6 +1140,11 @@ function disagreePackage() {
 
     function onError(x, e) {
     }
+}
+
+function applyPayment() {
+    $('#contentDiv').panel('setTitle', '新建支付');
+    $('#contentDiv').panel('refresh', '../jsp/pages/new_payment.jsp');
 }
 
 function onClickToDivide(index, field) {

@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Joo
-  Date: 2016/8/25
-  Time: 21:26
+  User: JooLiu
+  Date: 2016/10/28
+  Time: 11:00
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -27,7 +27,7 @@
 <div align="right">
     <td align="right">
     <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="width:80"
-           onclick="agreePackage()">支付</a></td>
+           onclick="applyPayment()">申请支付</a></td>
     </td>
 </div>
 </body>

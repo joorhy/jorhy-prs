@@ -15,6 +15,8 @@ public class AccountingLeftMenu {
     public static final String TO_APPROVE               = "to_approve";                         // 待审批
     public static final String APPROVED                 = "approved";                           // 已审批
     public static final String REJECTED                 = "rejected";                           // 审批未通过
+    public static final String TO_PAY                 = "to_pay";                         // 未支付
+    public static final String PAID                   = "paid";                           // 已支付
 
     /** 定义静态函数 */
     static public JSONArray getTree(String strUsername) {
@@ -27,6 +29,8 @@ public class AccountingLeftMenu {
         JSONArray toApprovePrjChildren = new JSONArray();
         JSONArray approvedPrjChildren = new JSONArray();
         JSONArray rejectedPrjChildren = new JSONArray();
+        JSONArray unpaidChildren = new JSONArray();
+        JSONArray paidChildren = new JSONArray();
         for (int i = 0; i< lstPurchasing.size(); i++) {
             PurchaseBean purchaseBean = lstPurchasing.get(i);
             JSONObject childrenNode = new JSONObject();
@@ -36,7 +40,7 @@ public class AccountingLeftMenu {
             String strNodeType = "";
             switch (PurchaseModel.dao.getActivityStatus(purchaseBean.getPurchaseID())) {
                 case PurchaseActivityBean.ACC_APPROVE:
-                    strNodeType = ApprovalLeftMenu.TO_APPROVE;
+                    strNodeType = TO_APPROVE;
                     break;
                 case PurchaseActivityBean.LEAD_APPROVE:
                 case PurchaseActivityBean.DIR_APPROVE:
@@ -44,7 +48,7 @@ public class AccountingLeftMenu {
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
                 case PurchaseActivityBean.PURCHASE:
-                    strNodeType = ApprovalLeftMenu.APPROVED;
+                    strNodeType = APPROVED;
                     break;
             }
             childrenNode.put("type", strNodeType);
@@ -52,18 +56,47 @@ public class AccountingLeftMenu {
             if (strNodeType.equals(ApprovalLeftMenu.TO_APPROVE)) {
                 toApprovePrjChildren.put(childrenNode);
             } else if (strNodeType.equals(ApprovalLeftMenu.APPROVED)) {
-                JSONArray packageFinishedChildren =
+                JSONArray packageRejectChildren =
                         new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
                                 PackageActivityBean.APPLIED));
-                if (packageFinishedChildren.length() > 0) {
-                    JSONObject childrenFinishNode = new JSONObject();
-                    childrenFinishNode.put("id", purchaseBean.getPurchaseID());
-                    childrenFinishNode.put("text", purchaseBean.getPurName());
-                    childrenFinishNode.put("iconCls", "icon-cut");
-                    childrenFinishNode.put("children", packageFinishedChildren);
-                    childrenFinishNode.put("type", strNodeType);
-                    childrenNode.put("level", purchaseBean.getPurchaseType());
-                    approvedPrjChildren.put(childrenFinishNode);
+                JSONArray packageUnpaidChildren =
+                        new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                PackageActivityBean.TO_PAY, PackageActivityBean.TO_REPAY));
+                JSONArray packagePaidChildren =
+                        new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                PackageActivityBean.PAID));
+                if (packageRejectChildren.length() > 0 || packageUnpaidChildren.length() > 0
+                        || packagePaidChildren.length() > 0) {
+                    if (packageRejectChildren.length() > 0) {
+                        JSONObject packageRejectChildrenNode = new JSONObject();
+                        packageRejectChildrenNode.put("id", purchaseBean.getPurchaseID());
+                        packageRejectChildrenNode.put("text", purchaseBean.getPurName());
+                        packageRejectChildrenNode.put("iconCls", "icon-cut");
+                        packageRejectChildrenNode.put("level", purchaseBean.getPurchaseType());
+                        packageRejectChildrenNode.put("children", packageRejectChildren);
+                        packageRejectChildrenNode.put("type", REJECTED);
+                        rejectedPrjChildren.put(packageRejectChildrenNode);
+                    }
+                    if (packageUnpaidChildren.length() > 0) {
+                        JSONObject packageUnpaidChildrenNode = new JSONObject();
+                        packageUnpaidChildrenNode.put("level", purchaseBean.getPurchaseType());
+                        packageUnpaidChildrenNode.put("id", purchaseBean.getPurchaseID());
+                        packageUnpaidChildrenNode.put("text", purchaseBean.getPurName());
+                        packageUnpaidChildrenNode.put("iconCls", "icon-cut");
+                        packageUnpaidChildrenNode.put("children", packageUnpaidChildren);
+                        packageUnpaidChildrenNode.put("type", TO_PAY);
+                        unpaidChildren.put(packageUnpaidChildrenNode);
+                    }
+                    if (packagePaidChildren.length() > 0) {
+                        JSONObject packagePaidChildrenNode = new JSONObject();
+                        packagePaidChildrenNode.put("id", purchaseBean.getPurchaseID());
+                        packagePaidChildrenNode.put("text", purchaseBean.getPurName());
+                        packagePaidChildrenNode.put("iconCls", "icon-cut");
+                        packagePaidChildrenNode.put("children", packagePaidChildren);
+                        packagePaidChildrenNode.put("level", purchaseBean.getPurchaseType());
+                        packagePaidChildrenNode.put("type", PAID);
+                        paidChildren.put(packagePaidChildrenNode);
+                    }
                 } else {
                     approvedPrjChildren.put(childrenNode);
                 }
@@ -86,14 +119,28 @@ public class AccountingLeftMenu {
 
         JSONObject rejectPrj = new JSONObject();
         rejectPrj.put("id", "executed_prj");
-        rejectPrj.put("text", "审批未通过项目");
+        rejectPrj.put("text", "未申请支付项目");
         rejectPrj.put("iconCls", "icon-cut");
         rejectPrj.put("children", rejectedPrjChildren);
+
+        JSONObject toPayPrj = new JSONObject();
+        toPayPrj.put("id", "to_pay_prj");
+        toPayPrj.put("text", "未支付项目");
+        toPayPrj.put("iconCls", "icon-cut");
+        toPayPrj.put("children", unpaidChildren);
+
+        JSONObject paidPrj = new JSONObject();
+        paidPrj.put("id", "paid_prj");
+        paidPrj.put("text", "已支付项目");
+        paidPrj.put("iconCls", "icon-cut");
+        paidPrj.put("children", paidChildren);
 
         JSONArray lstChildren = new JSONArray();
         lstChildren.put(toApprovePrj);
         lstChildren.put(approvedPrj);
         lstChildren.put(rejectPrj);
+        lstChildren.put(toPayPrj);
+        lstChildren.put(paidPrj);
 
         JSONObject rootNode = new JSONObject();
         rootNode.put("id", "root");

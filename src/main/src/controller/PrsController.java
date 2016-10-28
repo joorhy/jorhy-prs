@@ -26,9 +26,7 @@ public class PrsController extends Controller {
                     renderText(RegulatoryLeftMenu.getTree(strUsername).toString());
                 }  else if (strUserRole.equals(RoleBean.PURCHASE)) {
                     renderText(PurchaseLeftMenu.getTree(strUsername).toString());
-                } else if(strUserRole.equals(RoleBean.PAYMENT)) {
-                    renderText(PaymentLeftMenu.getTree(strUsername).toString());
-                } else {
+                }  else {
                     renderText(ApprovalLeftMenu.getTree(strUsername, strUserRole).toString());
                 }
             }

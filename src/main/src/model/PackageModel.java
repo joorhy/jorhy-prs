@@ -148,6 +148,13 @@ public class PackageModel extends Model<PackageModel> {
         return obj;
     }
 
+    public  ArrayList<Map<String, String>> getPackageList(String strPurchaseID, int fromType, int toType) {
+        String sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                "on p.purchase_id=pur.id where p.package_activity_id>=" + fromType +
+                " and p.package_activity_id<=" + toType;
+        return getPackageList(strPurchaseID, sql);
+    }
+
     public ArrayList<Map<String, String>> getPackageList(String strPurchaseID, int nPackageType) {
         String sql;
         switch (nPackageType) {
@@ -166,6 +173,14 @@ public class PackageModel extends Model<PackageModel> {
             case PackageActivityBean.TO_PAY:
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
                     "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_PAY;
+                break;
+            case PackageActivityBean.TO_REPAY:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.TO_REPAY;
+                break;
+            case PackageActivityBean.PAID:
+                sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +
+                        "on p.purchase_id=pur.id where p.package_activity_id=" + PackageActivityBean.PAID;
                 break;
             default:
                 sql = "select p.package_uuid, pur.purchase_uuid from package p left join purchase pur " +

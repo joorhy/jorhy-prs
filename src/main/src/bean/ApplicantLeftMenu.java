@@ -45,21 +45,38 @@ public class ApplicantLeftMenu {
                 case PurchaseActivityBean.SECTOR_APPROVE:
                 case PurchaseActivityBean.FINANCIAL_APPROVE:
                 case PurchaseActivityBean.FIN_BUREAU_APPROVE:
-                case PurchaseActivityBean.PURCHASE:
                     childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
                     committedPrjChildren.put(childrenNode);
-
+                    break;
+                case PurchaseActivityBean.PURCHASE:
                     JSONArray packageDividedChildren =
                             new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
                                     PackageActivityBean.ACCEPTANCE));
-                    if (packageDividedChildren.length() > 0) {
-                        JSONObject childrenDividedNode = new JSONObject();
-                        childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());
-                        childrenDividedNode.put("text", lstPurchase.get(i).getPurName());
-                        childrenDividedNode.put("iconCls", "icon-cut");
-                        childrenDividedNode.put("children", packageDividedChildren);
-                        childrenDividedNode.put("type", ApplicantLeftMenu.EXECUTED);
-                        executedPrjChildren.put(childrenDividedNode);
+                    JSONArray packageExecChildren =
+                            new JSONArray(PackageModel.dao.getPackageList(purchaseBean.getPurchaseID(),
+                                    PackageActivityBean.APPLIED, PackageActivityBean.TO_REPAY));
+                    if (packageDividedChildren.length() > 0 || packageExecChildren.length() > 0) {
+                        if (packageDividedChildren.length() > 0) {
+                            JSONObject childrenDividedNode = new JSONObject();
+                            childrenDividedNode.put("id", lstPurchase.get(i).getPurchaseID());
+                            childrenDividedNode.put("text", lstPurchase.get(i).getPurName());
+                            childrenDividedNode.put("iconCls", "icon-cut");
+                            childrenDividedNode.put("children", packageDividedChildren);
+                            childrenDividedNode.put("type", ApplicantLeftMenu.EXECUTED);
+                            executedPrjChildren.put(childrenDividedNode);
+                        }
+                        if (packageExecChildren.length() > 0) {
+                            JSONObject childrenExecNode = new JSONObject();
+                            childrenExecNode.put("id", lstPurchase.get(i).getPurchaseID());
+                            childrenExecNode.put("text", lstPurchase.get(i).getPurName());
+                            childrenExecNode.put("iconCls", "icon-cut");
+                            childrenExecNode.put("children", packageExecChildren);
+                            childrenExecNode.put("type", ApplicantLeftMenu.IMPLEMENTED);
+                            implementedPrjChildren.put(childrenExecNode);
+                        }
+                    } else {
+                        childrenNode.put("type", ApplicantLeftMenu.SUBMITTED);
+                        committedPrjChildren.put(childrenNode);
                     }
                     break;
             }
