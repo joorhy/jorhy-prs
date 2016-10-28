@@ -144,14 +144,14 @@ CREATE TABLE IF NOT EXISTS `package` (
   KEY `fk_package_package_activity1_idx` (`package_activity_id`),
   CONSTRAINT `fk_package_package_activity1` FOREIGN KEY (`package_activity_id`) REFERENCES `package_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_package_purchase1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.package 的数据：~4 rows (大约)
+-- 正在导出表  prs.package 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `package` DISABLE KEYS */;
 REPLACE INTO `package` (`id`, `package_uuid`, `purchase_id`, `package_name`, `package_code`, `pur_address`, `pur_date`, `expert_count`, `pur_method`, `publicity`, `vendor`, `amount`, `package_activity_id`) VALUES
-	(1, 'IABGuM5S8Yl9TUpNrvT4GDe0fngtP5GnQ478', 8, NULL, '1', '1', '2016-10-20', 1, 'gkzb', 0, '1', 1, 2),
-	(2, 'Pwzo3hoT5GC2ZVqthZrDtGOFzsttMezOjNiW', 8, NULL, '2', '2', '2', 2, 'gkzb', 0, '2', 2, 3),
-	(3, 'Z1CR0wyB3W3LuGr6KouK1S4SqwvnWlrsUNCc', 8, NULL, '3', '3', '3', 3, 'gkzb', 0, '3', 3, 4);
+	(1, 'IABGuM5S8Yl9TUpNrvT4GDe0fngtP5GnQ478', 8, NULL, '1', '1', '2016-10-20', 1, 'gkzb', 0, '1', 1, 3),
+	(2, 'Pwzo3hoT5GC2ZVqthZrDtGOFzsttMezOjNiW', 8, NULL, '2', '2', '2', 2, 'gkzb', 0, '2', 2, 4),
+	(3, 'Z1CR0wyB3W3LuGr6KouK1S4SqwvnWlrsUNCc', 8, NULL, '3', '3', '3', 3, 'gkzb', 0, '3', 3, 6);
 /*!40000 ALTER TABLE `package` ENABLE KEYS */;
 
 
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `package_activity` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.package_activity 的数据：~3 rows (大约)
+-- 正在导出表  prs.package_activity 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `package_activity` DISABLE KEYS */;
 REPLACE INTO `package_activity` (`id`, `status`) VALUES
 	(1, 'packaged'),
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `package_attach_file` (
   CONSTRAINT `fk_package_attach_file_package1` FOREIGN KEY (`package_id`) REFERENCES `package` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- 正在导出表  prs.package_attach_file 的数据：~3 rows (大约)
+-- 正在导出表  prs.package_attach_file 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `package_attach_file` DISABLE KEYS */;
 REPLACE INTO `package_attach_file` (`id`, `uuid`, `name`, `path`, `size`, `package_id`, `type`) VALUES
 	(2, 'o_1avgfbniou65g5e1ro6tha18n0f', 'persistency_cfg.xls', 'D:\\share\\jorhy-prs\\src\\main\\webapp\\upload\\persistency_cfg8.xls', 158208, 3, 'evaluation'),
